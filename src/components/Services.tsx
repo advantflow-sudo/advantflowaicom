@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef } from "react";
-import { Palette, Code2, Rocket, LineChart, Zap, Headphones } from "lucide-react";
+import { useRef, useState } from "react";
+import { Palette, Code2, Rocket, LineChart, Zap, Headphones, Bot, Workflow, MessageSquare, Plug, Clock, Users } from "lucide-react";
 
-const services = [
+const webServices = [
   {
     icon: Palette,
     title: "UI/UX Design",
@@ -42,7 +42,46 @@ const services = [
   },
 ];
 
-const ServiceCard = ({ service, index }: { service: typeof services[0]; index: number }) => {
+const aiServices = [
+  {
+    icon: Workflow,
+    title: "AI Automation Systems",
+    description: "End-to-end workflow automation that saves 10-100 hours per month. Lead capture to delivery pipelines.",
+    features: ["Workflow Automation", "Lead Pipelines", "Multi-Platform Agents", "24/7 Systems"],
+  },
+  {
+    icon: Bot,
+    title: "Custom AI Agents",
+    description: "Intelligent agents tailored to your business. Sales, support, and data-enhanced bots that work around the clock.",
+    features: ["Sales Agents", "Support Agents", "Data-Enhanced Bots", "Custom Training"],
+  },
+  {
+    icon: Plug,
+    title: "No-Code Integrations",
+    description: "Connect your tools seamlessly with n8n, Zapier, and Make. Build powerful systems without writing code.",
+    features: ["n8n & Zapier", "Make Integrations", "Airtable/Notion", "CRM Pipelines"],
+  },
+  {
+    icon: MessageSquare,
+    title: "AI Customer Support",
+    description: "24/7 intelligent support automation. Triage, respond, and escalate automatically.",
+    features: ["AI Triage", "Auto-Reply", "Smart Escalation", "Reporting"],
+  },
+  {
+    icon: Users,
+    title: "Sales DM Agents",
+    description: "Convert social messages into bookings. Intent detection and smart replies that close deals.",
+    features: ["Intent Detection", "Smart Replies", "Auto-Booking", "CRM Updates"],
+  },
+  {
+    icon: Clock,
+    title: "API Integrations",
+    description: "Connect to OpenAI, Claude, Gemini, Shopify, Stripe, Slack, and more. Unified automation ecosystem.",
+    features: ["OpenAI & Claude", "Shopify & Stripe", "Slack Integration", "CRM Systems"],
+  },
+];
+
+const ServiceCard = ({ service, index }: { service: typeof webServices[0]; index: number }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const Icon = service.icon;
@@ -90,38 +129,75 @@ const ServiceCard = ({ service, index }: { service: typeof services[0]; index: n
 
 export const Services = () => {
   const headerRef = useRef(null);
+  const aiHeaderRef = useRef(null);
   const isHeaderInView = useInView(headerRef, { once: true, margin: "-100px" });
+  const isAiHeaderInView = useInView(aiHeaderRef, { once: true, margin: "-100px" });
 
   return (
-    <section id="services" className="section-padding relative overflow-hidden">
-      <div className="container-wide">
-        {/* Section Header */}
-        <motion.div
-          ref={headerRef}
-          initial={{ opacity: 0, y: 30 }}
-          animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16 md:mb-24"
-        >
-          <span className="text-primary font-medium text-sm uppercase tracking-widest mb-4 block">
-            What We Do
-          </span>
-          <h2 className="heading-lg mb-6">
-            Services That{" "}
-            <span className="text-gradient">Drive Results</span>
-          </h2>
-          <p className="body-lg max-w-2xl mx-auto">
-            From concept to launch and beyond, we provide everything you need to dominate your market.
-          </p>
-        </motion.div>
+    <>
+      {/* Web Design Services */}
+      <section id="services" className="section-padding relative overflow-hidden">
+        <div className="container-wide">
+          {/* Section Header */}
+          <motion.div
+            ref={headerRef}
+            initial={{ opacity: 0, y: 30 }}
+            animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16 md:mb-24"
+          >
+            <span className="text-primary font-medium text-sm uppercase tracking-widest mb-4 block">
+              Web Design & Development
+            </span>
+            <h2 className="heading-lg mb-6">
+              Websites That{" "}
+              <span className="text-gradient">Convert</span>
+            </h2>
+            <p className="body-lg max-w-2xl mx-auto">
+              Premium web design and development that transforms visitors into customers.
+            </p>
+          </motion.div>
 
-        {/* Services Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {services.map((service, index) => (
-            <ServiceCard key={service.title} service={service} index={index} />
-          ))}
+          {/* Web Services Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {webServices.map((service, index) => (
+              <ServiceCard key={service.title} service={service} index={index} />
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* AI Automation Services */}
+      <section id="ai-automation" className="section-padding relative overflow-hidden bg-muted/30">
+        <div className="container-wide">
+          {/* Section Header */}
+          <motion.div
+            ref={aiHeaderRef}
+            initial={{ opacity: 0, y: 30 }}
+            animate={isAiHeaderInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16 md:mb-24"
+          >
+            <span className="text-primary font-medium text-sm uppercase tracking-widest mb-4 block">
+              AI Automation
+            </span>
+            <h2 className="heading-lg mb-6">
+              Automate &{" "}
+              <span className="text-gradient">Scale</span>
+            </h2>
+            <p className="body-lg max-w-2xl mx-auto">
+              Save 10-100 hours per month with intelligent automation. 24/7 systems that work while you sleep.
+            </p>
+          </motion.div>
+
+          {/* AI Services Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {aiServices.map((service, index) => (
+              <ServiceCard key={service.title} service={service} index={index} />
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
   );
 };

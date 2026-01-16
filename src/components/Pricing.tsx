@@ -1,9 +1,9 @@
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Check, ArrowRight, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const plans = [
+const webPlans = [
   {
     name: "Starter",
     price: "£1,497",
@@ -55,7 +55,67 @@ const plans = [
   },
 ];
 
-const PricingCard = ({ plan, index }: { plan: typeof plans[0]; index: number }) => {
+const aiPlans = [
+  {
+    name: "Starter",
+    price: "£149",
+    period: "/mo",
+    description: "Essential automation for growing businesses",
+    features: [
+      "1 automation workflow",
+      "Basic AI chatbot",
+      "Email integration",
+      "Up to 1,000 tasks/month",
+      "Email support",
+      "48-hour setup",
+    ],
+    popular: false,
+  },
+  {
+    name: "Growth",
+    price: "£399",
+    period: "/mo",
+    description: "Advanced automation for scaling operations",
+    features: [
+      "5 automation workflows",
+      "Custom AI agents",
+      "CRM integration",
+      "Up to 10,000 tasks/month",
+      "Lead pipeline automation",
+      "Priority support",
+      "24-hour setup",
+      "Monthly optimization",
+    ],
+    popular: true,
+  },
+  {
+    name: "Enterprise",
+    price: "Custom",
+    description: "Full-scale AI transformation for your business",
+    features: [
+      "Unlimited workflows",
+      "Custom AI development",
+      "Full API integrations",
+      "Unlimited tasks",
+      "Dedicated account manager",
+      "24/7 support",
+      "Custom training",
+      "White-label options",
+    ],
+    popular: false,
+  },
+];
+
+interface PlanType {
+  name: string;
+  price: string;
+  period?: string;
+  description: string;
+  features: string[];
+  popular: boolean;
+}
+
+const PricingCard = ({ plan, index, periodLabel }: { plan: PlanType; index: number; periodLabel: string }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -94,7 +154,7 @@ const PricingCard = ({ plan, index }: { plan: typeof plans[0]; index: number }) 
           </span>
           {plan.price !== "Custom" && (
             <span className={plan.popular ? "text-primary-foreground/70" : "text-muted-foreground"}>
-              /project
+              {plan.period || periodLabel}
             </span>
           )}
         </div>
@@ -141,8 +201,12 @@ const PricingCard = ({ plan, index }: { plan: typeof plans[0]; index: number }) 
 };
 
 export const Pricing = () => {
+  const [activeTab, setActiveTab] = useState<"web" | "ai">("web");
   const headerRef = useRef(null);
   const isHeaderInView = useInView(headerRef, { once: true, margin: "-100px" });
+
+  const plans = activeTab === "web" ? webPlans : aiPlans;
+  const periodLabel = activeTab === "web" ? "/project" : "/mo";
 
   return (
     <section id="pricing" className="section-padding relative overflow-hidden bg-secondary/30">
@@ -153,7 +217,7 @@ export const Pricing = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16 md:mb-24"
+          className="text-center mb-12"
         >
           <span className="text-primary font-medium text-sm uppercase tracking-widest mb-4 block">
             Pricing
@@ -167,10 +231,36 @@ export const Pricing = () => {
           </p>
         </motion.div>
 
+        {/* Tab Switcher */}
+        <div className="flex justify-center mb-12">
+          <div className="inline-flex rounded-2xl bg-secondary/50 p-1.5 border border-border">
+            <button
+              onClick={() => setActiveTab("web")}
+              className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
+                activeTab === "web"
+                  ? "bg-primary text-primary-foreground shadow-lg"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Web Design
+            </button>
+            <button
+              onClick={() => setActiveTab("ai")}
+              className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
+                activeTab === "ai"
+                  ? "bg-primary text-primary-foreground shadow-lg"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              AI Automation
+            </button>
+          </div>
+        </div>
+
         {/* Pricing Grid */}
         <div className="grid md:grid-cols-3 gap-6 md:gap-8 items-start">
           {plans.map((plan, index) => (
-            <PricingCard key={plan.name} plan={plan} index={index} />
+            <PricingCard key={`${activeTab}-${plan.name}`} plan={plan} index={index} periodLabel={periodLabel} />
           ))}
         </div>
 

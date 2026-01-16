@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 
 const brands = [
-  "TechStart", "GrowthCo", "ScaleUp", "InnovateLabs", "FutureBrand",
-  "DigitalEdge", "CloudPeak", "NextLevel", "EliteVentures", "PrimeSoft"
+  "Web Design", "AI Automation", "Lead Pipelines", "Custom Agents", 
+  "No-Code Systems", "CRM Integration", "Conversion Design", "24/7 Bots"
 ];
 
 export const Marquee = () => {

@@ -6,22 +6,22 @@ const values = [
   {
     icon: TrendingUp,
     title: "Results-Driven",
-    description: "Every pixel serves a purpose. We focus on conversions, not just aesthetics.",
+    description: "Every design and automation serves a purpose. We focus on growth, not just aesthetics.",
   },
   {
     icon: Clock,
     title: "Lightning Fast",
-    description: "24-48 hour turnarounds on designs. We move at the speed of your ambition.",
+    description: "24-48 hour turnarounds on designs. Automation systems deployed in days, not months.",
   },
   {
     icon: Users,
     title: "Partnership Mindset",
-    description: "We're not vendors, we're partners invested in your long-term success.",
+    description: "We're not vendors, we're partners invested in your long-term success and efficiency.",
   },
   {
     icon: Award,
     title: "Excellence Standard",
-    description: "Award-winning work that stands out in crowded markets.",
+    description: "Award-winning design combined with cutting-edge AI automation.",
   },
 ];
 
@@ -61,8 +61,8 @@ export const About = () => {
                       <p className="text-sm text-muted-foreground mt-1">Projects Completed</p>
                     </div>
                     <div>
-                      <span className="text-3xl md:text-4xl font-display font-bold text-foreground">50+</span>
-                      <p className="text-sm text-muted-foreground mt-1">Happy Clients</p>
+                      <span className="text-3xl md:text-4xl font-display font-bold text-foreground">1000+</span>
+                      <p className="text-sm text-muted-foreground mt-1">Hours Automated</p>
                     </div>
                   </div>
                 </div>
@@ -89,13 +89,13 @@ export const About = () => {
               About AdvantFlow
             </span>
             <h2 className="heading-lg mb-6">
-              We're Not Just Designers.{" "}
-              <span className="text-gradient">We're Growth Partners.</span>
+              Web Design + AI.{" "}
+              <span className="text-gradient">One Partner.</span>
             </h2>
             <p className="body-lg mb-8">
-              Founded on the belief that great design should drive real business results, 
-              AdvantFlow combines stunning aesthetics with conversion-focused strategy. 
-              We don't just make things look good — we make them work.
+              AdvantFlow combines stunning web design with intelligent AI automation. 
+              We build beautiful websites that convert AND automation systems that save 
+              you hours every week. Your complete digital growth partner.
             </p>
 
             {/* Values */}
