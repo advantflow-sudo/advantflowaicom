@@ -46,10 +46,10 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="heading-xl mb-6"
           >
-            We Build Websites That{" "}
-            <span className="text-gradient glow-text">Convert</span>
+            Web Design +{" "}
+            <span className="text-gradient glow-text">AI Automation</span>
             <br />
-            Visitors Into Customers
+            That Drives Growth
           </motion.h1>
 
           {/* Subheadline */}
@@ -59,8 +59,8 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="body-lg max-w-2xl mx-auto mb-12"
           >
-            We're not just designers — we're your growth partners. High-converting websites 
-            that turn your brand into a revenue machine. 24-48 hour turnaround.
+            We build high-converting websites and intelligent automation systems 
+            that save you 10-100 hours per month. Your growth partner for the digital age.
           </motion.p>
 
           {/* CTAs */}
