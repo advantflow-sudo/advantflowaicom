@@ -4,23 +4,23 @@ import { Star, Quote } from "lucide-react";
 
 const testimonials = [
   {
-    name: "Sarah Chen",
-    role: "CEO, TechStart",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80",
+    name: "James Whitmore",
+    role: "CEO, Finsbury Digital",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80",
     content: "AdvantFlow transformed our digital presence completely. Our conversion rate jumped by 340% within the first month. They don't just build websites — they build revenue machines.",
     rating: 5,
   },
   {
-    name: "Marcus Johnson",
-    role: "Founder, GrowthCo",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80",
+    name: "Sophie Anderson",
+    role: "Founder, Camden Ventures",
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80",
     content: "The team's attention to detail is unmatched. They delivered our project in just 3 days and it looks absolutely stunning. Worth every penny invested.",
     rating: 5,
   },
   {
-    name: "Emily Rodriguez",
-    role: "Marketing Director, ScaleUp",
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80",
+    name: "Oliver Thompson",
+    role: "Marketing Director, Mayfair Group",
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80",
     content: "We've worked with many agencies before, but AdvantFlow is different. They truly understand business goals and translate them into beautiful, functional designs.",
     rating: 5,
   },
@@ -117,7 +117,7 @@ export const Testimonials = () => {
         >
           {[
             { value: "150+", label: "Projects Delivered" },
-            { value: "$4.2M", label: "Revenue Generated" },
+            { value: "£3.2M", label: "Revenue Generated" },
             { value: "98%", label: "Client Satisfaction" },
             { value: "24hrs", label: "Avg. Response Time" },
           ].map((stat) => (
