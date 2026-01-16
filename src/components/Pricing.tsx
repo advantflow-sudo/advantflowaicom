@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 const plans = [
   {
     name: "Starter",
-    price: "$1,997",
+    price: "£1,497",
     description: "Perfect for startups and small businesses looking to make an impact",
     features: [
       "5-page responsive website",
@@ -21,7 +21,7 @@ const plans = [
   },
   {
     name: "Growth",
-    price: "$4,997",
+    price: "£3,997",
     description: "For businesses ready to scale with a high-converting online presence",
     features: [
       "10-page responsive website",
