@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 const projects = [
   {
     id: 1,
-    title: "TechStart Platform",
+    title: "Finsbury Digital",
     category: "SaaS Website",
     description: "A modern SaaS platform redesign that increased conversions by 340%",
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
@@ -15,16 +15,16 @@ const projects = [
   },
   {
     id: 2,
-    title: "LuxeBrand E-commerce",
+    title: "Mayfair Luxury",
     category: "E-commerce",
     description: "Premium e-commerce experience for a luxury fashion brand",
     image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80",
-    stats: "$2.4M revenue",
+    stats: "£1.8M revenue",
     color: "from-accent to-pink-500",
   },
   {
     id: 3,
-    title: "FinanceFlow Dashboard",
+    title: "Thames Fintech",
     category: "Web Application",
     description: "Complex fintech dashboard with real-time data visualization",
     image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
@@ -33,7 +33,7 @@ const projects = [
   },
   {
     id: 4,
-    title: "CreativeStudio Portfolio",
+    title: "Shoreditch Creative",
     category: "Portfolio",
     description: "Award-winning portfolio site for a creative agency",
     image: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=800&q=80",

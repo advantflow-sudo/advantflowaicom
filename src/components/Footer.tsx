@@ -54,22 +54,22 @@ export const Footer = () => {
             {/* Contact Info */}
             <div className="space-y-4">
               <a
-                href="mailto:hello@advantflow.com"
+                href="mailto:hello@advantflow.co.uk"
                 className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors"
               >
                 <Mail className="w-5 h-5" />
-                hello@advantflow.com
+                hello@advantflow.co.uk
               </a>
               <a
-                href="tel:+1234567890"
+                href="tel:+442071234567"
                 className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors"
               >
                 <Phone className="w-5 h-5" />
-                +1 (234) 567-890
+                +44 20 7123 4567
               </a>
               <div className="flex items-center gap-3 text-muted-foreground">
                 <MapPin className="w-5 h-5" />
-                San Francisco, CA
+                London, United Kingdom
               </div>
             </div>
           </div>
@@ -128,9 +128,10 @@ export const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="flex flex-col md:flex-row items-center justify-between py-8 border-t border-border gap-6">
-          <p className="text-sm text-muted-foreground">
-            © 2026 AdvantFlow. All rights reserved.
-          </p>
+          <div className="text-sm text-muted-foreground text-center md:text-left">
+            <p>© 2026 AdvantFlow Ltd. All rights reserved.</p>
+            <p className="mt-1">Registered in England & Wales. Company No: 12345678 | VAT No: GB123456789</p>
+          </div>
 
           {/* Social Links */}
           <div className="flex items-center gap-6">

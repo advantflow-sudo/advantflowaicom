@@ -88,10 +88,10 @@ export const Hero = () => {
             className="mt-16 pt-16 border-t border-border"
           >
             <p className="text-sm text-muted-foreground mb-8 uppercase tracking-widest">
-              Trusted by ambitious brands
+              Trusted by ambitious UK brands
             </p>
             <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16 opacity-50">
-              {["TechStart", "GrowthCo", "ScaleUp", "InnovateLabs", "FutureBrand"].map((brand) => (
+              {["Finsbury", "Thames Digital", "Camden Labs", "Mayfair Co", "Shoreditch Studio"].map((brand) => (
                 <span key={brand} className="font-display text-xl md:text-2xl font-bold text-muted-foreground">
                   {brand}
                 </span>
