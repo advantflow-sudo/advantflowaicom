@@ -85,23 +85,57 @@ const ServiceCard = ({ service, index }: { service: typeof webServices[0]; index
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const Icon = service.icon;
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 60 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      className="group relative p-8 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-500 hover:shadow-xl hover:shadow-primary/5"
+      transition={{ duration: 0.7, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="group relative p-8 rounded-2xl bg-card border border-border hover:border-primary/40 transition-all duration-500"
+      style={{
+        boxShadow: isHovered 
+          ? '0 24px 48px -12px hsl(var(--background) / 0.9), 0 0 0 1px hsl(var(--primary) / 0.1)' 
+          : '0 4px 24px -4px hsl(var(--background) / 0.8)',
+        transform: isHovered ? 'translateY(-8px)' : 'translateY(0)',
+      }}
     >
       {/* Glow effect on hover */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <motion.div 
+        className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/8 to-accent/8"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isHovered ? 1 : 0 }}
+        transition={{ duration: 0.4 }}
+      />
+      
+      {/* Shimmer effect */}
+      <motion.div
+        className="absolute inset-0 rounded-2xl overflow-hidden"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isHovered ? 1 : 0 }}
+      >
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent -skew-x-12"
+          animate={isHovered ? { x: ['-100%', '200%'] } : {}}
+          transition={{ duration: 1.5, ease: "easeInOut" }}
+        />
+      </motion.div>
       
       <div className="relative z-10">
         {/* Icon */}
-        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+        <motion.div 
+          className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-6"
+          animate={{ 
+            scale: isHovered ? 1.1 : 1,
+            rotate: isHovered ? 3 : 0,
+          }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        >
           <Icon className="w-7 h-7 text-primary-foreground" />
-        </div>
+        </motion.div>
 
         {/* Title */}
         <h3 className="font-display text-xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors duration-300">
@@ -114,12 +148,22 @@ const ServiceCard = ({ service, index }: { service: typeof webServices[0]; index
         </p>
 
         {/* Features */}
-        <ul className="space-y-2">
-          {service.features.map((feature) => (
-            <li key={feature} className="flex items-center gap-2 text-sm text-muted-foreground">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+        <ul className="space-y-2.5">
+          {service.features.map((feature, i) => (
+            <motion.li 
+              key={feature} 
+              className="flex items-center gap-2.5 text-sm text-muted-foreground"
+              initial={{ opacity: 0.7 }}
+              animate={{ opacity: isHovered ? 1 : 0.7 }}
+              transition={{ delay: i * 0.05 }}
+            >
+              <motion.span 
+                className="w-1.5 h-1.5 rounded-full bg-primary"
+                animate={{ scale: isHovered ? [1, 1.3, 1] : 1 }}
+                transition={{ delay: i * 0.1, duration: 0.3 }}
+              />
               {feature}
-            </li>
+            </motion.li>
           ))}
         </ul>
       </div>
