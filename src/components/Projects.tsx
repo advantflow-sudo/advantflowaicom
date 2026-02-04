@@ -52,18 +52,29 @@ const ProjectCard = ({ project, index }: { project: typeof projects[0]; index: n
       ref={ref}
       initial={{ opacity: 0, y: 80 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.8, delay: index * 0.15 }}
+      transition={{ duration: 0.8, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className={`relative group cursor-pointer ${
         index === 0 ? "md:col-span-2 md:row-span-2" : ""
       }`}
     >
-      <div className="relative h-full min-h-[400px] md:min-h-[500px] rounded-3xl overflow-hidden">
+      <motion.div 
+        className="relative h-full min-h-[400px] md:min-h-[500px] rounded-3xl overflow-hidden"
+        animate={{ 
+          y: isHovered ? -8 : 0,
+        }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        style={{
+          boxShadow: isHovered 
+            ? '0 32px 64px -16px hsl(var(--background) / 0.95)' 
+            : '0 8px 32px -8px hsl(var(--background) / 0.8)',
+        }}
+      >
         {/* Image */}
         <motion.div
-          animate={{ scale: isHovered ? 1.05 : 1 }}
-          transition={{ duration: 0.6 }}
+          animate={{ scale: isHovered ? 1.08 : 1 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="absolute inset-0"
         >
           <img
@@ -74,8 +85,12 @@ const ProjectCard = ({ project, index }: { project: typeof projects[0]; index: n
         </motion.div>
 
         {/* Overlay */}
-        <div className={`absolute inset-0 bg-gradient-to-t ${project.color} opacity-60 mix-blend-multiply`} />
-        <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
+        <motion.div 
+          className={`absolute inset-0 bg-gradient-to-t ${project.color} mix-blend-multiply`}
+          animate={{ opacity: isHovered ? 0.7 : 0.55 }}
+          transition={{ duration: 0.4 }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
 
         {/* Content */}
         <div className="absolute inset-0 p-8 flex flex-col justify-end">
@@ -83,36 +98,44 @@ const ProjectCard = ({ project, index }: { project: typeof projects[0]; index: n
           <motion.span
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: index * 0.15 + 0.3 }}
-            className="inline-flex w-fit items-center px-3 py-1 rounded-full text-xs font-medium bg-foreground/10 backdrop-blur-sm text-foreground mb-4"
+            transition={{ delay: index * 0.12 + 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="inline-flex w-fit items-center px-4 py-1.5 rounded-full text-xs font-semibold bg-foreground/10 backdrop-blur-md text-foreground mb-4 border border-foreground/10"
           >
             {project.category}
           </motion.span>
 
           {/* Title */}
-          <h3 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
+          <motion.h3 
+            className="font-display text-2xl md:text-3xl font-bold text-foreground mb-3"
+            animate={{ color: isHovered ? 'hsl(var(--primary))' : 'hsl(var(--foreground))' }}
+            transition={{ duration: 0.3 }}
+          >
             {project.title}
-          </h3>
+          </motion.h3>
 
           {/* Description */}
-          <p className="text-foreground/80 mb-4 max-w-md">
+          <p className="text-foreground/80 mb-5 max-w-md leading-relaxed">
             {project.description}
           </p>
 
           {/* Stats & Link */}
           <div className="flex items-center justify-between">
-            <span className="text-primary font-semibold">{project.stats}</span>
+            <span className="text-primary font-bold text-lg">{project.stats}</span>
             <motion.div
-              animate={{ x: isHovered ? 0 : -10, opacity: isHovered ? 1 : 0 }}
-              transition={{ duration: 0.3 }}
+              animate={{ 
+                x: isHovered ? 0 : -16, 
+                opacity: isHovered ? 1 : 0,
+                scale: isHovered ? 1 : 0.8,
+              }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/30">
                 <ArrowUpRight className="w-5 h-5 text-primary-foreground" />
               </div>
             </motion.div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   );
 };
