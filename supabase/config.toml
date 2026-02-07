@@ -2,3 +2,6 @@ project_id = "cdahbpcdepcqnhqqveom"
 
 [functions.send-lead-confirmation]
 verify_jwt = false
+
+[functions.create-project-payment]
+verify_jwt = false
