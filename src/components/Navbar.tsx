@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 const navLinks = [
   { name: "Web Design", href: "#services" },
@@ -14,6 +15,7 @@ const navLinks = [
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -76,9 +78,11 @@ export const Navbar = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.4, duration: 0.5 }}
         >
-          <Button variant="hero" size="lg">
-            Start a Project
-          </Button>
+          <a href={user ? "/portal" : "/auth"}>
+            <Button variant="hero" size="lg">
+              {user ? "Client Portal" : "Start a Project"}
+            </Button>
+          </a>
         </motion.div>
 
         {/* Mobile Menu Toggle */}
@@ -142,9 +146,11 @@ export const Navbar = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <Button variant="hero" size="lg" className="mt-4 w-full">
-                  Start a Project
-                </Button>
+                <a href={user ? "/portal" : "/auth"} className="w-full">
+                  <Button variant="hero" size="lg" className="mt-4 w-full">
+                    {user ? "Client Portal" : "Start a Project"}
+                  </Button>
+                </a>
               </motion.div>
             </nav>
           </motion.div>
