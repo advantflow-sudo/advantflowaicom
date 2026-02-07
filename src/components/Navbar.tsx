@@ -9,6 +9,7 @@ const navLinks = [
   { name: "AI Automation", href: "#ai-automation" },
   { name: "Work", href: "#work" },
   { name: "About", href: "#about" },
+  { name: "Blog", href: "/blog" },
   { name: "Contact", href: "#contact" },
 ];
 
