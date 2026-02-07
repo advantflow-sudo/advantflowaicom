@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { LogOut, LayoutDashboard, FolderOpen, User, Loader2 } from "lucide-react";
+import { LogOut, LayoutDashboard, FolderOpen, User, Loader2, MessageCircle, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { ProjectCard } from "@/components/portal/ProjectCard";
 import { ProfileSection } from "@/components/portal/ProfileSection";
+import { ChatInbox } from "@/components/portal/ChatInbox";
+import { BlogManager } from "@/components/portal/BlogManager";
 
 interface ClientProject {
   id: string;
@@ -29,6 +31,8 @@ interface Profile {
   avatar_url: string | null;
 }
 
+type TabId = "projects" | "profile" | "chat" | "blog";
+
 const Portal = () => {
   const { user, loading: authLoading, signOut } = useAuth();
   const navigate = useNavigate();
@@ -36,12 +40,11 @@ const Portal = () => {
   const [projects, setProjects] = useState<ClientProject[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loadingData, setLoadingData] = useState(true);
-  const [activeTab, setActiveTab] = useState<"projects" | "profile">("projects");
+  const [activeTab, setActiveTab] = useState<TabId>("projects");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    if (!authLoading && !user) {
-      navigate("/auth");
-    }
+    if (!authLoading && !user) navigate("/auth");
   }, [user, authLoading, navigate]);
 
   useEffect(() => {
@@ -56,20 +59,20 @@ const Portal = () => {
   }, [searchParams, setSearchParams]);
 
   useEffect(() => {
-    if (user) {
-      fetchData();
-    }
+    if (user) fetchData();
   }, [user]);
 
   const fetchData = async () => {
     setLoadingData(true);
-    const [projectsRes, profileRes] = await Promise.all([
+    const [projectsRes, profileRes, rolesRes] = await Promise.all([
       supabase.from("client_projects").select("*").order("created_at", { ascending: false }),
       supabase.from("profiles").select("*").eq("user_id", user!.id).single(),
+      supabase.from("user_roles").select("role").eq("user_id", user!.id),
     ]);
 
     if (projectsRes.data) setProjects(projectsRes.data);
     if (profileRes.data) setProfile(profileRes.data);
+    if (rolesRes.data) setIsAdmin(rolesRes.data.some((r) => r.role === "admin"));
     setLoadingData(false);
   };
 
@@ -87,14 +90,22 @@ const Portal = () => {
   }
 
   const statusCounts = {
-    active: projects.filter(p => p.status === "in_progress").length,
-    review: projects.filter(p => p.status === "review").length,
-    completed: projects.filter(p => p.status === "completed").length,
+    active: projects.filter((p) => p.status === "in_progress").length,
+    review: projects.filter((p) => p.status === "review").length,
+    completed: projects.filter((p) => p.status === "completed").length,
   };
+
+  const tabs: { id: TabId; label: string; icon: any; adminOnly?: boolean }[] = [
+    { id: "projects", label: "Projects", icon: FolderOpen },
+    { id: "profile", label: "Profile", icon: User },
+    { id: "blog", label: "Blog", icon: FileText, adminOnly: true },
+    { id: "chat", label: "Chat", icon: MessageCircle, adminOnly: true },
+  ];
+
+  const visibleTabs = tabs.filter((t) => !t.adminOnly || isAdmin);
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <header className="border-b border-border glass sticky top-0 z-50">
         <div className="container-wide px-6 md:px-12 lg:px-24 py-4 flex items-center justify-between">
           <a href="/" className="flex items-center gap-2.5">
@@ -105,11 +116,8 @@ const Portal = () => {
               Advant<span className="text-primary">Flow</span>
             </span>
           </a>
-
           <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground hidden md:block">
-              {user.email}
-            </span>
+            <span className="text-sm text-muted-foreground hidden md:block">{user.email}</span>
             <Button variant="outline" size="sm" onClick={handleSignOut}>
               <LogOut className="w-4 h-4 mr-2" />
               Sign Out
@@ -119,19 +127,13 @@ const Portal = () => {
       </header>
 
       <main className="container-wide px-6 md:px-12 lg:px-24 py-12">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <h1 className="heading-lg mb-2">
             Welcome{profile?.full_name ? `, ${profile.full_name}` : ""}
           </h1>
-          <p className="text-muted-foreground mb-8">
-            Track your projects, invoices, and account details.
-          </p>
+          <p className="text-muted-foreground mb-8">Track your projects, invoices, and account details.</p>
 
-          {/* Stats Cards */}
+          {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
             {[
               { label: "Active Projects", value: statusCounts.active, icon: FolderOpen },
@@ -151,11 +153,8 @@ const Portal = () => {
           </div>
 
           {/* Tabs */}
-          <div className="flex gap-2 mb-8">
-            {[
-              { id: "projects" as const, label: "Projects", icon: FolderOpen },
-              { id: "profile" as const, label: "Profile", icon: User },
-            ].map((tab) => (
+          <div className="flex gap-2 mb-8 flex-wrap">
+            {visibleTabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
@@ -181,12 +180,8 @@ const Portal = () => {
               <div className="card-enhanced rounded-2xl p-12 text-center">
                 <FolderOpen className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                 <h3 className="heading-md mb-2">No projects yet</h3>
-                <p className="text-muted-foreground mb-6">
-                  Once you start a project with us, it will appear here.
-                </p>
-                <Button variant="hero" onClick={() => navigate("/#contact")}>
-                  Start a Project
-                </Button>
+                <p className="text-muted-foreground mb-6">Once you start a project with us, it will appear here.</p>
+                <Button variant="hero" onClick={() => navigate("/#contact")}>Start a Project</Button>
               </div>
             ) : (
               <div className="grid gap-4">
@@ -195,9 +190,13 @@ const Portal = () => {
                 ))}
               </div>
             )
-          ) : (
+          ) : activeTab === "profile" ? (
             <ProfileSection profile={profile} user={user} onUpdate={fetchData} />
-          )}
+          ) : activeTab === "chat" ? (
+            <ChatInbox />
+          ) : activeTab === "blog" ? (
+            <BlogManager />
+          ) : null}
         </motion.div>
       </main>
     </div>
