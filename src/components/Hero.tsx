@@ -38,9 +38,9 @@ export const Hero = () => {
             transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             className="heading-xl mb-8"
           >
-            <span className="block">Web Design +</span>
-            <span className="text-gradient glow-text">AI Automation</span>
-            <span className="block mt-2">That Drives Growth</span>
+            <span className="block">Automate Your Business.</span>
+            <span className="text-gradient glow-text">Unlock Your</span>
+            <span className="block mt-2">Advantage.</span>
           </motion.h1>
 
           {/* Subheadline */}

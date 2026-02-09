@@ -52,7 +52,7 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         glow: "hsl(var(--glow))",
-        "glow-purple": "hsl(var(--glow-purple))",
+        "glow-blue": "hsl(var(--glow-blue))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
