@@ -113,7 +113,7 @@ const Portal = () => {
               <span className="text-primary-foreground font-bold text-xl">A</span>
             </div>
             <span className="font-display font-bold text-xl text-foreground">
-              Advant<span className="text-primary">Flow</span>
+              Advant<span className="text-primary">FlowAI</span>
             </span>
           </a>
           <div className="flex items-center gap-4">

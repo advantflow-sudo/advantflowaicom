@@ -50,7 +50,7 @@ export const Footer = () => {
                 <span className="text-primary-foreground font-bold text-xl">A</span>
               </div>
               <span className="font-display font-bold text-2xl text-foreground">
-                Advant<span className="text-primary">Flow</span>
+                Advant<span className="text-primary">FlowAI</span>
               </span>
             </div>
 
@@ -62,14 +62,14 @@ export const Footer = () => {
             {/* Contact Info */}
             <div className="space-y-5">
               <motion.a
-                href="mailto:hello@advantflow.co.uk"
+                href="mailto:hello@advantflowai.co.uk"
                 className="flex items-center gap-4 text-muted-foreground hover:text-foreground transition-colors duration-300 group"
                 whileHover={{ x: 4 }}
               >
                 <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center group-hover:bg-primary/10 transition-colors">
                   <Mail className="w-5 h-5 group-hover:text-primary transition-colors" />
                 </div>
-                <span>hello@advantflow.co.uk</span>
+                <span>hello@advantflowai.co.uk</span>
               </motion.a>
               <motion.a
                 href="tel:+442071234567"
@@ -138,7 +138,7 @@ export const Footer = () => {
           transition={{ duration: 0.7, delay: 0.3 }}
         >
           <div className="text-sm text-muted-foreground text-center md:text-left">
-            <p>© 2026 AdvantFlow Ltd. All rights reserved.</p>
+            <p>© 2026 AdvantFlowAI Ltd. All rights reserved.</p>
             <p className="mt-1 opacity-70">Registered in England & Wales. Company No: 12345678 | VAT No: GB123456789</p>
           </div>
 

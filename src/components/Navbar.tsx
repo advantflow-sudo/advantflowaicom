@@ -51,7 +51,7 @@ export const Navbar = () => {
             <span className="text-primary-foreground font-bold text-xl">A</span>
           </motion.div>
           <span className="font-display font-bold text-xl text-foreground">
-            Advant<span className="text-primary">Flow</span>
+            Advant<span className="text-primary">FlowAI</span>
           </span>
         </motion.a>
 

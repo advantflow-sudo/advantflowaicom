@@ -7,7 +7,7 @@ const testimonials = [
     name: "James Whitmore",
     role: "CEO, Finsbury Digital",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80",
-    content: "AdvantFlow transformed our digital presence completely. Our conversion rate jumped by 340% within the first month. They don't just build websites — they build revenue machines.",
+    content: "AdvantFlowAI transformed our digital presence completely. Our conversion rate jumped by 340% within the first month. They don't just build websites — they build revenue machines.",
     rating: 5,
   },
   {
@@ -21,7 +21,7 @@ const testimonials = [
     name: "Oliver Thompson",
     role: "Marketing Director, Mayfair Group",
     image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80",
-    content: "We've worked with many agencies before, but AdvantFlow is different. They truly understand business goals and translate them into beautiful, functional designs.",
+    content: "We've worked with many agencies before, but AdvantFlowAI is different. They truly understand business goals and translate them into beautiful, functional designs.",
     rating: 5,
   },
 ];
@@ -96,7 +96,7 @@ export const Testimonials = () => {
             <span className="text-gradient">Say About Us</span>
           </h2>
           <p className="body-lg max-w-2xl mx-auto">
-            Don't just take our word for it. Here's what our partners have to say about working with AdvantFlow.
+            Don't just take our word for it. Here's what our partners have to say about working with AdvantFlowAI.
           </p>
         </motion.div>
 

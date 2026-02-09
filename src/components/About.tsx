@@ -86,14 +86,14 @@ export const About = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <span className="text-primary font-medium text-sm uppercase tracking-widest mb-4 block">
-              About AdvantFlow
+              About AdvantFlowAI
             </span>
             <h2 className="heading-lg mb-6">
               Web Design + AI.{" "}
               <span className="text-gradient">One Partner.</span>
             </h2>
             <p className="body-lg mb-8">
-              AdvantFlow combines stunning web design with intelligent AI automation. 
+              AdvantFlowAI combines stunning web design with intelligent AI automation. 
               We build beautiful websites that convert AND automation systems that save 
               you hours every week. Your complete digital growth partner.
             </p>
