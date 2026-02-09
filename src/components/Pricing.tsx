@@ -205,7 +205,7 @@ const PricingCard = ({ plan, index, periodLabel, isAi }: { plan: PlanType; index
         variant={plan.popular ? "secondary" : "hero"}
         size="lg"
         className={`w-full group ${plan.popular ? "bg-primary-foreground text-primary hover:bg-primary-foreground/90" : ""}`}
-        onClick={isAi && plan.priceId ? handleSubscribe : undefined}
+        onClick={isAi && plan.priceId ? handleSubscribe : () => { document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }); }}
         disabled={loading}
       >
         {loading ? (
