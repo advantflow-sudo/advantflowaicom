@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { LogOut, LayoutDashboard, FolderOpen, User, Loader2, MessageCircle, FileText } from "lucide-react";
+import { LogOut, LayoutDashboard, FolderOpen, User, Loader2, MessageCircle, FileText, Files, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,6 +10,8 @@ import { ProjectCard } from "@/components/portal/ProjectCard";
 import { ProfileSection } from "@/components/portal/ProfileSection";
 import { ChatInbox } from "@/components/portal/ChatInbox";
 import { BlogManager } from "@/components/portal/BlogManager";
+import { FileManager } from "@/components/portal/FileManager";
+import { AdminDashboard } from "@/components/portal/AdminDashboard";
 
 interface ClientProject {
   id: string;
@@ -31,7 +33,7 @@ interface Profile {
   avatar_url: string | null;
 }
 
-type TabId = "projects" | "profile" | "chat" | "blog";
+type TabId = "projects" | "files" | "profile" | "admin" | "chat" | "blog";
 
 const Portal = () => {
   const { user, loading: authLoading, signOut } = useAuth();
@@ -97,7 +99,9 @@ const Portal = () => {
 
   const tabs: { id: TabId; label: string; icon: any; adminOnly?: boolean }[] = [
     { id: "projects", label: "Projects", icon: FolderOpen },
+    { id: "files", label: "Files", icon: Files },
     { id: "profile", label: "Profile", icon: User },
+    { id: "admin", label: "Admin", icon: Shield, adminOnly: true },
     { id: "blog", label: "Blog", icon: FileText, adminOnly: true },
     { id: "chat", label: "Chat", icon: MessageCircle, adminOnly: true },
   ];
@@ -131,7 +135,7 @@ const Portal = () => {
           <h1 className="heading-lg mb-2">
             Welcome{profile?.full_name ? `, ${profile.full_name}` : ""}
           </h1>
-          <p className="text-muted-foreground mb-8">Track your projects, invoices, and account details.</p>
+          <p className="text-muted-foreground mb-8">Track your projects, files, invoices, and account details.</p>
 
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
@@ -190,8 +194,12 @@ const Portal = () => {
                 ))}
               </div>
             )
+          ) : activeTab === "files" ? (
+            <FileManager projects={projects.map((p) => ({ id: p.id, title: p.title }))} isAdmin={isAdmin} />
           ) : activeTab === "profile" ? (
             <ProfileSection profile={profile} user={user} onUpdate={fetchData} />
+          ) : activeTab === "admin" ? (
+            <AdminDashboard />
           ) : activeTab === "chat" ? (
             <ChatInbox />
           ) : activeTab === "blog" ? (
