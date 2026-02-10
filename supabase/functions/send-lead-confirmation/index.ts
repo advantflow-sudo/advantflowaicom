@@ -56,7 +56,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send confirmation email to the lead
     const confirmationEmail = await sendEmail({
-      from: "Advant Flow <onboarding@resend.dev>",
+      from: "Advant Flow <hello@advantflow.co.uk>",
       to: [email],
       subject: "Thanks for reaching out to Advant Flow!",
       html: `
@@ -97,7 +97,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send notification email to the business
     const notificationEmail = await sendEmail({
-      from: "Advant Flow Website <onboarding@resend.dev>",
+      from: "Advant Flow Website <hello@advantflow.co.uk>",
       to: ["hello@advantflow.co.uk"],
       subject: `New Lead: ${name} - ${service_interest || "General Inquiry"}`,
       html: `
