@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { Palette, Code2, Rocket, LineChart, Zap, Headphones, Bot, Workflow, MessageSquare, Plug, Clock, Users } from "lucide-react";
+import servicesImage from "@/assets/services-image.png";
 
 const webServices = [
   {
@@ -213,7 +214,12 @@ export const Services = () => {
 
       {/* AI Automation Services */}
       <section id="ai-automation" className="section-padding relative overflow-hidden bg-muted/30">
-        <div className="container-wide">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img src={servicesImage} alt="" className="w-full h-full object-cover opacity-10" />
+          <div className="absolute inset-0 bg-background/80" />
+        </div>
+        <div className="container-wide relative z-10">
           {/* Section Header */}
           <motion.div
             ref={aiHeaderRef}

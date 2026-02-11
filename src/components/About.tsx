@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Award, Users, TrendingUp, Clock } from "lucide-react";
+import aboutBg from "@/assets/about-bg.png";
 
 const values = [
   {
@@ -42,8 +43,11 @@ export const About = () => {
             className="relative"
           >
             <div className="relative aspect-square max-w-lg mx-auto">
-              {/* Background Elements */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl blur-3xl" />
+              {/* Background Image */}
+              <div className="absolute inset-0 rounded-3xl overflow-hidden">
+                <img src={aboutBg} alt="" className="w-full h-full object-cover opacity-40" />
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20" />
+              </div>
               
               {/* Main Card */}
               <div className="relative h-full rounded-3xl bg-gradient-to-br from-card to-secondary border border-border p-8 md:p-12 flex flex-col justify-center">
