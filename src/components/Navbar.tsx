@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import logoIcon from "@/assets/logo-icon.png";
 
 const navLinks = [
   { name: "Web Design", href: "#services" },
@@ -44,11 +45,11 @@ export const Navbar = () => {
           whileTap={{ scale: 0.98 }}
         >
           <motion.div 
-            className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20"
+            className="w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-primary/20"
             whileHover={{ rotate: 5 }}
             transition={{ duration: 0.3 }}
           >
-            <span className="text-primary-foreground font-bold text-xl">A</span>
+            <img src={logoIcon} alt="AdvantFlowAI" className="w-full h-full object-cover" />
           </motion.div>
           <span className="font-display font-bold text-xl text-foreground">
             Advant<span className="text-primary">FlowAI</span>

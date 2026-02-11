@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Play, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AnimatedBackground } from "./AnimatedBackground";
+import heroImage from "@/assets/hero-image.png";
 
 export const Hero = () => {
   return (
@@ -11,6 +12,16 @@ export const Hero = () => {
       
       {/* Radial Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-radial" />
+
+      {/* Hero Image Overlay */}
+      <div className="absolute inset-0 z-[1]">
+        <img 
+          src={heroImage} 
+          alt="" 
+          className="w-full h-full object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/30" />
+      </div>
 
       <div className="container-wide section-padding relative z-10">
         <div className="max-w-5xl mx-auto text-center">
