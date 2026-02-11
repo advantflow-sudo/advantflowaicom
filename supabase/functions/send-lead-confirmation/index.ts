@@ -58,34 +58,43 @@ const handler = async (req: Request): Promise<Response> => {
     const confirmationEmail = await sendEmail({
       from: "AdvantFlowAI <hello@advantflowai.co.uk>",
       to: [email],
-      subject: "Thanks for reaching out to Advant Flow!",
+      subject: "Thanks for reaching out to AdvantFlowAI!",
       html: `
         <!DOCTYPE html>
         <html>
           <head>
             <style>
-              body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
-              .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
-              .header { text-align: center; margin-bottom: 30px; }
-              .logo { font-size: 28px; font-weight: bold; color: #0ea5e9; }
-              .content { background: #f8fafc; padding: 30px; border-radius: 12px; }
-              .footer { text-align: center; margin-top: 30px; color: #64748b; font-size: 14px; }
+              body { font-family: 'Space Grotesk', 'Segoe UI', sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #0a0e1a; color: #e2e8f0; }
+              .container { max-width: 600px; margin: 0 auto; padding: 0; }
+              .header { background: linear-gradient(135deg, #1a1f4d 0%, #0a0e2a 100%); text-align: center; padding: 40px 20px 30px; border-bottom: 2px solid #00d4ff; }
+              .logo { font-size: 28px; font-weight: bold; letter-spacing: -0.5px; }
+              .logo-advant { color: #ffffff; }
+              .logo-flow { color: #00d4ff; }
+              .logo-ai { color: #ffffff; }
+              .content { background: #111827; padding: 40px 30px; }
+              .content h2 { color: #ffffff; margin-top: 0; }
+              .content p { color: #94a3b8; }
+              .content strong { color: #00d4ff; }
+              .cta-button { display: inline-block; background: linear-gradient(135deg, #00d4ff, #0ea5e9); color: #0a0e1a; font-weight: bold; padding: 12px 28px; border-radius: 8px; text-decoration: none; margin-top: 20px; }
+              .footer { background: #0a0e1a; text-align: center; padding: 30px 20px; color: #475569; font-size: 13px; border-top: 1px solid #1e293b; }
+              .footer a { color: #00d4ff; text-decoration: none; }
             </style>
           </head>
           <body>
             <div class="container">
               <div class="header">
-                <div class="logo">Advant Flow</div>
+                <div class="logo"><span class="logo-advant">Advant</span><span class="logo-flow">Flow</span><span class="logo-ai">AI</span></div>
               </div>
               <div class="content">
                 <h2>Hi ${name},</h2>
-                <p>Thank you for getting in touch with us! We've received your message and one of our team members will get back to you within 24 hours.</p>
+                <p>Thank you for getting in touch! We've received your message and one of our team will get back to you within <strong>24 hours</strong>.</p>
                 <p>In the meantime, feel free to browse our portfolio and see the work we've done for other ambitious brands.</p>
-                <p>Best regards,<br><strong>The Advant Flow Team</strong></p>
+                <a href="https://advantflowai.co.uk" class="cta-button">Visit Our Website →</a>
+                <p style="margin-top: 30px;">Best regards,<br><strong>The AdvantFlowAI Team</strong></p>
               </div>
               <div class="footer">
                 <p>Web Design + AI Automation | London, UK</p>
-                <p>© ${new Date().getFullYear()} Advant Flow Ltd. All rights reserved.</p>
+                <p>© ${new Date().getFullYear()} AdvantFlowAI Ltd. All rights reserved.</p>
               </div>
             </div>
           </body>
@@ -105,31 +114,43 @@ const handler = async (req: Request): Promise<Response> => {
         <html>
           <head>
             <style>
-              body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
-              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-              .field { margin-bottom: 15px; }
-              .label { font-weight: bold; color: #0ea5e9; }
-              .value { margin-top: 5px; }
-              .message-box { background: #f1f5f9; padding: 20px; border-radius: 8px; margin-top: 20px; }
+              body { font-family: 'Space Grotesk', 'Segoe UI', sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #0a0e1a; color: #e2e8f0; }
+              .container { max-width: 600px; margin: 0 auto; }
+              .header { background: linear-gradient(135deg, #1a1f4d, #0a0e2a); padding: 30px 20px; text-align: center; border-bottom: 2px solid #00d4ff; }
+              .header h2 { color: #ffffff; margin: 0; font-size: 22px; }
+              .header h2 span { color: #00d4ff; }
+              .body { background: #111827; padding: 30px; }
+              .field { margin-bottom: 18px; }
+              .label { font-weight: bold; color: #00d4ff; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+              .value { margin-top: 4px; color: #e2e8f0; font-size: 15px; }
+              .message-box { background: #1e293b; padding: 20px; border-radius: 8px; margin-top: 20px; border-left: 3px solid #00d4ff; }
+              .footer { background: #0a0e1a; text-align: center; padding: 20px; color: #475569; font-size: 12px; border-top: 1px solid #1e293b; }
             </style>
           </head>
           <body>
             <div class="container">
-              <h2>🎉 New Lead from Website!</h2>
-              <div class="field">
-                <div class="label">Name</div>
-                <div class="value">${name}</div>
+              <div class="header">
+                <h2>🎉 New Lead from <span>AdvantFlowAI</span></h2>
               </div>
-              <div class="field">
-                <div class="label">Email</div>
-                <div class="value">${email}</div>
+              <div class="body">
+                <div class="field">
+                  <div class="label">Name</div>
+                  <div class="value">${name}</div>
+                </div>
+                <div class="field">
+                  <div class="label">Email</div>
+                  <div class="value">${email}</div>
+                </div>
+                ${company ? `<div class="field"><div class="label">Company</div><div class="value">${company}</div></div>` : ''}
+                ${phone ? `<div class="field"><div class="label">Phone</div><div class="value">${phone}</div></div>` : ''}
+                ${service_interest ? `<div class="field"><div class="label">Interested In</div><div class="value">${service_interest}</div></div>` : ''}
+                <div class="message-box">
+                  <div class="label">Message</div>
+                  <div class="value">${message}</div>
+                </div>
               </div>
-              ${company ? `<div class="field"><div class="label">Company</div><div class="value">${company}</div></div>` : ''}
-              ${phone ? `<div class="field"><div class="label">Phone</div><div class="value">${phone}</div></div>` : ''}
-              ${service_interest ? `<div class="field"><div class="label">Interested In</div><div class="value">${service_interest}</div></div>` : ''}
-              <div class="message-box">
-                <div class="label">Message</div>
-                <div class="value">${message}</div>
+              <div class="footer">
+                <p>AdvantFlowAI Lead Notification</p>
               </div>
             </div>
           </body>
