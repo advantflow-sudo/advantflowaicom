@@ -1,87 +1,103 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, Loader2 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { MessageCircle, X, Send, Loader2, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import ReactMarkdown from "react-markdown";
 
 interface Message {
-  id: string;
-  sender_type: string;
-  message: string;
-  created_at: string;
+  role: "user" | "assistant";
+  content: string;
 }
+
+const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
 
 export const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [conversationId, setConversationId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [started, setStarted] = useState(false);
-  const [sending, setSending] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  useEffect(() => {
-    if (!conversationId) return;
-
-    const channel = supabase
-      .channel(`chat-${conversationId}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "chat_messages",
-          filter: `conversation_id=eq.${conversationId}`,
-        },
-        (payload) => {
-          setMessages((prev) => [...prev, payload.new as Message]);
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [conversationId]);
-
-  const startChat = async () => {
-    if (!name.trim()) return;
-    const { data } = await supabase
-      .from("chat_conversations")
-      .insert({ visitor_name: name, visitor_email: email || null })
-      .select()
-      .single();
-
-    if (data) {
-      setConversationId(data.id);
-      setStarted(true);
-    }
-  };
-
   const sendMessage = async () => {
-    if (!input.trim() || !conversationId || sending) return;
-    setSending(true);
-    const msg = input;
+    if (!input.trim() || isLoading) return;
+    const userMsg: Message = { role: "user", content: input.trim() };
+    const allMessages = [...messages, userMsg];
+    setMessages(allMessages);
     setInput("");
+    setIsLoading(true);
 
-    await supabase.from("chat_messages").insert({
-      conversation_id: conversationId,
-      sender_type: "visitor",
-      message: msg,
-    });
+    let assistantSoFar = "";
 
-    setSending(false);
+    try {
+      const resp = await fetch(CHAT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({ messages: allMessages }),
+      });
+
+      if (!resp.ok || !resp.body) {
+        throw new Error("Failed to connect");
+      }
+
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let textBuffer = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        textBuffer += decoder.decode(value, { stream: true });
+
+        let newlineIndex: number;
+        while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
+          let line = textBuffer.slice(0, newlineIndex);
+          textBuffer = textBuffer.slice(newlineIndex + 1);
+          if (line.endsWith("\r")) line = line.slice(0, -1);
+          if (line.startsWith(":") || line.trim() === "") continue;
+          if (!line.startsWith("data: ")) continue;
+
+          const jsonStr = line.slice(6).trim();
+          if (jsonStr === "[DONE]") break;
+
+          try {
+            const parsed = JSON.parse(jsonStr);
+            const content = parsed.choices?.[0]?.delta?.content as string | undefined;
+            if (content) {
+              assistantSoFar += content;
+              setMessages((prev) => {
+                const last = prev[prev.length - 1];
+                if (last?.role === "assistant") {
+                  return prev.map((m, i) => (i === prev.length - 1 ? { ...m, content: assistantSoFar } : m));
+                }
+                return [...prev, { role: "assistant", content: assistantSoFar }];
+              });
+            }
+          } catch {
+            textBuffer = line + "\n" + textBuffer;
+            break;
+          }
+        }
+      }
+    } catch (e) {
+      console.error("Chat error:", e);
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: "Sorry, I'm having trouble connecting right now. Please try again or contact us at advantflow@gmail.com." },
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <>
-      {/* Floating button */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/30 hover:scale-110 transition-transform"
@@ -100,83 +116,74 @@ export const ChatWidget = () => {
         </AnimatePresence>
       </motion.button>
 
-      {/* Chat panel */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-24 right-6 z-50 w-[360px] max-h-[500px] rounded-2xl border border-border bg-card shadow-2xl flex flex-col overflow-hidden"
+            className="fixed bottom-24 right-6 z-50 w-[380px] max-h-[520px] rounded-2xl border border-border bg-card shadow-2xl flex flex-col overflow-hidden"
           >
-            {/* Header */}
-            <div className="p-4 bg-gradient-to-r from-primary to-accent">
-              <h3 className="font-display font-semibold text-primary-foreground">Chat with us</h3>
-              <p className="text-primary-foreground/70 text-xs">We usually reply within minutes</p>
+            <div className="p-4 bg-gradient-to-r from-primary to-accent flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-primary-foreground/20 flex items-center justify-center">
+                <Bot className="w-5 h-5 text-primary-foreground" />
+              </div>
+              <div>
+                <h3 className="font-display font-semibold text-primary-foreground text-sm">AdvantFlow AI Assistant</h3>
+                <p className="text-primary-foreground/70 text-xs">Ask me anything about our services</p>
+              </div>
             </div>
 
-            {!started ? (
-              /* Start form */
-              <div className="p-4 flex flex-col gap-3">
-                <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Your name *"
-                  className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-                />
-                <input
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email (optional)"
-                  className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-                />
-                <Button onClick={startChat} disabled={!name.trim()} className="w-full">
-                  Start Chat
-                </Button>
-              </div>
-            ) : (
-              <>
-                {/* Messages */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[200px] max-h-[320px]">
-                  {messages.length === 0 && (
-                    <p className="text-xs text-muted-foreground text-center py-8">
-                      Send a message to start the conversation!
-                    </p>
-                  )}
-                  {messages.map((msg) => (
-                    <div
-                      key={msg.id}
-                      className={`flex ${msg.sender_type === "visitor" ? "justify-end" : "justify-start"}`}
-                    >
-                      <div
-                        className={`max-w-[80%] px-3 py-2 rounded-xl text-sm ${
-                          msg.sender_type === "visitor"
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-secondary text-foreground"
-                        }`}
-                      >
-                        {msg.message}
+            <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[240px] max-h-[340px]">
+              {messages.length === 0 && (
+                <div className="text-center py-8 space-y-3">
+                  <Bot className="w-10 h-10 mx-auto text-muted-foreground/50" />
+                  <p className="text-xs text-muted-foreground">
+                    Hi! 👋 I'm the AdvantFlowAI assistant. Ask me about our services, pricing, or how we can help your business.
+                  </p>
+                </div>
+              )}
+              {messages.map((msg, i) => (
+                <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                  <div
+                    className={`max-w-[85%] px-3 py-2 rounded-xl text-sm ${
+                      msg.role === "user"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-secondary text-foreground"
+                    }`}
+                  >
+                    {msg.role === "assistant" ? (
+                      <div className="prose prose-sm dark:prose-invert max-w-none [&>p]:m-0 [&>ul]:m-0 [&>ol]:m-0">
+                        <ReactMarkdown>{msg.content}</ReactMarkdown>
                       </div>
-                    </div>
-                  ))}
-                  <div ref={messagesEndRef} />
+                    ) : (
+                      msg.content
+                    )}
+                  </div>
                 </div>
+              ))}
+              {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
+                <div className="flex justify-start">
+                  <div className="bg-secondary px-3 py-2 rounded-xl">
+                    <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
 
-                {/* Input */}
-                <div className="p-3 border-t border-border flex gap-2">
-                  <input
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                    placeholder="Type a message..."
-                    className="flex-1 px-3 py-2 rounded-lg bg-secondary border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-                  />
-                  <Button size="sm" onClick={sendMessage} disabled={!input.trim() || sending}>
-                    {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-                  </Button>
-                </div>
-              </>
-            )}
+            <div className="p-3 border-t border-border flex gap-2">
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                placeholder="Ask about our services..."
+                className="flex-1 px-3 py-2 rounded-lg bg-secondary border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+              />
+              <Button size="sm" onClick={sendMessage} disabled={!input.trim() || isLoading}>
+                {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+              </Button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

@@ -23,10 +23,9 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { name: "Twitter", href: "#" },
-  { name: "LinkedIn", href: "#" },
-  { name: "Instagram", href: "#" },
-  { name: "Dribbble", href: "#" },
+  { name: "Twitter / X", href: "https://x.com/AdvantFlowAI" },
+  { name: "LinkedIn", href: "https://linkedin.com/company/advantflowai" },
+  { name: "Instagram", href: "https://instagram.com/advantflowai" },
 ];
 
 export const Footer = () => {
@@ -72,14 +71,14 @@ export const Footer = () => {
                 <span>advantflow@gmail.com</span>
               </motion.a>
               <motion.a
-                href="tel:+442071234567"
+                href="tel:+4407751523675"
                 className="flex items-center gap-4 text-muted-foreground hover:text-foreground transition-colors duration-300 group"
                 whileHover={{ x: 4 }}
               >
                 <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center group-hover:bg-primary/10 transition-colors">
                   <Phone className="w-5 h-5 group-hover:text-primary transition-colors" />
                 </div>
-                <span>+44 20 7123 4567</span>
+                <span>07751523675</span>
               </motion.a>
               <div className="flex items-center gap-4 text-muted-foreground">
                 <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center">
