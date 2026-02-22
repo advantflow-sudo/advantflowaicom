@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Star, Quote } from "lucide-react";
+import testimonialsBg from "@/assets/testimonials-bg.png";
 
 const testimonials = [
   {
@@ -79,7 +80,10 @@ export const Testimonials = () => {
 
   return (
     <section id="testimonials" className="section-padding relative overflow-hidden">
-      <div className="container-wide">
+      <div className="absolute inset-0 z-0">
+        <img src={testimonialsBg} alt="" className="w-full h-full object-cover opacity-10" />
+      </div>
+      <div className="container-wide relative z-10">
         {/* Section Header */}
         <motion.div
           ref={headerRef}
