@@ -10,50 +10,50 @@ import { subscriptionTiers } from "@/lib/subscriptions";
 const webPlans = [
   {
     name: "Starter",
-    price: "£1,497",
-    description: "Perfect for startups and small businesses looking to make an impact",
+    price: "£497",
+    description: "Launch your online presence fast — perfect for new businesses & freelancers",
     features: [
       "5-page responsive website",
-      "Custom UI/UX design",
-      "Mobile optimization",
+      "Custom modern design",
+      "Mobile-first optimization",
       "Basic SEO setup",
       "Contact form integration",
       "2 rounds of revisions",
-      "7-day delivery",
+      "5-day delivery",
     ],
     popular: false,
   },
   {
     name: "Growth",
-    price: "£3,997",
-    description: "For businesses ready to scale with a high-converting online presence",
+    price: "£997",
+    description: "Our most popular — a high-converting site built to grow your revenue",
     features: [
-      "10-page responsive website",
+      "Up to 10 pages",
       "Premium UI/UX design",
-      "Conversion-focused copy",
+      "Conversion-focused copywriting",
       "Advanced SEO optimization",
       "CMS integration",
-      "Analytics dashboard",
+      "Analytics & tracking setup",
       "Unlimited revisions",
-      "14-day delivery",
-      "30-day support",
+      "10-day delivery",
+      "30-day free support",
     ],
     popular: true,
   },
   {
-    name: "Enterprise",
-    price: "Custom",
-    description: "Full-scale digital transformation for established brands",
+    name: "Premium",
+    price: "£2,497",
+    description: "Full-scale web solution for serious brands ready to dominate",
     features: [
       "Unlimited pages",
       "Complete brand identity",
       "Custom web application",
-      "E-commerce integration",
-      "API integrations",
-      "Priority support",
+      "E-commerce ready",
+      "API & tool integrations",
+      "Priority 24/7 support",
       "Dedicated project manager",
-      "Performance optimization",
-      "12-month maintenance",
+      "Speed & performance tuning",
+      "6-month maintenance included",
     ],
     popular: false,
   },
@@ -65,14 +65,14 @@ const aiPlans = [
     price: subscriptionTiers.starter.price,
     period: "/mo",
     priceId: subscriptionTiers.starter.price_id,
-    description: "Essential automation for growing businesses",
+    description: "Start saving hours every week with smart automation",
     features: [
       "1 automation workflow",
-      "Basic AI chatbot",
-      "Email integration",
+      "AI chatbot for your website",
+      "Email & form automation",
       "Up to 1,000 tasks/month",
       "Email support",
-      "48-hour setup",
+      "Setup in 48 hours",
     ],
     popular: false,
   },
@@ -81,16 +81,16 @@ const aiPlans = [
     price: subscriptionTiers.growth.price,
     period: "/mo",
     priceId: subscriptionTiers.growth.price_id,
-    description: "Advanced automation for scaling operations",
+    description: "Scale faster — automate your sales, leads & operations",
     features: [
       "5 automation workflows",
       "Custom AI agents",
-      "CRM integration",
+      "CRM & pipeline automation",
       "Up to 10,000 tasks/month",
-      "Lead pipeline automation",
+      "Lead scoring & follow-ups",
       "Priority support",
-      "24-hour setup",
-      "Monthly optimization",
+      "Setup in 24 hours",
+      "Monthly performance reviews",
     ],
     popular: true,
   },
@@ -99,15 +99,15 @@ const aiPlans = [
     price: subscriptionTiers.enterprise.price,
     period: "/mo",
     priceId: subscriptionTiers.enterprise.price_id,
-    description: "Full-scale AI transformation for your business",
+    description: "Complete AI transformation — we handle everything",
     features: [
       "Unlimited workflows",
       "Custom AI development",
       "Full API integrations",
       "Unlimited tasks",
       "Dedicated account manager",
-      "24/7 support",
-      "Custom training",
+      "24/7 priority support",
+      "Team training included",
       "White-label options",
     ],
     popular: false,
@@ -238,10 +238,10 @@ export const Pricing = () => {
         >
           <span className="text-primary font-medium text-sm uppercase tracking-widest mb-4 block">Pricing</span>
           <h2 className="heading-lg mb-6">
-            Investment in Your <span className="text-gradient">Future Success</span>
+            Affordable Plans That <span className="text-gradient">Actually Deliver</span>
           </h2>
           <p className="body-lg max-w-2xl mx-auto">
-            Transparent pricing with no hidden fees. Choose the plan that fits your ambitions.
+            No hidden fees. No lock-in contracts. Just results-driven solutions at prices that make sense.
           </p>
         </motion.div>
 
@@ -279,7 +279,7 @@ export const Pricing = () => {
           transition={{ delay: 0.5 }}
           className="text-center text-muted-foreground mt-12"
         >
-          💯 100% satisfaction guaranteed. If you're not happy, we'll make it right or refund you.
+          💯 100% money-back guarantee. Not happy? Full refund, no questions asked. ⭐ Rated 5/5 by 50+ businesses.
         </motion.p>
       </div>
     </section>

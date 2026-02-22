@@ -62,14 +62,14 @@ export const Footer = () => {
             {/* Contact Info */}
             <div className="space-y-5">
               <motion.a
-                href="mailto:hello@advantflowai.co.uk"
+                href="mailto:advantflow@gmail.com"
                 className="flex items-center gap-4 text-muted-foreground hover:text-foreground transition-colors duration-300 group"
                 whileHover={{ x: 4 }}
               >
                 <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center group-hover:bg-primary/10 transition-colors">
                   <Mail className="w-5 h-5 group-hover:text-primary transition-colors" />
                 </div>
-                <span>hello@advantflowai.co.uk</span>
+                <span>advantflow@gmail.com</span>
               </motion.a>
               <motion.a
                 href="tel:+442071234567"

@@ -39,7 +39,7 @@ export const Hero = () => {
             >
               <Sparkles className="w-4 h-4 text-primary" />
             </motion.span>
-            <span className="text-sm font-medium text-foreground/90">Now accepting new clients for 2026</span>
+            <span className="text-sm font-medium text-foreground/90">🔥 Limited spots — Only 3 slots left this month</span>
           </motion.div>
 
           {/* Main Headline */}
@@ -61,8 +61,8 @@ export const Hero = () => {
             transition={{ duration: 0.9, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="body-lg max-w-2xl mx-auto mb-14"
           >
-            We build high-converting websites and intelligent automation systems 
-            that save you 10-100 hours per month. Your growth partner for the digital age.
+            Websites from £497. AI automation from £97/mo. We help small businesses 
+            get online fast, automate boring tasks, and start making money.
           </motion.p>
 
           {/* CTAs */}
@@ -95,7 +95,7 @@ export const Hero = () => {
             className="mt-20 pt-16 border-t border-border/50"
           >
             <p className="text-sm text-muted-foreground mb-10 uppercase tracking-[0.2em] font-medium">
-              Trusted by ambitious UK brands
+              Trusted by 50+ UK businesses
             </p>
             <div className="flex flex-wrap items-center justify-center gap-10 md:gap-16">
               {["Finsbury", "Thames Digital", "Camden Labs", "Mayfair Co", "Shoreditch Studio"].map((brand, i) => (
