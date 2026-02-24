@@ -1,4 +1,4 @@
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState } from "react";
 import { 
   LayoutDashboard, HeartPulse, GraduationCap, Building2, 
@@ -14,22 +14,22 @@ import { DashboardMockup } from "@/components/DashboardMockup";
 const DASHBOARD_PRICE_ID = "price_1T4Fp8C1I7VBCNgysIV03mAB";
 
 const industries = [
-  { icon: HeartPulse, name: "Healthcare", desc: "Patient portals & analytics" },
-  { icon: GraduationCap, name: "Education", desc: "Student dashboards & LMS" },
-  { icon: Building2, name: "Real Estate", desc: "Property & tenant portals" },
-  { icon: ShoppingBag, name: "E-Commerce", desc: "Orders & inventory" },
-  { icon: Truck, name: "Logistics", desc: "Fleet tracking & KPIs" },
-  { icon: Scale, name: "Legal", desc: "Case & client management" },
-  { icon: Utensils, name: "Hospitality", desc: "Bookings & revenue" },
-  { icon: Dumbbell, name: "Fitness", desc: "Members & scheduling" },
-  { icon: Factory, name: "Manufacturing", desc: "Production & quality" },
-  { icon: Landmark, name: "Finance", desc: "Portfolio & compliance" },
-  { icon: Plane, name: "Travel", desc: "Bookings & itineraries" },
-  { icon: Leaf, name: "Agriculture", desc: "Crop & yield tracking" },
-  { icon: Car, name: "Automotive", desc: "Inventory & service" },
-  { icon: Palette, name: "Creative", desc: "Projects & clients" },
-  { icon: Wifi, name: "SaaS / Tech", desc: "Metrics & user data" },
-  { icon: LayoutDashboard, name: "Any Industry", desc: "Fully custom for you" },
+  { icon: HeartPulse, name: "Healthcare", desc: "Patient portals & analytics", features: ["Patient intake forms", "Appointment scheduling", "Lab results viewer", "HIPAA-compliant dashboards"] },
+  { icon: GraduationCap, name: "Education", desc: "Student dashboards & LMS", features: ["Grade tracking", "Attendance monitoring", "Course management", "Parent portal access"] },
+  { icon: Building2, name: "Real Estate", desc: "Property & tenant portals", features: ["Listing management", "Tenant payments", "Maintenance requests", "Occupancy analytics"] },
+  { icon: ShoppingBag, name: "E-Commerce", desc: "Orders & inventory", features: ["Order management", "Stock alerts", "Sales analytics", "Customer segmentation"] },
+  { icon: Truck, name: "Logistics", desc: "Fleet tracking & KPIs", features: ["Live GPS tracking", "Route optimization", "Delivery ETAs", "Driver performance"] },
+  { icon: Scale, name: "Legal", desc: "Case & client management", features: ["Case tracking", "Time & billing", "Document vault", "Client portal"] },
+  { icon: Utensils, name: "Hospitality", desc: "Bookings & revenue", features: ["Reservation system", "Table management", "Revenue forecasting", "Guest profiles"] },
+  { icon: Dumbbell, name: "Fitness", desc: "Members & scheduling", features: ["Class bookings", "Member check-ins", "Trainer scheduling", "Revenue tracking"] },
+  { icon: Factory, name: "Manufacturing", desc: "Production & quality", features: ["Production lines", "Quality control", "Equipment uptime", "Supply chain view"] },
+  { icon: Landmark, name: "Finance", desc: "Portfolio & compliance", features: ["Portfolio overview", "Risk dashboards", "Regulatory reports", "Transaction audit"] },
+  { icon: Plane, name: "Travel", desc: "Bookings & itineraries", features: ["Trip planner", "Booking management", "Commission tracking", "Customer CRM"] },
+  { icon: Leaf, name: "Agriculture", desc: "Crop & yield tracking", features: ["Field mapping", "Weather alerts", "Yield forecasting", "Equipment logs"] },
+  { icon: Car, name: "Automotive", desc: "Inventory & service", features: ["Vehicle inventory", "Service scheduling", "Parts ordering", "Customer history"] },
+  { icon: Palette, name: "Creative", desc: "Projects & clients", features: ["Project timelines", "Asset management", "Client approvals", "Invoice tracking"] },
+  { icon: Wifi, name: "SaaS / Tech", desc: "Metrics & user data", features: ["MRR & churn", "User analytics", "Feature usage", "Support tickets"] },
+  { icon: LayoutDashboard, name: "Any Industry", desc: "Fully custom for you", features: ["Tailored KPIs", "Custom workflows", "Brand-matched UI", "Unlimited modules"] },
 ];
 
 const features = [
@@ -131,15 +131,27 @@ export const Dashboards = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
-                className="group p-5 rounded-xl bg-card border border-border hover:border-primary/30 transition-all duration-300 text-center"
+                whileHover={{ scale: 1.05, y: -4 }}
+                className="group relative p-5 rounded-xl bg-card border border-border hover:border-primary/30 hover:shadow-[0_0_30px_-8px_hsl(var(--primary)/0.25)] transition-all duration-300 text-center cursor-default"
               >
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center mx-auto mb-3">
+                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center mx-auto mb-3 group-hover:shadow-lg group-hover:shadow-primary/20 transition-shadow">
                   <Icon className="w-6 h-6 text-primary-foreground" />
                 </div>
                 <h3 className="font-display font-semibold text-foreground text-sm mb-0.5 group-hover:text-primary transition-colors">
                   {industry.name}
                 </h3>
-                <p className="text-xs text-muted-foreground">{industry.desc}</p>
+                <p className="text-xs text-muted-foreground mb-0 group-hover:mb-2 transition-all">{industry.desc}</p>
+                
+                {/* Hover features tooltip */}
+                <div className="grid grid-cols-1 gap-1 max-h-0 overflow-hidden opacity-0 group-hover:max-h-40 group-hover:opacity-100 group-hover:mt-3 transition-all duration-300 ease-in-out">
+                  <div className="h-px bg-border mb-1" />
+                  {industry.features.map((feature) => (
+                    <div key={feature} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <CheckCircle2 className="w-3 h-3 text-primary flex-shrink-0" />
+                      <span>{feature}</span>
+                    </div>
+                  ))}
+                </div>
               </motion.div>
             );
           })}
