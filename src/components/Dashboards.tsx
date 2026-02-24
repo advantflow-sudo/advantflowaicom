@@ -87,9 +87,11 @@ export const Dashboards = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          className="mb-16"
+          className="mb-16 relative"
           style={{ perspective: "1200px" }}
         >
+          {/* Glow effect */}
+          <div className="absolute -inset-4 md:-inset-8 rounded-3xl bg-gradient-to-br from-primary/20 via-accent/15 to-primary/10 blur-2xl md:blur-3xl opacity-60 pointer-events-none" />
           <motion.div
             animate={{ 
               rotateX: [0, 1.5, 0, -1, 0],
@@ -102,8 +104,11 @@ export const Dashboards = () => {
               ease: "easeInOut" 
             }}
             style={{ transformStyle: "preserve-3d" }}
+            className="relative"
           >
-            <DashboardMockup />
+            <div className="shadow-[0_0_60px_-10px_hsl(var(--primary)/0.3)] rounded-2xl">
+              <DashboardMockup />
+            </div>
           </motion.div>
         </motion.div>
 
