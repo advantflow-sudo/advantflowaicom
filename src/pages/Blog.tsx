@@ -38,7 +38,7 @@ const Blog = () => {
       <SEOHead
         title="Blog | AdvantFlowAI — AI Automation & Web Design Insights"
         description="Expert insights on AI automation, web design, and business growth. Tips, guides, and case studies from AdvantFlowAI."
-        canonical="https://advantflowai.co.uk/blog"
+        canonical="https://advantflowai.com/blog"
       />
       <Navbar />
       <section className="section-padding pt-36 md:pt-44 min-h-screen">

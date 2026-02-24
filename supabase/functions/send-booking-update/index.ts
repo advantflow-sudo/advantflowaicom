@@ -61,7 +61,7 @@ const handler = async (req: Request): Promise<Response> => {
         '<p style="color:#00d4ff;font-weight:600;margin:0 0 12px">What now?</p>' +
         '<p style="color:#94a3b8;margin:0">You can book a new time that works better for you — we\'d still love to chat!</p>' +
         '</div>' +
-        '<a href="https://advantflowai.co.uk/#booking" class="cta">Book a New Time →</a>'
+        '<a href="https://advantflowai.com/#booking" class="cta">Book a New Time →</a>'
       : '<h2>Your call has been rescheduled</h2>' +
         '<p>Your discovery call has been moved to a new time:</p>' +
         '<div style="background:#1e293b;border-radius:12px;padding:24px;margin:24px 0;border-left:3px solid #00d4ff">' +
@@ -76,7 +76,7 @@ const handler = async (req: Request): Promise<Response> => {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
         body: JSON.stringify({
-          from: "AdvantFlowAI <hello@advantflowai.co.uk>",
+          from: "AdvantFlowAI <hello@advantflowai.com>",
           to: [email],
           reply_to: "advantflow@gmail.com",
           subject,
@@ -108,7 +108,7 @@ body{font-family:'Space Grotesk','Segoe UI',sans-serif;margin:0;padding:0;backgr
   </div>
   <div class="footer">
     <p>AdvantFlowAI Ltd · London, UK</p>
-    <p><a href="https://advantflowai.co.uk">advantflowai.co.uk</a> · <a href="mailto:advantflow@gmail.com">advantflow@gmail.com</a></p>
+    <p><a href="https://advantflowai.com">advantflowai.com</a> · <a href="mailto:advantflow@gmail.com">advantflow@gmail.com</a></p>
     <p>© ${new Date().getFullYear()} AdvantFlowAI Ltd. All rights reserved.</p>
   </div>
 </div>
