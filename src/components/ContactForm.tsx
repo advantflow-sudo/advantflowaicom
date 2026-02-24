@@ -73,15 +73,19 @@ export const ContactForm = () => {
     setIsSubmitting(true);
 
     try {
+      // Generate ID client-side so we can pass it to edge functions without needing SELECT
+      const leadId = crypto.randomUUID();
+
       // Save lead to database
-      const { data: leadData, error: dbError } = await supabase.from("leads").insert({
+      const { error: dbError } = await supabase.from("leads").insert({
+        id: leadId,
         name: result.data.name,
         email: result.data.email,
         company: result.data.company || null,
         phone: result.data.phone || null,
         service_interest: result.data.service_interest || null,
         message: result.data.message,
-      }).select("id").single();
+      });
 
       if (dbError) {
         console.error("Database error:", dbError);
@@ -91,7 +95,7 @@ export const ContactForm = () => {
       // Send confirmation email + trigger AI lead scoring
       const { error: emailError } = await supabase.functions.invoke("send-lead-confirmation", {
         body: {
-          lead_id: leadData?.id,
+          lead_id: leadId,
           name: result.data.name,
           email: result.data.email,
           company: result.data.company,

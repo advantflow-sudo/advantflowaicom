@@ -112,161 +112,142 @@ const handler = async (req: Request): Promise<Response> => {
 
     const serviceContent = getServiceSpecificContent(service_interest);
 
-    // 1. Send personalised confirmation email to lead
-    const confirmationEmail = await sendEmail({
-      from: "AdvantFlowAI <hello@advantflowai.co.uk>",
-      to: [email],
-      reply_to: "advantflow@gmail.com",
-      subject: `${name}, ${serviceContent.subject_suffix}`,
-      html: `
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <style>
-              body { font-family: 'Space Grotesk', 'Segoe UI', sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #0a0e1a; color: #e2e8f0; }
-              .container { max-width: 600px; margin: 0 auto; }
-              .header { background: linear-gradient(135deg, #1a1f4d 0%, #0a0e2a 100%); text-align: center; padding: 40px 20px 30px; border-bottom: 2px solid #00d4ff; }
-              .logo { font-size: 28px; font-weight: bold; letter-spacing: -0.5px; }
-              .logo-advant { color: #ffffff; }
-              .logo-flow { color: #00d4ff; }
-              .content { background: #111827; padding: 40px 30px; }
-              .content h2 { color: #ffffff; margin-top: 0; font-size: 24px; }
-              .content p { color: #94a3b8; font-size: 15px; }
-              .highlight { color: #00d4ff; font-weight: 600; }
-              .cta-button { display: inline-block; background: linear-gradient(135deg, #00d4ff, #0ea5e9); color: #0a0e1a; font-weight: bold; padding: 14px 32px; border-radius: 8px; text-decoration: none; margin-top: 20px; font-size: 15px; }
-              .stats { display: flex; gap: 20px; margin: 24px 0; }
-              .stat { text-align: center; flex: 1; }
-              .stat-value { color: #00d4ff; font-size: 24px; font-weight: bold; display: block; }
-              .stat-label { color: #64748b; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
-              .footer { background: #0a0e1a; text-align: center; padding: 30px 20px; color: #475569; font-size: 13px; border-top: 1px solid #1e293b; }
-              .footer a { color: #00d4ff; text-decoration: none; }
-            </style>
-          </head>
-          <body>
-            <div class="container">
-              <div class="header">
-                <div class="logo"><span class="logo-advant">Advant</span><span class="logo-flow">Flow</span>AI</div>
-                <p style="color: #94a3b8; margin: 8px 0 0; font-size: 13px;">AI Automation & Web Design Agency</p>
-              </div>
-              <div class="content">
-                <h2>Hey ${name} 👋</h2>
-                <p>Thanks for reaching out! We've received your message about <span class="highlight">${service_interest || "our services"}</span> and we're already excited about the possibilities.</p>
-                <p>A real human from our team will personally review your project and respond within <span class="highlight">24 hours</span> — usually much sooner.</p>
-                
-                ${serviceContent.tips}
-
-                <table width="100%" cellpadding="0" cellspacing="0" style="margin: 24px 0;">
-                  <tr>
-                    <td align="center" style="padding: 16px; background: #1e293b; border-radius: 8px;">
-                      <span style="color: #00d4ff; font-size: 28px; font-weight: bold; display: block;">50+</span>
-                      <span style="color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Happy Clients</span>
-                    </td>
-                    <td width="12"></td>
-                    <td align="center" style="padding: 16px; background: #1e293b; border-radius: 8px;">
-                      <span style="color: #00d4ff; font-size: 28px; font-weight: bold; display: block;">5 Days</span>
-                      <span style="color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Avg. Delivery</span>
-                    </td>
-                    <td width="12"></td>
-                    <td align="center" style="padding: 16px; background: #1e293b; border-radius: 8px;">
-                      <span style="color: #00d4ff; font-size: 28px; font-weight: bold; display: block;">100%</span>
-                      <span style="color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Satisfaction</span>
-                    </td>
-                  </tr>
-                </table>
-
-                <a href="https://advantflowai.co.uk/#projects" class="cta-button">${serviceContent.cta}</a>
-                
-                <p style="margin-top: 30px; color: #64748b; font-size: 13px;">
-                  P.S. Want to fast-track things? Reply to this email with any extra details about your project and we'll get back to you even quicker.
-                </p>
-              </div>
-              <div class="footer">
-                <p>AdvantFlowAI Ltd · London, UK</p>
-                <p><a href="https://advantflowai.co.uk">advantflowai.co.uk</a> · <a href="mailto:advantflow@gmail.com">advantflow@gmail.com</a></p>
-                <p>© ${new Date().getFullYear()} AdvantFlowAI Ltd. All rights reserved.</p>
-              </div>
-            </div>
-          </body>
-        </html>
-      `,
-    });
-
-    console.log("Confirmation email sent:", confirmationEmail);
-
-    // 2. Send enriched notification to business with lead intelligence
-    const notificationEmail = await sendEmail({
-      from: "AdvantFlowAI Website <hello@advantflowai.co.uk>",
-      to: ["advantflow@gmail.com"],
-      subject: `🔥 New Lead: ${name} — ${service_interest || "General"} ${company ? `(${company})` : ""}`,
-      html: `
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <style>
-              body { font-family: 'Space Grotesk', 'Segoe UI', sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #0a0e1a; color: #e2e8f0; }
-              .container { max-width: 600px; margin: 0 auto; }
-              .header { background: linear-gradient(135deg, #1a1f4d, #0a0e2a); padding: 30px 20px; text-align: center; border-bottom: 2px solid #00d4ff; }
-              .body { background: #111827; padding: 30px; }
-              .field { margin-bottom: 18px; }
-              .label { font-weight: bold; color: #00d4ff; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
-              .value { margin-top: 4px; color: #e2e8f0; font-size: 15px; }
-              .message-box { background: #1e293b; padding: 20px; border-radius: 8px; margin-top: 20px; border-left: 3px solid #00d4ff; }
-              .action-box { background: linear-gradient(135deg, #00d4ff15, #0ea5e915); border: 1px solid #00d4ff30; border-radius: 8px; padding: 20px; margin-top: 20px; text-align: center; }
-              .action-btn { display: inline-block; background: #00d4ff; color: #0a0e1a; font-weight: bold; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-size: 14px; }
-              .footer { background: #0a0e1a; text-align: center; padding: 20px; color: #475569; font-size: 12px; border-top: 1px solid #1e293b; }
-            </style>
-          </head>
-          <body>
-            <div class="container">
-              <div class="header">
-                <h2 style="color: #fff; margin: 0;">🎯 New Lead Incoming</h2>
-                <p style="color: #94a3b8; margin: 8px 0 0; font-size: 14px;">AI scoring in progress...</p>
-              </div>
-              <div class="body">
-                <div class="field">
-                  <div class="label">Name</div>
-                  <div class="value">${name}</div>
+    // 1. Send personalised confirmation email to lead (non-blocking)
+    let emailSuccess = false;
+    try {
+      await sendEmail({
+        from: "AdvantFlowAI <hello@advantflowai.co.uk>",
+        to: [email],
+        reply_to: "advantflow@gmail.com",
+        subject: `${name}, ${serviceContent.subject_suffix}`,
+        html: `
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <style>
+                body { font-family: 'Space Grotesk', 'Segoe UI', sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #0a0e1a; color: #e2e8f0; }
+                .container { max-width: 600px; margin: 0 auto; }
+                .header { background: linear-gradient(135deg, #1a1f4d 0%, #0a0e2a 100%); text-align: center; padding: 40px 20px 30px; border-bottom: 2px solid #00d4ff; }
+                .logo { font-size: 28px; font-weight: bold; letter-spacing: -0.5px; }
+                .logo-advant { color: #ffffff; }
+                .logo-flow { color: #00d4ff; }
+                .content { background: #111827; padding: 40px 30px; }
+                .content h2 { color: #ffffff; margin-top: 0; font-size: 24px; }
+                .content p { color: #94a3b8; font-size: 15px; }
+                .highlight { color: #00d4ff; font-weight: 600; }
+                .cta-button { display: inline-block; background: linear-gradient(135deg, #00d4ff, #0ea5e9); color: #0a0e1a; font-weight: bold; padding: 14px 32px; border-radius: 8px; text-decoration: none; margin-top: 20px; font-size: 15px; }
+                .footer { background: #0a0e1a; text-align: center; padding: 30px 20px; color: #475569; font-size: 13px; border-top: 1px solid #1e293b; }
+                .footer a { color: #00d4ff; text-decoration: none; }
+              </style>
+            </head>
+            <body>
+              <div class="container">
+                <div class="header">
+                  <div class="logo"><span class="logo-advant">Advant</span><span class="logo-flow">Flow</span>AI</div>
+                  <p style="color: #94a3b8; margin: 8px 0 0; font-size: 13px;">AI Automation & Web Design Agency</p>
                 </div>
-                <div class="field">
-                  <div class="label">Email</div>
-                  <div class="value"><a href="mailto:${email}" style="color: #00d4ff;">${email}</a></div>
+                <div class="content">
+                  <h2>Hey ${name} 👋</h2>
+                  <p>Thanks for reaching out! We've received your message about <span class="highlight">${service_interest || "our services"}</span> and we're already excited about the possibilities.</p>
+                  <p>A real human from our team will personally review your project and respond within <span class="highlight">24 hours</span> — usually much sooner.</p>
+                  ${serviceContent.tips}
+                  <table width="100%" cellpadding="0" cellspacing="0" style="margin: 24px 0;">
+                    <tr>
+                      <td align="center" style="padding: 16px; background: #1e293b; border-radius: 8px;">
+                        <span style="color: #00d4ff; font-size: 28px; font-weight: bold; display: block;">50+</span>
+                        <span style="color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Happy Clients</span>
+                      </td>
+                      <td width="12"></td>
+                      <td align="center" style="padding: 16px; background: #1e293b; border-radius: 8px;">
+                        <span style="color: #00d4ff; font-size: 28px; font-weight: bold; display: block;">5 Days</span>
+                        <span style="color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Avg. Delivery</span>
+                      </td>
+                      <td width="12"></td>
+                      <td align="center" style="padding: 16px; background: #1e293b; border-radius: 8px;">
+                        <span style="color: #00d4ff; font-size: 28px; font-weight: bold; display: block;">100%</span>
+                        <span style="color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Satisfaction</span>
+                      </td>
+                    </tr>
+                  </table>
+                  <a href="https://advantflowai.co.uk/#projects" class="cta-button">${serviceContent.cta}</a>
+                  <p style="margin-top: 30px; color: #64748b; font-size: 13px;">
+                    P.S. Want to fast-track things? Reply to this email with any extra details about your project and we'll get back to you even quicker.
+                  </p>
                 </div>
-                ${company ? `<div class="field"><div class="label">Company</div><div class="value">${company}</div></div>` : ''}
-                ${phone ? `<div class="field"><div class="label">Phone</div><div class="value"><a href="tel:${phone}" style="color: #00d4ff;">${phone}</a></div></div>` : ''}
-                ${service_interest ? `<div class="field"><div class="label">Interested In</div><div class="value">${service_interest}</div></div>` : ''}
-                <div class="message-box">
-                  <div class="label">Their Message</div>
-                  <div class="value" style="margin-top: 8px;">${message}</div>
-                </div>
-                <div class="action-box">
-                  <p style="color: #e2e8f0; margin: 0 0 12px; font-size: 14px;">⚡ Respond fast to close this lead</p>
-                  <a href="mailto:${email}?subject=Re: Your enquiry to AdvantFlowAI&body=Hi ${name},%0A%0AThanks for reaching out!" class="action-btn">Reply to ${name} →</a>
+                <div class="footer">
+                  <p>AdvantFlowAI Ltd · London, UK</p>
+                  <p><a href="https://advantflowai.co.uk">advantflowai.co.uk</a> · <a href="mailto:advantflow@gmail.com">advantflow@gmail.com</a></p>
+                  <p>© ${new Date().getFullYear()} AdvantFlowAI Ltd. All rights reserved.</p>
                 </div>
               </div>
-              <div class="footer">
-                <p>AdvantFlowAI Lead System</p>
+            </body>
+          </html>
+        `,
+      });
+      emailSuccess = true;
+      console.log("Confirmation email sent successfully");
+    } catch (emailErr) {
+      console.error("Email send failed (non-fatal):", emailErr);
+    }
+
+    // 2. Send enriched notification to business
+    try {
+      await sendEmail({
+        from: "AdvantFlowAI Website <hello@advantflowai.co.uk>",
+        to: ["advantflow@gmail.com"],
+        subject: `🔥 New Lead: ${name} — ${service_interest || "General"} ${company ? `(${company})` : ""}`,
+        html: `
+          <!DOCTYPE html>
+          <html>
+            <body style="font-family: 'Space Grotesk', sans-serif; background: #0a0e1a; color: #e2e8f0; margin: 0; padding: 0;">
+              <div style="max-width: 600px; margin: 0 auto;">
+                <div style="background: linear-gradient(135deg, #1a1f4d, #0a0e2a); padding: 30px 20px; text-align: center; border-bottom: 2px solid #00d4ff;">
+                  <h2 style="color: #fff; margin: 0;">🎯 New Lead Incoming</h2>
+                </div>
+                <div style="background: #111827; padding: 30px;">
+                  <p style="color: #00d4ff; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">Name</p>
+                  <p style="color: #e2e8f0;">${name}</p>
+                  <p style="color: #00d4ff; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">Email</p>
+                  <p><a href="mailto:${email}" style="color: #00d4ff;">${email}</a></p>
+                  ${company ? `<p style="color: #00d4ff; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">Company</p><p style="color: #e2e8f0;">${company}</p>` : ''}
+                  ${phone ? `<p style="color: #00d4ff; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">Phone</p><p><a href="tel:${phone}" style="color: #00d4ff;">${phone}</a></p>` : ''}
+                  ${service_interest ? `<p style="color: #00d4ff; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">Interested In</p><p style="color: #e2e8f0;">${service_interest}</p>` : ''}
+                  <div style="background: #1e293b; padding: 20px; border-radius: 8px; margin-top: 20px; border-left: 3px solid #00d4ff;">
+                    <p style="color: #00d4ff; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">Their Message</p>
+                    <p style="color: #e2e8f0;">${message}</p>
+                  </div>
+                  <div style="text-align: center; margin-top: 20px;">
+                    <a href="mailto:${email}?subject=Re: Your enquiry to AdvantFlowAI&body=Hi ${name}," style="display: inline-block; background: #00d4ff; color: #0a0e1a; font-weight: bold; padding: 10px 24px; border-radius: 6px; text-decoration: none;">Reply to ${name} →</a>
+                  </div>
+                </div>
               </div>
-            </div>
-          </body>
-        </html>
-      `,
-    });
+            </body>
+          </html>
+        `,
+      });
+      console.log("Admin notification sent");
+    } catch (notifErr) {
+      console.error("Admin notification failed (non-fatal):", notifErr);
+    }
 
-    console.log("Notification email sent:", notificationEmail);
-
-    // 3. Trigger AI lead scoring (fire and forget)
+    // 3. Trigger AI lead scoring (always runs regardless of email status)
     if (lead_id) {
       const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
       const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
       
-      fetch(`${supabaseUrl}/functions/v1/score-lead`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${supabaseAnonKey}`,
-        },
-        body: JSON.stringify({ lead_id, name, email, company, phone, service_interest, message }),
-      }).catch(err => console.error("Lead scoring trigger failed:", err));
+      try {
+        await fetch(`${supabaseUrl}/functions/v1/score-lead`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${supabaseAnonKey}`,
+          },
+          body: JSON.stringify({ lead_id, name, email, company, phone, service_interest, message }),
+        });
+        console.log("Lead scoring triggered for:", lead_id);
+      } catch (err) {
+        console.error("Lead scoring trigger failed:", err);
+      }
     }
 
     return new Response(
