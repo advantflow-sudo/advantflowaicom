@@ -60,6 +60,22 @@ const webPlans = [
     ],
     popular: false,
   },
+  {
+    name: "Custom",
+    price: "Quote",
+    description: "Bespoke solution tailored to your exact requirements",
+    features: [
+      "Everything in Premium",
+      "Fully custom scope & timeline",
+      "Multi-site or enterprise builds",
+      "Complex integrations & APIs",
+      "Ongoing retainer options",
+      "Dedicated team assigned",
+      "SLA & priority guarantees",
+    ],
+    popular: false,
+    isCustom: true,
+  },
 ];
 
 const aiPlans = [
@@ -115,6 +131,23 @@ const aiPlans = [
     ],
     popular: false,
   },
+  {
+    name: "Custom",
+    price: "Quote",
+    period: "",
+    description: "Tailored AI solutions built around your exact needs",
+    features: [
+      "Everything in Enterprise",
+      "Bespoke AI model training",
+      "Custom integrations & APIs",
+      "Dedicated engineering team",
+      "Flexible billing & retainer",
+      "SLA & uptime guarantees",
+      "On-site training available",
+    ],
+    popular: false,
+    isCustom: true,
+  },
 ];
 
 interface PlanType {
@@ -125,6 +158,7 @@ interface PlanType {
   description: string;
   features: string[];
   popular: boolean;
+  isCustom?: boolean;
 }
 
 const PricingCard = ({ plan, index, periodLabel, isAi }: { plan: PlanType; index: number; periodLabel: string; isAi: boolean }) => {
@@ -134,6 +168,10 @@ const PricingCard = ({ plan, index, periodLabel, isAi }: { plan: PlanType; index
   const [loading, setLoading] = useState(false);
 
   const handleCheckout = async () => {
+    if (plan.isCustom) {
+      document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
     if (!plan.priceId) return;
     if (!user) {
       window.location.href = "/auth";
@@ -210,7 +248,7 @@ const PricingCard = ({ plan, index, periodLabel, isAi }: { plan: PlanType; index
         disabled={loading}
       >
         {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-        {isAi ? "Subscribe" : "Buy Now"}
+        {plan.isCustom ? "Get a Quote" : isAi ? "Subscribe" : "Buy Now"}
         {!loading && <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />}
       </Button>
     </motion.div>
@@ -265,7 +303,7 @@ export const Pricing = () => {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 md:gap-8 items-start">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-6 items-start">
           {plans.map((plan, index) => (
             <PricingCard key={`${activeTab}-${plan.name}`} plan={plan} index={index} periodLabel={periodLabel} isAi={activeTab === "ai"} />
           ))}
