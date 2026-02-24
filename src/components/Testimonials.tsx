@@ -117,11 +117,10 @@ export const Testimonials = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8 }}
-          className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 p-8 rounded-3xl bg-gradient-to-r from-primary/10 to-accent/10 border border-border"
+          className="mt-20 grid grid-cols-3 gap-8 p-8 rounded-3xl bg-gradient-to-r from-primary/10 to-accent/10 border border-border"
         >
           {[
             { value: "150+", label: "Projects Delivered" },
-            { value: "£3.2M", label: "Revenue Generated" },
             { value: "98%", label: "Client Satisfaction" },
             { value: "24hrs", label: "Avg. Response Time" },
           ].map((stat) => (
