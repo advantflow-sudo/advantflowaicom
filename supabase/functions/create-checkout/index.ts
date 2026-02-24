@@ -26,7 +26,7 @@ serve(async (req) => {
     const user = data.user;
     if (!user?.email) throw new Error("User not authenticated");
 
-    const { priceId } = await req.json();
+    const { priceId, mode = "subscription" } = await req.json();
     if (!priceId) throw new Error("Price ID is required");
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
@@ -43,7 +43,7 @@ serve(async (req) => {
       customer: customerId,
       customer_email: customerId ? undefined : user.email,
       line_items: [{ price: priceId, quantity: 1 }],
-      mode: "subscription",
+      mode: mode as "subscription" | "payment",
       success_url: `${req.headers.get("origin")}/portal?payment=success`,
       cancel_url: `${req.headers.get("origin")}/portal?payment=cancelled`,
     });

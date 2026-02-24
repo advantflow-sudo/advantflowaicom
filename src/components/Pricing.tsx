@@ -5,12 +5,13 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { subscriptionTiers } from "@/lib/subscriptions";
+import { subscriptionTiers, webDesignProducts } from "@/lib/subscriptions";
 
 const webPlans = [
   {
     name: "Starter",
-    price: "£497",
+    price: webDesignProducts.starter.price,
+    priceId: webDesignProducts.starter.price_id,
     description: "Launch your online presence fast — perfect for new businesses & freelancers",
     features: [
       "5-page responsive website",
@@ -25,7 +26,8 @@ const webPlans = [
   },
   {
     name: "Growth",
-    price: "£997",
+    price: webDesignProducts.growth.price,
+    priceId: webDesignProducts.growth.price_id,
     description: "Our most popular — a high-converting site built to grow your revenue",
     features: [
       "Up to 10 pages",
@@ -42,7 +44,8 @@ const webPlans = [
   },
   {
     name: "Premium",
-    price: "£2,497",
+    price: webDesignProducts.premium.price,
+    priceId: webDesignProducts.premium.price_id,
     description: "Full-scale web solution for serious brands ready to dominate",
     features: [
       "Unlimited pages",
@@ -130,7 +133,7 @@ const PricingCard = ({ plan, index, periodLabel, isAi }: { plan: PlanType; index
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
 
-  const handleSubscribe = async () => {
+  const handleCheckout = async () => {
     if (!plan.priceId) return;
     if (!user) {
       window.location.href = "/auth";
@@ -139,7 +142,7 @@ const PricingCard = ({ plan, index, periodLabel, isAi }: { plan: PlanType; index
     setLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: { priceId: plan.priceId },
+        body: { priceId: plan.priceId, mode: isAi ? "subscription" : "payment" },
       });
       if (error) throw error;
       if (data?.url) window.open(data.url, "_blank");
@@ -177,11 +180,9 @@ const PricingCard = ({ plan, index, periodLabel, isAi }: { plan: PlanType; index
           <span className={`font-display text-4xl md:text-5xl font-bold ${plan.popular ? "text-primary-foreground" : "text-foreground"}`}>
             {plan.price}
           </span>
-          {plan.price !== "Custom" && (
-            <span className={plan.popular ? "text-primary-foreground/70" : "text-muted-foreground"}>
-              {plan.period || periodLabel}
-            </span>
-          )}
+          <span className={plan.popular ? "text-primary-foreground/70" : "text-muted-foreground"}>
+            {plan.period || periodLabel}
+          </span>
         </div>
         <p className={plan.popular ? "text-primary-foreground/80" : "text-muted-foreground"}>
           {plan.description}
@@ -205,13 +206,11 @@ const PricingCard = ({ plan, index, periodLabel, isAi }: { plan: PlanType; index
         variant={plan.popular ? "secondary" : "hero"}
         size="lg"
         className={`w-full group ${plan.popular ? "bg-primary-foreground text-primary hover:bg-primary-foreground/90" : ""}`}
-        onClick={isAi && plan.priceId ? handleSubscribe : () => { document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }); }}
+        onClick={handleCheckout}
         disabled={loading}
       >
-        {loading ? (
-          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-        ) : null}
-        {isAi && plan.priceId ? "Subscribe" : "Get Started"}
+        {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+        {isAi ? "Subscribe" : "Buy Now"}
         {!loading && <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />}
       </Button>
     </motion.div>
