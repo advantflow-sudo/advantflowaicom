@@ -1,12 +1,13 @@
 import { motion } from "framer-motion";
+import logoIcon from "@/assets/logo-icon.png";
 import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 
 const footerLinks = {
   services: [
-    { name: "Web Design", href: "#" },
-    { name: "Development", href: "#" },
-    { name: "Branding", href: "#" },
-    { name: "SEO", href: "#" },
+    { name: "Web Design", href: "#services" },
+    { name: "AI Automation", href: "#ai-automation" },
+    { name: "White-Label Dashboards", href: "#dashboards" },
+    { name: "À La Carte Services", href: "#individual-services" },
   ],
   company: [
     { name: "About Us", href: "#about" },
@@ -45,8 +46,8 @@ export const Footer = () => {
           >
             {/* Logo */}
             <div className="flex items-center gap-2.5 mb-8">
-              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
-                <span className="text-primary-foreground font-bold text-xl">A</span>
+              <div className="w-11 h-11 rounded-xl overflow-hidden shadow-lg shadow-primary/20">
+                <img src={logoIcon} alt="AdvantFlowAI" className="w-full h-full object-cover" />
               </div>
               <span className="font-display font-bold text-2xl text-foreground">
                 Advant<span className="text-primary">FlowAI</span>
@@ -54,8 +55,8 @@ export const Footer = () => {
             </div>
 
             <p className="text-muted-foreground max-w-md mb-10 leading-relaxed text-lg">
-              We build high-converting websites that transform your digital presence 
-              and drive real business growth. Let's create something amazing together.
+              We build high-converting websites, AI automation systems, and custom 
+              white-label dashboards for any industry. Let's create something amazing together.
             </p>
 
             {/* Contact Info */}
