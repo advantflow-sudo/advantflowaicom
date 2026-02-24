@@ -1,115 +1,89 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Play, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AnimatedBackground } from "./AnimatedBackground";
-import heroImage from "@/assets/hero-image.png";
 
 export const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden noise">
-      {/* Animated Background */}
+    <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden noise">
       <AnimatedBackground />
-      
-      {/* Radial Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-radial" />
 
-      {/* Hero Image Overlay */}
-      <div className="absolute inset-0 z-[1]">
-        <img 
-          src={heroImage} 
-          alt="" 
-          className="w-full h-full object-cover opacity-20"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/30" />
-      </div>
-
       <div className="container-wide section-padding relative z-10">
-        <div className="max-w-5xl mx-auto text-center">
+        <div className="max-w-4xl mx-auto">
           {/* Badge */}
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm mb-10"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm mb-8"
           >
-            <motion.span 
-              className="flex items-center justify-center"
-              animate={{ rotate: [0, 15, -15, 0] }}
-              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-            >
-              <Sparkles className="w-4 h-4 text-primary" />
-            </motion.span>
-            <span className="text-sm font-medium text-foreground/90">🔥 Limited spots — Only 3 slots left this month</span>
+            <Sparkles className="w-3.5 h-3.5 text-primary" />
+            <span className="text-xs font-medium text-foreground/80 tracking-wide uppercase">
+              Limited spots this month
+            </span>
           </motion.div>
 
-          {/* Main Headline */}
+          {/* Headline */}
           <motion.h1
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className="heading-xl mb-8"
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-[-0.04em] leading-[0.9] mb-6"
           >
-            <span className="block">Websites. AI. Dashboards.</span>
-            <span className="text-gradient glow-text">Built For Your</span>
-            <span className="block mt-2">Industry.</span>
+            <span className="block text-foreground">We build websites,</span>
+            <span className="block text-gradient glow-text">AI systems</span>
+            <span className="block text-foreground">&amp; dashboards.</span>
           </motion.h1>
 
           {/* Subheadline */}
           <motion.p
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="body-lg max-w-2xl mx-auto mb-14"
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-lg md:text-xl text-muted-foreground max-w-xl mb-10 leading-relaxed"
           >
-            Websites from £497. AI automation from £97/mo. Custom white-label dashboards 
-            for any industry. We help businesses get online, automate, and scale.
+            Websites from £497. AI automation from £97/mo. Custom white-label 
+            dashboards from £997. Built for your industry.
           </motion.p>
 
           {/* CTAs */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-5"
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="flex flex-col sm:flex-row items-start gap-4"
           >
-            <Button variant="hero" size="xl" className="group relative overflow-hidden">
-              <span className="relative z-10 flex items-center gap-2">
-                Book a Free Strategy Call
+            <a href="#contact">
+              <Button variant="hero" size="xl" className="group">
+                Book a Free Call
                 <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
-              </span>
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-accent to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-              />
-            </Button>
-            <Button variant="glass" size="xl" className="group">
-              <Play className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
-              <span>Watch Our Work</span>
-            </Button>
+              </Button>
+            </a>
+            <a href="#work">
+              <Button variant="glass" size="xl">
+                See Our Work
+              </Button>
+            </a>
           </motion.div>
 
-          {/* Trust Indicators */}
+          {/* Stats row */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1.2, delay: 0.9 }}
-            className="mt-20 pt-16 border-t border-border/50"
+            transition={{ duration: 1, delay: 0.8 }}
+            className="mt-20 flex flex-wrap gap-12 md:gap-16"
           >
-            <p className="text-sm text-muted-foreground mb-10 uppercase tracking-[0.2em] font-medium">
-              Trusted by 50+ UK businesses
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-10 md:gap-16">
-              {["Finsbury", "Thames Digital", "Camden Labs", "Mayfair Co", "Shoreditch Studio"].map((brand, i) => (
-                <motion.span 
-                  key={brand} 
-                  className="font-display text-xl md:text-2xl font-bold text-muted-foreground/50 hover:text-muted-foreground transition-colors duration-300"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 1 + i * 0.1 }}
-                >
-                  {brand}
-                </motion.span>
-              ))}
-            </div>
+            {[
+              { value: "50+", label: "Clients served" },
+              { value: "200+", label: "Projects delivered" },
+              { value: "98%", label: "Client satisfaction" },
+            ].map((stat) => (
+              <div key={stat.label}>
+                <div className="font-display text-3xl md:text-4xl font-bold text-foreground">{stat.value}</div>
+                <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
+              </div>
+            ))}
           </motion.div>
         </div>
       </div>
@@ -119,17 +93,17 @@ export const Hero = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
         <motion.div
-          animate={{ y: [0, 12, 0] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-          className="w-7 h-12 rounded-full border-2 border-muted-foreground/25 flex items-start justify-center p-2"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="w-6 h-10 rounded-full border-2 border-muted-foreground/20 flex items-start justify-center p-1.5"
         >
           <motion.div
-            animate={{ opacity: [0.5, 1, 0.5], height: ["8px", "16px", "8px"] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-            className="w-1.5 rounded-full bg-primary"
+            animate={{ opacity: [0.4, 1, 0.4], height: ["6px", "12px", "6px"] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="w-1 rounded-full bg-primary"
           />
         </motion.div>
       </motion.div>
