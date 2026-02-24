@@ -34,7 +34,7 @@ export const DashboardMockup = () => {
         <div className="hidden md:flex flex-col w-52 bg-[hsl(220,20%,8%)] border-r border-white/5 p-4 gap-1">
           <div className="flex items-center gap-2 mb-6 px-2">
             <LayoutDashboard className="w-5 h-5 text-[hsl(var(--primary))]" />
-            <span className="font-bold text-sm">YourBrand</span>
+            <span className="font-bold text-sm">AdvantFlowAI</span>
           </div>
           {sidebarItems.map((item) => (
             <div
