@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Users, FolderOpen, PoundSterling, TrendingUp, Loader2, Plus, Trash2, CalendarCheck } from "lucide-react";
+import { Users, FolderOpen, PoundSterling, TrendingUp, Loader2, Plus, Trash2, CalendarCheck, X, Clock, Calendar as CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { format } from "date-fns";
+import { format, startOfDay, addDays, isWeekend, isBefore } from "date-fns";
 
 interface ClientWithProfile {
   user_id: string;
@@ -37,6 +39,14 @@ export const AdminDashboard = () => {
   const [showNewProject, setShowNewProject] = useState(false);
   const [newProject, setNewProject] = useState({ title: "", description: "", client_id: "", total_cost: "" });
   const [saving, setSaving] = useState(false);
+  const [rescheduleId, setRescheduleId] = useState<string | null>(null);
+  const [rescheduleDate, setRescheduleDate] = useState<Date | undefined>();
+  const [rescheduleTime, setRescheduleTime] = useState("");
+
+  const TIME_SLOTS = [
+    "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
+    "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30",
+  ];
 
   useEffect(() => {
     fetchAll();
@@ -98,6 +108,32 @@ export const AdminDashboard = () => {
       fetchAll();
     }
   };
+
+  const handleCancelBooking = async (id: string) => {
+    const { error } = await supabase.from("bookings").update({ status: "cancelled" }).eq("id", id);
+    if (error) toast.error(error.message);
+    else { toast.success("Booking cancelled."); fetchAll(); }
+  };
+
+  const handleReschedule = async () => {
+    if (!rescheduleId || !rescheduleDate || !rescheduleTime) {
+      toast.error("Pick a new date and time."); return;
+    }
+    const { error } = await supabase.from("bookings").update({
+      booking_date: format(rescheduleDate, "yyyy-MM-dd"),
+      booking_time: rescheduleTime,
+    }).eq("id", rescheduleId);
+    if (error) toast.error(error.message);
+    else {
+      toast.success("Booking rescheduled.");
+      setRescheduleId(null); setRescheduleDate(undefined); setRescheduleTime("");
+      fetchAll();
+    }
+  };
+
+  const today = startOfDay(new Date());
+  const maxDate = addDays(today, 30);
+  const disabledDays = (date: Date) => isBefore(date, today) || date > maxDate || isWeekend(date);
 
   const totalRevenue = projects.reduce((sum, p) => sum + Number(p.amount_paid || 0), 0);
   const totalOutstanding = projects.reduce((sum, p) => sum + (Number(p.total_cost || 0) - Number(p.amount_paid || 0)), 0);
@@ -320,19 +356,31 @@ export const AdminDashboard = () => {
                         <p className="text-sm text-primary font-semibold">{b.booking_time}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 mt-2">
-                      <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                        b.status === "confirmed" && !isPast ? "bg-green-500/20 text-green-400" :
-                        b.status === "cancelled" ? "bg-red-500/20 text-red-400" :
-                        "bg-secondary text-muted-foreground"
-                      }`}>
-                        {isPast && b.status === "confirmed" ? "Completed" : b.status}
-                      </span>
-                      {b.service_interest && (
-                        <span className="text-xs px-2.5 py-0.5 rounded-full bg-primary/10 text-primary">{b.service_interest}</span>
-                      )}
-                      {b.company && (
-                        <span className="text-xs text-muted-foreground">· {b.company}</span>
+                    <div className="flex items-center justify-between mt-2">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                          b.status === "confirmed" && !isPast ? "bg-green-500/20 text-green-400" :
+                          b.status === "cancelled" ? "bg-red-500/20 text-red-400" :
+                          "bg-secondary text-muted-foreground"
+                        }`}>
+                          {isPast && b.status === "confirmed" ? "Completed" : b.status}
+                        </span>
+                        {b.service_interest && (
+                          <span className="text-xs px-2.5 py-0.5 rounded-full bg-primary/10 text-primary">{b.service_interest}</span>
+                        )}
+                        {b.company && (
+                          <span className="text-xs text-muted-foreground">· {b.company}</span>
+                        )}
+                      </div>
+                      {b.status === "confirmed" && !isPast && (
+                        <div className="flex items-center gap-2">
+                          <Button variant="outline" size="sm" onClick={() => { setRescheduleId(b.id); setRescheduleDate(undefined); setRescheduleTime(""); }}>
+                            <Clock className="w-3.5 h-3.5 mr-1" /> Reschedule
+                          </Button>
+                          <Button variant="outline" size="sm" className="text-destructive hover:text-destructive" onClick={() => handleCancelBooking(b.id)}>
+                            <X className="w-3.5 h-3.5 mr-1" /> Cancel
+                          </Button>
+                        </div>
                       )}
                     </div>
                     {b.notes && <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{b.notes}</p>}
@@ -342,6 +390,60 @@ export const AdminDashboard = () => {
             )}
           </div>
         </div>
+      )}
+
+      {/* Reschedule Modal */}
+      {rescheduleId && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-6"
+          onClick={() => setRescheduleId(null)}
+        >
+          <motion.div
+            initial={{ scale: 0.95 }}
+            animate={{ scale: 1 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-card border border-border rounded-2xl p-8 w-full max-w-md space-y-4"
+          >
+            <h3 className="text-lg font-semibold font-display">Reschedule Booking</h3>
+            <div className="flex justify-center">
+              <Calendar
+                mode="single"
+                selected={rescheduleDate}
+                onSelect={setRescheduleDate}
+                disabled={disabledDays}
+                className="pointer-events-auto"
+              />
+            </div>
+            {rescheduleDate && (
+              <div>
+                <p className="text-sm font-medium text-foreground mb-2">Pick a time</p>
+                <div className="grid grid-cols-3 gap-2 max-h-[200px] overflow-y-auto">
+                  {TIME_SLOTS.map((t) => (
+                    <button
+                      key={t}
+                      onClick={() => setRescheduleTime(t)}
+                      className={`px-3 py-2 rounded-lg text-sm font-medium border transition-all ${
+                        rescheduleTime === t
+                          ? "bg-primary text-primary-foreground border-primary"
+                          : "bg-secondary text-foreground border-border hover:border-primary/50"
+                      }`}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            <div className="flex gap-3 pt-2">
+              <Button variant="outline" onClick={() => setRescheduleId(null)} className="flex-1">Cancel</Button>
+              <Button variant="hero" onClick={handleReschedule} disabled={!rescheduleDate || !rescheduleTime} className="flex-1">
+                Confirm Reschedule
+              </Button>
+            </div>
+          </motion.div>
+        </motion.div>
       )}
 
       {/* New Project Modal */}
