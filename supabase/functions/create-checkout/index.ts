@@ -44,8 +44,8 @@ serve(async (req) => {
       customer_email: customerId ? undefined : user.email,
       line_items: [{ price: priceId, quantity: 1 }],
       mode: mode as "subscription" | "payment",
-      success_url: `${req.headers.get("origin")}/portal?payment=success`,
-      cancel_url: `${req.headers.get("origin")}/portal?payment=cancelled`,
+      success_url: `${req.headers.get("origin")}/payment-success`,
+      cancel_url: `${req.headers.get("origin")}/#pricing`,
     });
 
     return new Response(JSON.stringify({ url: session.url }), {

@@ -5,24 +5,24 @@ import testimonialsBg from "@/assets/testimonials-bg.png";
 
 const testimonials = [
   {
-    name: "James Whitmore",
-    role: "CEO, Finsbury Digital",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80",
-    content: "AdvantFlowAI transformed our digital presence completely. Our conversion rate jumped by 340% within the first month. They don't just build websites — they build revenue machines.",
+    name: "D. Patel",
+    role: "Owner, Patel & Co Accountants",
+    image: "",
+    content: "AdvantFlowAI built us a professional website in under a week. We went from zero online presence to getting enquiries through our site within days. Brilliant service and very easy to work with.",
     rating: 5,
   },
   {
-    name: "Sophie Anderson",
-    role: "Founder, Camden Ventures",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80",
-    content: "The team's attention to detail is unmatched. They delivered our project in just 3 days and it looks absolutely stunning. Worth every penny invested.",
+    name: "R. Hussain",
+    role: "Director, Hussain Property Group",
+    image: "",
+    content: "The AI chatbot they set up handles most of our tenant enquiries automatically now. It's saved us hours every week and our response time has gone from days to seconds. Highly recommend.",
     rating: 5,
   },
   {
-    name: "Oliver Thompson",
-    role: "Marketing Director, Mayfair Group",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80",
-    content: "We've worked with many agencies before, but AdvantFlowAI is different. They truly understand business goals and translate them into beautiful, functional designs.",
+    name: "L. Morgan",
+    role: "Founder, Morgan Fitness Studio",
+    image: "",
+    content: "They redesigned our website and set up automated booking confirmations. Class sign-ups increased noticeably and I spend far less time on admin. Great value for the price.",
     rating: 5,
   },
 ];
@@ -58,11 +58,11 @@ const TestimonialCard = ({ testimonial, index }: { testimonial: typeof testimoni
 
       {/* Author */}
       <div className="flex items-center gap-4">
-        <img
-          src={testimonial.image}
-          alt={testimonial.name}
-          className="w-14 h-14 rounded-full object-cover border-2 border-primary/20"
-        />
+        <div className="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center border-2 border-primary/20">
+          <span className="text-primary font-display font-bold text-lg">
+            {testimonial.name.split(" ").map(n => n[0]).join("")}
+          </span>
+        </div>
         <div>
           <h4 className="font-display font-semibold text-foreground">
             {testimonial.name}
