@@ -107,9 +107,13 @@ body{font-family:'Space Grotesk','Segoe UI',sans-serif;margin:0;padding:0;backgr
         <li style="margin-bottom:8px">Gather 2-3 examples of websites or tools you admire</li>
       </ul>
     </div>
-    <p>We'll reach out with meeting details shortly. If you need to reschedule, just reply to this email.</p>
+    <p>We'll reach out with meeting details shortly.</p>
     <div style="text-align:center;margin:24px 0">
       <a href="${gcalUrl}" style="display:inline-block;background:linear-gradient(135deg,#00d4ff,#0ea5e9);color:#0a0e1a;font-weight:bold;padding:14px 32px;border-radius:8px;text-decoration:none;font-size:15px">📅 Add to Google Calendar</a>
+    </div>
+    <div style="text-align:center;margin:16px 0 24px;display:flex;justify-content:center;gap:12px">
+      <a href="mailto:advantflow@gmail.com?subject=Reschedule: ${encodeURIComponent(booking.name)} — ${encodeURIComponent(formattedDate)} at ${booking.booking_time}&body=Hi, I'd like to reschedule my discovery call.%0A%0AOriginal: ${encodeURIComponent(formattedDate)} at ${booking.booking_time}%0A%0APreferred new time: " style="display:inline-block;background:#1e293b;border:1px solid #00d4ff;color:#00d4ff;font-weight:600;padding:12px 24px;border-radius:8px;text-decoration:none;font-size:14px">🔄 Reschedule</a>
+      <a href="mailto:advantflow@gmail.com?subject=Cancel: ${encodeURIComponent(booking.name)} — ${encodeURIComponent(formattedDate)} at ${booking.booking_time}&body=Hi, I'd like to cancel my discovery call scheduled for ${encodeURIComponent(formattedDate)} at ${booking.booking_time}.%0A%0AReason (optional): " style="display:inline-block;background:#1e293b;border:1px solid #475569;color:#94a3b8;font-weight:600;padding:12px 24px;border-radius:8px;text-decoration:none;font-size:14px">✕ Cancel</a>
     </div>
   </div>
   <div class="footer">
