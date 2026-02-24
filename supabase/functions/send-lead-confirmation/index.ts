@@ -116,7 +116,7 @@ const handler = async (req: Request): Promise<Response> => {
     let emailSuccess = false;
     try {
       await sendEmail({
-        from: "AdvantFlowAI <hello@advantflowai.co.uk>",
+        from: "AdvantFlowAI <hello@advantflowai.com>",
         to: [email],
         reply_to: "advantflow@gmail.com",
         subject: `${name}, ${serviceContent.subject_suffix}`,
@@ -169,14 +169,14 @@ const handler = async (req: Request): Promise<Response> => {
                       </td>
                     </tr>
                   </table>
-                  <a href="https://advantflowai.co.uk/#projects" class="cta-button">${serviceContent.cta}</a>
+                  <a href="https://advantflowai.com/#projects" class="cta-button">${serviceContent.cta}</a>
                   <p style="margin-top: 30px; color: #64748b; font-size: 13px;">
                     P.S. Want to fast-track things? Reply to this email with any extra details about your project and we'll get back to you even quicker.
                   </p>
                 </div>
                 <div class="footer">
                   <p>AdvantFlowAI Ltd · London, UK</p>
-                  <p><a href="https://advantflowai.co.uk">advantflowai.co.uk</a> · <a href="mailto:advantflow@gmail.com">advantflow@gmail.com</a></p>
+                  <p><a href="https://advantflowai.com">advantflowai.com</a> · <a href="mailto:advantflow@gmail.com">advantflow@gmail.com</a></p>
                   <p>© ${new Date().getFullYear()} AdvantFlowAI Ltd. All rights reserved.</p>
                 </div>
               </div>
@@ -193,7 +193,7 @@ const handler = async (req: Request): Promise<Response> => {
     // 2. Send enriched notification to business
     try {
       await sendEmail({
-        from: "AdvantFlowAI Website <hello@advantflowai.co.uk>",
+        from: "AdvantFlowAI Website <hello@advantflowai.com>",
         to: ["advantflow@gmail.com"],
         subject: `🔥 New Lead: ${name} — ${service_interest || "General"} ${company ? `(${company})` : ""}`,
         html: `

@@ -42,7 +42,7 @@ const handler = async (req: Request): Promise<Response> => {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
         body: JSON.stringify({
-          from: "AdvantFlowAI <hello@advantflowai.co.uk>",
+          from: "AdvantFlowAI <hello@advantflowai.com>",
           to: [email],
           reply_to: "advantflow@gmail.com",
           subject: `Your discovery call is confirmed — ${formattedDate} at ${booking_time}`,
@@ -93,11 +93,11 @@ body{font-family:'Space Grotesk','Segoe UI',sans-serif;margin:0;padding:0;backgr
     <div style="text-align:center;margin:24px 0">
       <a href="${gcalUrl}" style="display:inline-block;background:linear-gradient(135deg,#00d4ff,#0ea5e9);color:#0a0e1a;font-weight:bold;padding:14px 32px;border-radius:8px;text-decoration:none;font-size:15px">📅 Add to Google Calendar</a>
     </div>
-    <a href="https://advantflowai.co.uk/#projects" class="cta">See Our Recent Work →</a>
+    <a href="https://advantflowai.com/#projects" class="cta">See Our Recent Work →</a>
   </div>
   <div class="footer">
     <p>AdvantFlowAI Ltd · London, UK</p>
-    <p><a href="https://advantflowai.co.uk">advantflowai.co.uk</a> · <a href="mailto:advantflow@gmail.com">advantflow@gmail.com</a></p>
+    <p><a href="https://advantflowai.com">advantflowai.com</a> · <a href="mailto:advantflow@gmail.com">advantflow@gmail.com</a></p>
     <p>© ${new Date().getFullYear()} AdvantFlowAI Ltd. All rights reserved.</p>
   </div>
 </div>
@@ -117,7 +117,7 @@ body{font-family:'Space Grotesk','Segoe UI',sans-serif;margin:0;padding:0;backgr
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
         body: JSON.stringify({
-          from: "AdvantFlowAI Website <hello@advantflowai.co.uk>",
+          from: "AdvantFlowAI Website <hello@advantflowai.com>",
           to: ["advantflow@gmail.com"],
           subject: `📅 New Booking: ${name} — ${formattedDate} at ${booking_time}`,
           html: `
