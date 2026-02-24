@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Users, FolderOpen, PoundSterling, TrendingUp, Loader2, Plus, Trash2 } from "lucide-react";
+import { Users, FolderOpen, PoundSterling, TrendingUp, Loader2, Plus, Trash2, CalendarCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
@@ -30,7 +30,8 @@ export const AdminDashboard = () => {
   const [projects, setProjects] = useState<ProjectSummary[]>([]);
   const [leads, setLeads] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [view, setView] = useState<"overview" | "clients" | "finances" | "leads">("overview");
+  const [bookings, setBookings] = useState<any[]>([]);
+  const [view, setView] = useState<"overview" | "clients" | "finances" | "leads" | "bookings">("overview");
 
   // New project form
   const [showNewProject, setShowNewProject] = useState(false);
@@ -43,14 +44,16 @@ export const AdminDashboard = () => {
 
   const fetchAll = async () => {
     setLoading(true);
-    const [projectsRes, profilesRes, leadsRes] = await Promise.all([
+    const [projectsRes, profilesRes, leadsRes, bookingsRes] = await Promise.all([
       supabase.from("client_projects").select("*").order("created_at", { ascending: false }),
       supabase.from("profiles").select("user_id, full_name, company"),
       supabase.from("leads").select("*").order("created_at", { ascending: false }).limit(50),
+      supabase.from("bookings").select("*").order("booking_date", { ascending: true }),
     ]);
 
     if (projectsRes.data) setProjects(projectsRes.data);
     if (leadsRes.data) setLeads(leadsRes.data);
+    if (bookingsRes.data) setBookings(bookingsRes.data);
 
     // Build client list from profiles that have projects
     if (profilesRes.data && projectsRes.data) {
@@ -113,6 +116,7 @@ export const AdminDashboard = () => {
     { id: "clients", label: "Clients" },
     { id: "finances", label: "Finances" },
     { id: "leads", label: "Leads" },
+    { id: "bookings", label: "Bookings" },
   ];
 
   return (
@@ -276,6 +280,67 @@ export const AdminDashboard = () => {
               </div>
             ))
           )}
+        </div>
+      )}
+
+      {view === "bookings" && (
+        <div className="space-y-4">
+          <div className="grid sm:grid-cols-3 gap-4">
+            {[
+              { label: "Upcoming", value: bookings.filter((b) => b.status === "confirmed" && b.booking_date >= new Date().toISOString().split("T")[0]).length },
+              { label: "Completed", value: bookings.filter((b) => b.status === "completed").length },
+              { label: "Cancelled", value: bookings.filter((b) => b.status === "cancelled").length },
+            ].map((stat) => (
+              <div key={stat.label} className="card-enhanced p-5 rounded-2xl">
+                <p className="text-sm text-muted-foreground">{stat.label}</p>
+                <p className="text-3xl font-bold font-display">{stat.value}</p>
+              </div>
+            ))}
+          </div>
+          <div className="space-y-2">
+            {bookings.length === 0 ? (
+              <p className="text-muted-foreground text-center py-12">No bookings yet.</p>
+            ) : (
+              bookings.map((b) => {
+                const isPast = b.booking_date < new Date().toISOString().split("T")[0];
+                return (
+                  <div key={b.id} className="card-enhanced rounded-xl p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                          <CalendarCheck className="w-5 h-5 text-primary" />
+                        </div>
+                        <div>
+                          <p className="font-medium">{b.name}</p>
+                          <p className="text-sm text-muted-foreground">{b.email}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-medium">{format(new Date(b.booking_date + "T00:00:00"), "dd MMM yyyy")}</p>
+                        <p className="text-sm text-primary font-semibold">{b.booking_time}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                        b.status === "confirmed" && !isPast ? "bg-green-500/20 text-green-400" :
+                        b.status === "cancelled" ? "bg-red-500/20 text-red-400" :
+                        "bg-secondary text-muted-foreground"
+                      }`}>
+                        {isPast && b.status === "confirmed" ? "Completed" : b.status}
+                      </span>
+                      {b.service_interest && (
+                        <span className="text-xs px-2.5 py-0.5 rounded-full bg-primary/10 text-primary">{b.service_interest}</span>
+                      )}
+                      {b.company && (
+                        <span className="text-xs text-muted-foreground">· {b.company}</span>
+                      )}
+                    </div>
+                    {b.notes && <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{b.notes}</p>}
+                  </div>
+                );
+              })
+            )}
+          </div>
         </div>
       )}
 
