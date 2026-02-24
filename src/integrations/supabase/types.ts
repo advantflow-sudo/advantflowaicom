@@ -165,30 +165,45 @@ export type Database = {
           company: string | null
           created_at: string
           email: string
+          follow_up_sent: boolean | null
+          follow_up_sent_at: string | null
           id: string
+          lead_score: number | null
+          lead_status: string | null
           message: string
           name: string
           phone: string | null
+          score_reason: string | null
           service_interest: string | null
         }
         Insert: {
           company?: string | null
           created_at?: string
           email: string
+          follow_up_sent?: boolean | null
+          follow_up_sent_at?: string | null
           id?: string
+          lead_score?: number | null
+          lead_status?: string | null
           message: string
           name: string
           phone?: string | null
+          score_reason?: string | null
           service_interest?: string | null
         }
         Update: {
           company?: string | null
           created_at?: string
           email?: string
+          follow_up_sent?: boolean | null
+          follow_up_sent_at?: string | null
           id?: string
+          lead_score?: number | null
+          lead_status?: string | null
           message?: string
           name?: string
           phone?: string | null
+          score_reason?: string | null
           service_interest?: string | null
         }
         Relationships: []

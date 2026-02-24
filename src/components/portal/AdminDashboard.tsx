@@ -251,12 +251,26 @@ export const AdminDashboard = () => {
             leads.map((lead) => (
               <div key={lead.id} className="card-enhanced rounded-xl p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <p className="font-medium">{lead.name}</p>
+                  <div className="flex items-center gap-3">
+                    <p className="font-medium">{lead.name}</p>
+                    {lead.lead_score > 0 && (
+                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                        lead.lead_status === 'hot' ? 'bg-red-500/20 text-red-400' :
+                        lead.lead_status === 'warm' ? 'bg-yellow-500/20 text-yellow-400' :
+                        'bg-blue-500/20 text-blue-400'
+                      }`}>
+                        {lead.lead_score}/100 · {lead.lead_status?.toUpperCase()}
+                      </span>
+                    )}
+                  </div>
                   <span className="text-xs text-muted-foreground">{format(new Date(lead.created_at), "dd MMM yyyy")}</span>
                 </div>
                 <p className="text-sm text-muted-foreground">{lead.email} {lead.company ? `· ${lead.company}` : ""}</p>
                 {lead.service_interest && (
                   <span className="inline-block mt-2 text-xs px-2.5 py-1 rounded-full bg-primary/10 text-primary">{lead.service_interest}</span>
+                )}
+                {lead.score_reason && (
+                  <p className="text-xs text-muted-foreground mt-2 italic">AI: {lead.score_reason}</p>
                 )}
                 <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{lead.message}</p>
               </div>
