@@ -74,23 +74,24 @@ export const ContactForm = () => {
 
     try {
       // Save lead to database
-      const { error: dbError } = await supabase.from("leads").insert({
+      const { data: leadData, error: dbError } = await supabase.from("leads").insert({
         name: result.data.name,
         email: result.data.email,
         company: result.data.company || null,
         phone: result.data.phone || null,
         service_interest: result.data.service_interest || null,
         message: result.data.message,
-      });
+      }).select("id").single();
 
       if (dbError) {
         console.error("Database error:", dbError);
         throw new Error("Failed to save your information");
       }
 
-      // Send confirmation email
+      // Send confirmation email + trigger AI lead scoring
       const { error: emailError } = await supabase.functions.invoke("send-lead-confirmation", {
         body: {
+          lead_id: leadData?.id,
           name: result.data.name,
           email: result.data.email,
           company: result.data.company,
@@ -102,7 +103,6 @@ export const ContactForm = () => {
 
       if (emailError) {
         console.error("Email error:", emailError);
-        // Don't throw here - lead is saved, email failed
       }
 
       toast({
