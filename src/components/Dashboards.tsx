@@ -13,24 +13,28 @@ import { DashboardMockup } from "@/components/DashboardMockup";
 
 const DASHBOARD_PRICE_ID = "price_1T4Fp8C1I7VBCNgysIV03mAB";
 
+type Category = "All" | "Professional" | "Retail & Hospitality" | "Tech & Data" | "Operations";
+
 const industries = [
-  { icon: HeartPulse, name: "Healthcare", desc: "Patient portals & analytics", features: ["Patient intake forms", "Appointment scheduling", "Lab results viewer", "HIPAA-compliant dashboards"] },
-  { icon: GraduationCap, name: "Education", desc: "Student dashboards & LMS", features: ["Grade tracking", "Attendance monitoring", "Course management", "Parent portal access"] },
-  { icon: Building2, name: "Real Estate", desc: "Property & tenant portals", features: ["Listing management", "Tenant payments", "Maintenance requests", "Occupancy analytics"] },
-  { icon: ShoppingBag, name: "E-Commerce", desc: "Orders & inventory", features: ["Order management", "Stock alerts", "Sales analytics", "Customer segmentation"] },
-  { icon: Truck, name: "Logistics", desc: "Fleet tracking & KPIs", features: ["Live GPS tracking", "Route optimization", "Delivery ETAs", "Driver performance"] },
-  { icon: Scale, name: "Legal", desc: "Case & client management", features: ["Case tracking", "Time & billing", "Document vault", "Client portal"] },
-  { icon: Utensils, name: "Hospitality", desc: "Bookings & revenue", features: ["Reservation system", "Table management", "Revenue forecasting", "Guest profiles"] },
-  { icon: Dumbbell, name: "Fitness", desc: "Members & scheduling", features: ["Class bookings", "Member check-ins", "Trainer scheduling", "Revenue tracking"] },
-  { icon: Factory, name: "Manufacturing", desc: "Production & quality", features: ["Production lines", "Quality control", "Equipment uptime", "Supply chain view"] },
-  { icon: Landmark, name: "Finance", desc: "Portfolio & compliance", features: ["Portfolio overview", "Risk dashboards", "Regulatory reports", "Transaction audit"] },
-  { icon: Plane, name: "Travel", desc: "Bookings & itineraries", features: ["Trip planner", "Booking management", "Commission tracking", "Customer CRM"] },
-  { icon: Leaf, name: "Agriculture", desc: "Crop & yield tracking", features: ["Field mapping", "Weather alerts", "Yield forecasting", "Equipment logs"] },
-  { icon: Car, name: "Automotive", desc: "Inventory & service", features: ["Vehicle inventory", "Service scheduling", "Parts ordering", "Customer history"] },
-  { icon: Palette, name: "Creative", desc: "Projects & clients", features: ["Project timelines", "Asset management", "Client approvals", "Invoice tracking"] },
-  { icon: Wifi, name: "SaaS / Tech", desc: "Metrics & user data", features: ["MRR & churn", "User analytics", "Feature usage", "Support tickets"] },
-  { icon: LayoutDashboard, name: "Any Industry", desc: "Fully custom for you", features: ["Tailored KPIs", "Custom workflows", "Brand-matched UI", "Unlimited modules"] },
+  { icon: HeartPulse, name: "Healthcare", desc: "Patient portals & analytics", category: "Professional" as Category, features: ["Patient intake forms", "Appointment scheduling", "Lab results viewer", "HIPAA-compliant dashboards"] },
+  { icon: GraduationCap, name: "Education", desc: "Student dashboards & LMS", category: "Professional" as Category, features: ["Grade tracking", "Attendance monitoring", "Course management", "Parent portal access"] },
+  { icon: Building2, name: "Real Estate", desc: "Property & tenant portals", category: "Professional" as Category, features: ["Listing management", "Tenant payments", "Maintenance requests", "Occupancy analytics"] },
+  { icon: Scale, name: "Legal", desc: "Case & client management", category: "Professional" as Category, features: ["Case tracking", "Time & billing", "Document vault", "Client portal"] },
+  { icon: Landmark, name: "Finance", desc: "Portfolio & compliance", category: "Professional" as Category, features: ["Portfolio overview", "Risk dashboards", "Regulatory reports", "Transaction audit"] },
+  { icon: Palette, name: "Creative", desc: "Projects & clients", category: "Professional" as Category, features: ["Project timelines", "Asset management", "Client approvals", "Invoice tracking"] },
+  { icon: ShoppingBag, name: "E-Commerce", desc: "Orders & inventory", category: "Retail & Hospitality" as Category, features: ["Order management", "Stock alerts", "Sales analytics", "Customer segmentation"] },
+  { icon: Utensils, name: "Hospitality", desc: "Bookings & revenue", category: "Retail & Hospitality" as Category, features: ["Reservation system", "Table management", "Revenue forecasting", "Guest profiles"] },
+  { icon: Dumbbell, name: "Fitness", desc: "Members & scheduling", category: "Retail & Hospitality" as Category, features: ["Class bookings", "Member check-ins", "Trainer scheduling", "Revenue tracking"] },
+  { icon: Plane, name: "Travel", desc: "Bookings & itineraries", category: "Retail & Hospitality" as Category, features: ["Trip planner", "Booking management", "Commission tracking", "Customer CRM"] },
+  { icon: Car, name: "Automotive", desc: "Inventory & service", category: "Retail & Hospitality" as Category, features: ["Vehicle inventory", "Service scheduling", "Parts ordering", "Customer history"] },
+  { icon: Wifi, name: "SaaS / Tech", desc: "Metrics & user data", category: "Tech & Data" as Category, features: ["MRR & churn", "User analytics", "Feature usage", "Support tickets"] },
+  { icon: Truck, name: "Logistics", desc: "Fleet tracking & KPIs", category: "Operations" as Category, features: ["Live GPS tracking", "Route optimization", "Delivery ETAs", "Driver performance"] },
+  { icon: Factory, name: "Manufacturing", desc: "Production & quality", category: "Operations" as Category, features: ["Production lines", "Quality control", "Equipment uptime", "Supply chain view"] },
+  { icon: Leaf, name: "Agriculture", desc: "Crop & yield tracking", category: "Operations" as Category, features: ["Field mapping", "Weather alerts", "Yield forecasting", "Equipment logs"] },
+  { icon: LayoutDashboard, name: "Any Industry", desc: "Fully custom for you", category: "All" as Category, features: ["Tailored KPIs", "Custom workflows", "Brand-matched UI", "Unlimited modules"] },
 ];
+
+const categories: Category[] = ["All", "Professional", "Retail & Hospitality", "Tech & Data", "Operations"];
 
 const features = [
   "Fully white-labelled under your brand",
@@ -46,6 +50,16 @@ export const Dashboards = () => {
   const isHeaderInView = useInView(headerRef, { once: true, margin: "-100px" });
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<Category>("All");
+  const [expandedCard, setExpandedCard] = useState<string | null>(null);
+
+  const filteredIndustries = activeCategory === "All"
+    ? industries
+    : industries.filter((i) => i.category === activeCategory || i.category === "All");
+
+  const handleCardTap = (name: string) => {
+    setExpandedCard((prev) => (prev === name ? null : name));
+  };
 
   const handleCheckout = async () => {
     if (!user) {
@@ -120,41 +134,84 @@ export const Dashboards = () => {
           </motion.div>
         </motion.div>
 
-        {/* Industries Grid - 4 columns on desktop, 2 on mobile */}
+        {/* Category Filter Tabs */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-wrap items-center justify-center gap-2 mb-8"
+        >
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => {
+                setActiveCategory(cat);
+                setExpandedCard(null);
+              }}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                activeCategory === cat
+                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                  : "bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </motion.div>
+
+        {/* Industries Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-16">
-          {industries.map((industry, index) => {
-            const Icon = industry.icon;
-            return (
-              <motion.div
-                key={industry.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
-                whileHover={{ scale: 1.05, y: -4 }}
-                className="group relative p-5 rounded-xl bg-card border border-border hover:border-primary/30 hover:shadow-[0_0_30px_-8px_hsl(var(--primary)/0.25)] transition-all duration-300 text-center cursor-default"
-              >
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center mx-auto mb-3 group-hover:shadow-lg group-hover:shadow-primary/20 transition-shadow">
-                  <Icon className="w-6 h-6 text-primary-foreground" />
-                </div>
-                <h3 className="font-display font-semibold text-foreground text-sm mb-0.5 group-hover:text-primary transition-colors">
-                  {industry.name}
-                </h3>
-                <p className="text-xs text-muted-foreground mb-0 group-hover:mb-2 transition-all">{industry.desc}</p>
-                
-                {/* Hover features tooltip */}
-                <div className="grid grid-cols-1 gap-1 max-h-0 overflow-hidden opacity-0 group-hover:max-h-40 group-hover:opacity-100 group-hover:mt-3 transition-all duration-300 ease-in-out">
-                  <div className="h-px bg-border mb-1" />
-                  {industry.features.map((feature) => (
-                    <div key={feature} className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <CheckCircle2 className="w-3 h-3 text-primary flex-shrink-0" />
-                      <span>{feature}</span>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            );
-          })}
+          <AnimatePresence mode="popLayout">
+            {filteredIndustries.map((industry) => {
+              const Icon = industry.icon;
+              const isExpanded = expandedCard === industry.name;
+              return (
+                <motion.div
+                  key={industry.name}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.3 }}
+                  whileHover={{ scale: 1.05, y: -4 }}
+                  onClick={() => handleCardTap(industry.name)}
+                  className={`group relative p-5 rounded-xl bg-card border transition-all duration-300 text-center cursor-pointer ${
+                    isExpanded
+                      ? "border-primary/50 shadow-[0_0_30px_-8px_hsl(var(--primary)/0.25)]"
+                      : "border-border hover:border-primary/30 hover:shadow-[0_0_30px_-8px_hsl(var(--primary)/0.25)]"
+                  }`}
+                >
+                  <div className={`w-12 h-12 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center mx-auto mb-3 transition-shadow ${
+                    isExpanded ? "shadow-lg shadow-primary/20" : "group-hover:shadow-lg group-hover:shadow-primary/20"
+                  }`}>
+                    <Icon className="w-6 h-6 text-primary-foreground" />
+                  </div>
+                  <h3 className={`font-display font-semibold text-sm mb-0.5 transition-colors ${
+                    isExpanded ? "text-primary" : "text-foreground group-hover:text-primary"
+                  }`}>
+                    {industry.name}
+                  </h3>
+                  <p className="text-xs text-muted-foreground">{industry.desc}</p>
+                  
+                  {/* Features - visible on hover (desktop) or tap (mobile) */}
+                  <div className={`grid grid-cols-1 gap-1 overflow-hidden transition-all duration-300 ease-in-out ${
+                    isExpanded
+                      ? "max-h-40 opacity-100 mt-3"
+                      : "max-h-0 opacity-0 md:group-hover:max-h-40 md:group-hover:opacity-100 md:group-hover:mt-3"
+                  }`}>
+                    <div className="h-px bg-border mb-1" />
+                    {industry.features.map((feature) => (
+                      <div key={feature} className="flex items-center gap-1.5 text-xs text-muted-foreground text-left">
+                        <CheckCircle2 className="w-3 h-3 text-primary flex-shrink-0" />
+                        <span>{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
         </div>
 
         {/* Pricing + Features Card */}
