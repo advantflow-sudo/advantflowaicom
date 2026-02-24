@@ -1,3 +1,4 @@
+import { SEOHead } from "@/components/SEOHead";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { Marquee } from "@/components/Marquee";
@@ -16,6 +17,11 @@ import { Footer } from "@/components/Footer";
 const Index = () => {
   return (
     <main className="relative">
+      <SEOHead
+        title="AdvantFlowAI | AI Automation & Web Design Agency | London, UK"
+        description="We build high-converting websites, AI automation systems & custom dashboards. Websites from £497. AI from £97/mo. 50+ UK businesses trust us."
+        canonical="https://advantflowai.co.uk/"
+      />
       <Navbar />
       <Hero />
       <Marquee />
