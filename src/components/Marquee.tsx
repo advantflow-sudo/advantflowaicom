@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 
 const brands = [
-  "Web Design", "AI Automation", "Lead Pipelines", "Custom Agents", 
-  "No-Code Systems", "CRM Integration", "Conversion Design", "24/7 Bots"
+  "Web Design", "AI Automation", "White-Label Dashboards", "Custom Agents", 
+  "No-Code Systems", "CRM Integration", "Conversion Design", "24/7 Bots", "Any Industry"
 ];
 
 export const Marquee = () => {

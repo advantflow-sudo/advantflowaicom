@@ -49,9 +49,9 @@ export const Hero = () => {
             transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             className="heading-xl mb-8"
           >
-            <span className="block">Automate Your Business.</span>
-            <span className="text-gradient glow-text">Unlock Your</span>
-            <span className="block mt-2">Advantage.</span>
+            <span className="block">Websites. AI. Dashboards.</span>
+            <span className="text-gradient glow-text">Built For Your</span>
+            <span className="block mt-2">Industry.</span>
           </motion.h1>
 
           {/* Subheadline */}
@@ -61,8 +61,8 @@ export const Hero = () => {
             transition={{ duration: 0.9, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="body-lg max-w-2xl mx-auto mb-14"
           >
-            Websites from £497. AI automation from £97/mo. We help small businesses 
-            get online fast, automate boring tasks, and start making money.
+            Websites from £497. AI automation from £97/mo. Custom white-label dashboards 
+            for any industry. We help businesses get online, automate, and scale.
           </motion.p>
 
           {/* CTAs */}

@@ -8,6 +8,7 @@ import logoIcon from "@/assets/logo-icon.png";
 const navLinks = [
   { name: "Web Design", href: "#services" },
   { name: "AI Automation", href: "#ai-automation" },
+  { name: "Dashboards", href: "#dashboards" },
   { name: "Work", href: "#work" },
   { name: "About", href: "#about" },
   { name: "Blog", href: "/blog" },
