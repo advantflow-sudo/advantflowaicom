@@ -29,6 +29,13 @@ const handler = async (req: Request): Promise<Response> => {
     const dateObj = new Date(booking_date + "T00:00:00");
     const formattedDate = dateObj.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
 
+    // Build Google Calendar link
+    const [hours, minutes] = booking_time.split(":").map(Number);
+    const startUtc = new Date(Date.UTC(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), hours, minutes));
+    const endUtc = new Date(startUtc.getTime() + 30 * 60 * 1000); // 30 min call
+    const fmt = (d: Date) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+    const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("Discovery Call with AdvantFlowAI")}&dates=${fmt(startUtc)}/${fmt(endUtc)}&details=${encodeURIComponent(`Free 30-minute discovery call with AdvantFlowAI.\n\nService interest: ${service_interest || "General"}\n\nWe'll reach out with meeting details shortly.`)}&location=${encodeURIComponent("Video Call (link to follow)")}`;
+
     // 1. Send confirmation to the booker
     try {
       const res = await fetch("https://api.resend.com/emails", {
@@ -82,7 +89,10 @@ body{font-family:'Space Grotesk','Segoe UI',sans-serif;margin:0;padding:0;backgr
         <li style="margin-bottom:8px">Gather 2-3 examples of websites or tools you admire</li>
       </ul>
     </div>
-    <p>We'll reach out shortly with a calendar invite. If you need to reschedule, just reply to this email.</p>
+    <p>If you need to reschedule, just reply to this email.</p>
+    <div style="text-align:center;margin:24px 0">
+      <a href="${gcalUrl}" style="display:inline-block;background:linear-gradient(135deg,#00d4ff,#0ea5e9);color:#0a0e1a;font-weight:bold;padding:14px 32px;border-radius:8px;text-decoration:none;font-size:15px">📅 Add to Google Calendar</a>
+    </div>
     <a href="https://advantflowai.co.uk/#projects" class="cta">See Our Recent Work →</a>
   </div>
   <div class="footer">
