@@ -2,7 +2,8 @@ import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { 
   LayoutDashboard, HeartPulse, GraduationCap, Building2, 
-  ShoppingBag, Truck, Scale, Utensils, ArrowRight, CheckCircle2, Loader2
+  ShoppingBag, Truck, Scale, Utensils, ArrowRight, CheckCircle2, Loader2,
+  Dumbbell, Factory, Landmark, Plane, Leaf, Car, Palette, Wifi
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
@@ -20,6 +21,14 @@ const industries = [
   { icon: Truck, name: "Logistics", desc: "Fleet tracking & KPIs" },
   { icon: Scale, name: "Legal", desc: "Case & client management" },
   { icon: Utensils, name: "Hospitality", desc: "Bookings & revenue" },
+  { icon: Dumbbell, name: "Fitness", desc: "Members & scheduling" },
+  { icon: Factory, name: "Manufacturing", desc: "Production & quality" },
+  { icon: Landmark, name: "Finance", desc: "Portfolio & compliance" },
+  { icon: Plane, name: "Travel", desc: "Bookings & itineraries" },
+  { icon: Leaf, name: "Agriculture", desc: "Crop & yield tracking" },
+  { icon: Car, name: "Automotive", desc: "Inventory & service" },
+  { icon: Palette, name: "Creative", desc: "Projects & clients" },
+  { icon: Wifi, name: "SaaS / Tech", desc: "Metrics & user data" },
   { icon: LayoutDashboard, name: "Any Industry", desc: "Fully custom for you" },
 ];
 
@@ -90,7 +99,6 @@ export const Dashboards = () => {
           className="mb-16 relative"
           style={{ perspective: "1200px" }}
         >
-          {/* Glow effect */}
           <div className="absolute -inset-4 md:-inset-8 rounded-3xl bg-gradient-to-br from-primary/20 via-accent/15 to-primary/10 blur-2xl md:blur-3xl opacity-60 pointer-events-none" />
           <motion.div
             animate={{ 
@@ -112,7 +120,7 @@ export const Dashboards = () => {
           </motion.div>
         </motion.div>
 
-        {/* Industries Grid */}
+        {/* Industries Grid - 4 columns on desktop, 2 on mobile */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-16">
           {industries.map((industry, index) => {
             const Icon = industry.icon;
@@ -145,7 +153,6 @@ export const Dashboards = () => {
           transition={{ duration: 0.7 }}
           className="max-w-3xl mx-auto rounded-2xl bg-card border border-border p-8 md:p-12"
         >
-          {/* Price */}
           <div className="text-center mb-8">
             <div className="flex items-baseline justify-center gap-2 mb-2">
               <span className="text-muted-foreground text-sm font-medium">From</span>
@@ -154,7 +161,6 @@ export const Dashboards = () => {
             <p className="text-muted-foreground text-sm">One-time payment · Fully custom · No monthly fees</p>
           </div>
 
-          {/* Features */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
             {features.map((feature) => (
               <div key={feature} className="flex items-center gap-2.5 text-sm text-muted-foreground">
@@ -164,7 +170,6 @@ export const Dashboards = () => {
             ))}
           </div>
 
-          {/* CTAs */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Button
               variant="hero"
