@@ -54,7 +54,7 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="flex flex-col sm:flex-row items-start gap-4"
           >
-            <a href="#contact">
+            <a href="#booking">
               <Button variant="hero" size="xl" className="group">
                 Book a Free Call
                 <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
