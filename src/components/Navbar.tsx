@@ -13,6 +13,7 @@ const navLinks = [
       { name: "Web Design", href: "#services" },
       { name: "AI Automation", href: "#ai-automation" },
       { name: "White-Label Dashboards", href: "#dashboards" },
+      { name: "View All Pricing", href: "/pricing" },
     ],
   },
   { name: "Work", href: "#work" },
