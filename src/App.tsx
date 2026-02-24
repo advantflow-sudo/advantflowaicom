@@ -12,6 +12,7 @@ import BlogPost from "./pages/BlogPost";
 import NotFound from "./pages/NotFound";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PricingPage from "./pages/PricingPage";
+import ResetPassword from "./pages/ResetPassword";
 import { ChatWidget } from "@/components/chat/ChatWidget";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/payment-success" element={<PaymentSuccess />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
