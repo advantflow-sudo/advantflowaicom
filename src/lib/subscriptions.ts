@@ -19,6 +19,27 @@ export const subscriptionTiers = {
   },
 } as const;
 
+export const webDesignProducts = {
+  starter: {
+    name: "Starter",
+    price_id: "price_1T4FKPC1I7VBCNgyjkPbY1or",
+    product_id: "prod_U2JyxjhRCMUU9A",
+    price: "£497",
+  },
+  growth: {
+    name: "Growth",
+    price_id: "price_1T4FKkC1I7VBCNgyGg2w0zVV",
+    product_id: "prod_U2Jyms2Qf8fZq9",
+    price: "£997",
+  },
+  premium: {
+    name: "Premium",
+    price_id: "price_1T4FL4C1I7VBCNgyUZG63Xn1",
+    product_id: "prod_U2JzXngjkDd7xS",
+    price: "£2,497",
+  },
+} as const;
+
 export type SubscriptionTier = keyof typeof subscriptionTiers;
 
 export function getTierByProductId(productId: string): SubscriptionTier | null {
