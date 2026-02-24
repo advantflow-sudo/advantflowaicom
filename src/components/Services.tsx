@@ -154,8 +154,8 @@ const ServiceCard = ({ service, index }: { service: typeof webServices[0]; index
             <motion.li 
               key={feature} 
               className="flex items-center gap-2.5 text-sm text-muted-foreground"
-              initial={{ opacity: 0.7 }}
-              animate={{ opacity: isHovered ? 1 : 0.7 }}
+              initial={{ opacity: 1 }}
+              animate={{ opacity: 1 }}
               transition={{ delay: i * 0.05 }}
             >
               <motion.span 
