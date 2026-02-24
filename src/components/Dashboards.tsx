@@ -88,8 +88,23 @@ export const Dashboards = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
           className="mb-16"
+          style={{ perspective: "1200px" }}
         >
-          <DashboardMockup />
+          <motion.div
+            animate={{ 
+              rotateX: [0, 1.5, 0, -1, 0],
+              rotateY: [0, -2, 0, 1.5, 0],
+              y: [0, -8, 0, -4, 0],
+            }}
+            transition={{ 
+              duration: 8, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+            style={{ transformStyle: "preserve-3d" }}
+          >
+            <DashboardMockup />
+          </motion.div>
         </motion.div>
 
         {/* Industries Grid */}
