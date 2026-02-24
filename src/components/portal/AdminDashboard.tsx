@@ -110,15 +110,25 @@ export const AdminDashboard = () => {
   };
 
   const handleCancelBooking = async (id: string) => {
+    const booking = bookings.find((b) => b.id === id);
     const { error } = await supabase.from("bookings").update({ status: "cancelled" }).eq("id", id);
     if (error) toast.error(error.message);
-    else { toast.success("Booking cancelled."); fetchAll(); }
+    else {
+      toast.success("Booking cancelled.");
+      if (booking) {
+        supabase.functions.invoke("send-booking-update", {
+          body: { type: "cancelled", name: booking.name, email: booking.email, original_date: booking.booking_date, original_time: booking.booking_time },
+        }).catch(console.error);
+      }
+      fetchAll();
+    }
   };
 
   const handleReschedule = async () => {
     if (!rescheduleId || !rescheduleDate || !rescheduleTime) {
       toast.error("Pick a new date and time."); return;
     }
+    const booking = bookings.find((b) => b.id === rescheduleId);
     const { error } = await supabase.from("bookings").update({
       booking_date: format(rescheduleDate, "yyyy-MM-dd"),
       booking_time: rescheduleTime,
@@ -126,6 +136,15 @@ export const AdminDashboard = () => {
     if (error) toast.error(error.message);
     else {
       toast.success("Booking rescheduled.");
+      if (booking) {
+        supabase.functions.invoke("send-booking-update", {
+          body: {
+            type: "rescheduled", name: booking.name, email: booking.email,
+            original_date: booking.booking_date, original_time: booking.booking_time,
+            new_date: format(rescheduleDate, "yyyy-MM-dd"), new_time: rescheduleTime,
+          },
+        }).catch(console.error);
+      }
       setRescheduleId(null); setRescheduleDate(undefined); setRescheduleTime("");
       fetchAll();
     }
