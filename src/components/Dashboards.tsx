@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import dashboardMockup from "@/assets/dashboard-mockup.png";
 
 const DASHBOARD_PRICE_ID = "price_1T4Fp8C1I7VBCNgysIV03mAB";
 
@@ -78,6 +79,17 @@ export const Dashboards = () => {
             Fully branded dashboards, built to your spec. Your brand, your data, 
             your clients — powered by us.
           </p>
+        </motion.div>
+
+        {/* Dashboard Mockup */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="mb-16 rounded-2xl overflow-hidden border border-border shadow-2xl shadow-primary/10"
+        >
+          <img src={dashboardMockup} alt="White-label dashboard mockup showing analytics, KPIs and data tables" className="w-full h-auto" />
         </motion.div>
 
         {/* Industries Grid */}
