@@ -83,6 +83,21 @@ export const BookingCalendar = () => {
 
       if (error) throw error;
 
+      // Trigger confirmation email (non-blocking)
+      try {
+        await supabase.functions.invoke("send-booking-confirmation", {
+          body: {
+            name: formData.name,
+            email: formData.email,
+            booking_date: format(selectedDate, "yyyy-MM-dd"),
+            booking_time: selectedTime,
+            service_interest: formData.service_interest || undefined,
+          },
+        });
+      } catch (emailErr) {
+        console.error("Booking email trigger failed:", emailErr);
+      }
+
       setStep("confirmed");
       toast({ title: "Discovery call booked! 🎉", description: "Check your inbox for confirmation details." });
     } catch (error: any) {
