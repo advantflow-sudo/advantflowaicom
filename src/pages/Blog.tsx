@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { SEOHead } from "@/components/SEOHead";
 
 interface BlogPost {
   id: string;
@@ -34,6 +35,11 @@ const Blog = () => {
 
   return (
     <main className="relative">
+      <SEOHead
+        title="Blog | AdvantFlowAI — AI Automation & Web Design Insights"
+        description="Expert insights on AI automation, web design, and business growth. Tips, guides, and case studies from AdvantFlowAI."
+        canonical="https://advantflowai.co.uk/blog"
+      />
       <Navbar />
       <section className="section-padding pt-36 md:pt-44 min-h-screen">
         <div className="container-wide">
