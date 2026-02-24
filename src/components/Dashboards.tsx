@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import dashboardMockup from "@/assets/dashboard-mockup.png";
+import { DashboardMockup } from "@/components/DashboardMockup";
 
 const DASHBOARD_PRICE_ID = "price_1T4Fp8C1I7VBCNgysIV03mAB";
 
@@ -87,9 +87,9 @@ export const Dashboards = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          className="mb-16 rounded-2xl overflow-hidden border border-border shadow-2xl shadow-primary/10"
+          className="mb-16"
         >
-          <img src={dashboardMockup} alt="White-label dashboard mockup showing analytics, KPIs and data tables" className="w-full h-auto" />
+          <DashboardMockup />
         </motion.div>
 
         {/* Industries Grid */}
