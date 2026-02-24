@@ -60,6 +60,31 @@ const Auth = () => {
     }
   };
 
+  const handleForgotPassword = async () => {
+    if (!email) {
+      toast({
+        title: "Enter your email",
+        description: "Please enter your email address first, then click 'Forgot your password?'",
+      });
+      return;
+    }
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (error) throw error;
+      toast({
+        title: "Check your email",
+        description: "We've sent you a password reset link.",
+      });
+    } catch (error: any) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleGoogleSignIn = async () => {
     setGoogleLoading(true);
     try {
@@ -193,6 +218,16 @@ const Auth = () => {
                 "Create Account"
               )}
             </Button>
+
+            {isLogin && (
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                className="w-full text-sm text-muted-foreground hover:text-primary transition-colors mt-2"
+              >
+                Forgot your password?
+              </button>
+            )}
           </form>
 
           <p className="text-center text-sm text-muted-foreground mt-6">
