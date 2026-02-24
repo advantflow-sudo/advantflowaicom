@@ -56,25 +56,25 @@ export const AnimatedBackground = () => {
 
       {/* Floating Geometric Shapes */}
       <FloatingShape 
-        className="top-20 right-[15%] border border-primary/20 rounded-xl rotate-12 backdrop-blur-sm"
+        className="top-20 right-[15%] border border-primary/20 rounded-xl rotate-12"
         size="w-24 h-24"
         delay={0}
         duration={25}
       />
       <FloatingShape 
-        className="top-1/3 left-[10%] border border-accent/20 rounded-full backdrop-blur-sm"
+        className="top-1/3 left-[10%] border border-accent/20 rounded-full"
         size="w-16 h-16"
         delay={2}
         duration={20}
       />
       <FloatingShape 
-        className="bottom-1/3 right-[20%] border border-primary/15 rotate-45 backdrop-blur-sm"
+        className="bottom-1/3 right-[20%] border border-primary/15 rotate-45"
         size="w-20 h-20"
         delay={4}
         duration={22}
       />
       <FloatingShape 
-        className="bottom-1/4 left-[25%] border border-accent/15 rounded-xl backdrop-blur-sm"
+        className="bottom-1/4 left-[25%] border border-accent/15 rounded-xl"
         size="w-12 h-12"
         delay={1}
         duration={18}
