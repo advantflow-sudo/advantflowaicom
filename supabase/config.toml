@@ -1,31 +1,25 @@
 project_id = "cdahbpcdepcqnhqqveom"
 
-[functions.send-lead-confirmation]
-verify_jwt = false
-
-[functions.create-project-payment]
-verify_jwt = false
-
-[functions.create-checkout]
-verify_jwt = false
-
-[functions.check-subscription]
-verify_jwt = false
-
-[functions.customer-portal]
-verify_jwt = false
-
-[functions.stripe-webhook]
-verify_jwt = false
-
-[functions.ai-chat]
-verify_jwt = false
-
-[functions.score-lead]
-verify_jwt = false
-
-[functions.send-booking-confirmation]
-verify_jwt = false
-
-[functions.send-booking-update]
-verify_jwt = false
+[functions]
+  [functions.ai-chat]
+    verify_jwt = false
+  [functions.auth-email-hook]
+    verify_jwt = false
+  [functions.check-subscription]
+    verify_jwt = false
+  [functions.create-checkout]
+    verify_jwt = false
+  [functions.create-project-payment]
+    verify_jwt = false
+  [functions.customer-portal]
+    verify_jwt = false
+  [functions.score-lead]
+    verify_jwt = false
+  [functions.send-booking-confirmation]
+    verify_jwt = false
+  [functions.send-booking-update]
+    verify_jwt = false
+  [functions.send-lead-confirmation]
+    verify_jwt = false
+  [functions.stripe-webhook]
+    verify_jwt = false
