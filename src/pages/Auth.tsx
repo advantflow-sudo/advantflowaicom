@@ -17,6 +17,7 @@ const Auth = () => {
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [appleLoading, setAppleLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
   const { user } = useAuth();
