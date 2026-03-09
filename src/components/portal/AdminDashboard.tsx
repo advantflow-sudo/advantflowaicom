@@ -50,6 +50,30 @@ export const AdminDashboard = () => {
 
   useEffect(() => {
     fetchAll();
+
+    // Realtime subscriptions for leads, bookings, and projects
+    const channel = supabase
+      .channel('admin-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'leads' }, () => {
+        supabase.from("leads").select("*").order("created_at", { ascending: false }).limit(50).then(({ data }) => {
+          if (data) setLeads(data);
+        });
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'bookings' }, () => {
+        supabase.from("bookings").select("*").order("booking_date", { ascending: true }).then(({ data }) => {
+          if (data) setBookings(data);
+        });
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'client_projects' }, () => {
+        supabase.from("client_projects").select("*").order("created_at", { ascending: false }).then(({ data }) => {
+          if (data) setProjects(data);
+        });
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const fetchAll = async () => {
