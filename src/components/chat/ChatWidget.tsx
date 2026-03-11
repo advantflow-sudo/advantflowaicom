@@ -97,7 +97,7 @@ export const ChatWidget = forwardRef<HTMLDivElement>((_, ref) => {
   };
 
   return (
-    <>
+    <div ref={ref}>
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/30 hover:scale-110 transition-transform"
@@ -105,13 +105,13 @@ export const ChatWidget = forwardRef<HTMLDivElement>((_, ref) => {
       >
         <AnimatePresence mode="wait">
           {isOpen ? (
-            <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }}>
+            <motion.span key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }}>
               <X className="w-6 h-6 text-primary-foreground" />
-            </motion.div>
+            </motion.span>
           ) : (
-            <motion.div key="open" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
+            <motion.span key="open" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
               <MessageCircle className="w-6 h-6 text-primary-foreground" />
-            </motion.div>
+            </motion.span>
           )}
         </AnimatePresence>
       </motion.button>
@@ -187,6 +187,8 @@ export const ChatWidget = forwardRef<HTMLDivElement>((_, ref) => {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
-};
+});
+
+ChatWidget.displayName = "ChatWidget";
