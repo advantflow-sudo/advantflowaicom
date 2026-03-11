@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, forwardRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send, Loader2, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ interface Message {
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
 
-export const ChatWidget = forwardRef<HTMLDivElement>((_, ref) => {
+export const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -97,7 +97,7 @@ export const ChatWidget = forwardRef<HTMLDivElement>((_, ref) => {
   };
 
   return (
-    <div ref={ref}>
+    <>
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/30 hover:scale-110 transition-transform"
@@ -187,8 +187,6 @@ export const ChatWidget = forwardRef<HTMLDivElement>((_, ref) => {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
-});
-
-ChatWidget.displayName = "ChatWidget";
+};
