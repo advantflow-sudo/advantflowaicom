@@ -164,7 +164,7 @@ const DashboardDemo = () => {
           <div key={s.label} className="p-3 rounded-xl bg-secondary border border-border">
             <p className="text-xs text-muted-foreground">{s.label}</p>
             <p className="text-xl font-bold text-foreground">{s.value}</p>
-            <p className="text-xs text-green-400">↑ {s.change}</p>
+            <p className="text-xs text-primary">↑ {s.change}</p>
           </div>
         ))}
       </div>
