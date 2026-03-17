@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { LogOut, LayoutDashboard, FolderOpen, User, Loader2, MessageCircle, FileText, Files, Shield } from "lucide-react";
+import { LogOut, LayoutDashboard, FolderOpen, User, Loader2, MessageCircle, FileText, Files, Shield, Users, Calendar, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
