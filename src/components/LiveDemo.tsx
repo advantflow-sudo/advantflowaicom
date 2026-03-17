@@ -114,8 +114,8 @@ const LeadDemo = () => {
   if (submitted) {
     return (
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center space-y-4 py-4">
-        <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center mx-auto">
-          <Check className="w-8 h-8 text-green-500" />
+        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
+          <Check className="w-8 h-8 text-primary" />
         </div>
         <p className="font-semibold text-foreground">Lead Captured!</p>
         <p className="text-xs text-muted-foreground">Saved to CRM • Follow-up email sent • Lead scored by AI</p>
