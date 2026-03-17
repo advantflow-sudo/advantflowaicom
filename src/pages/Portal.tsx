@@ -42,7 +42,7 @@ const Portal = () => {
   const [projects, setProjects] = useState<ClientProject[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loadingData, setLoadingData] = useState(true);
-  const [activeTab, setActiveTab] = useState<TabId>("projects");
+  const [activeTab, setActiveTab] = useState<TabId>("leads");
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
