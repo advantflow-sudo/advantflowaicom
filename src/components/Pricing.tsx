@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { subscriptionTiers, webDesignProducts } from "@/lib/subscriptions";
+import { setupProducts, monthlySubscription, webDesignProducts } from "@/lib/subscriptions";
 
 const webPlans = [
   {
