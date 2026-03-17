@@ -83,7 +83,7 @@ const aiPlans = [
     name: "Starter Setup",
     price: "£199",
     period: " one-time",
-    priceId: subscriptionTiers.starter.price_id,
+    priceId: setupProducts.starter.price_id,
     description: "We install your AI system — chatbot, lead capture & booking page",
     features: [
       "AI chatbot installed on your site",
