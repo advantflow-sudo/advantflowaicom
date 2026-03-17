@@ -43,8 +43,8 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-lg md:text-xl text-muted-foreground max-w-xl mb-10 leading-relaxed"
           >
-            AdvantFlowAI replies to customers instantly, captures leads, and books 
-            jobs for you — 24/7. No tech skills needed.
+            We install an AI system that replies to customers, captures leads, 
+            and books jobs for you — automatically, 24/7.
           </motion.p>
 
           {/* CTAs */}
