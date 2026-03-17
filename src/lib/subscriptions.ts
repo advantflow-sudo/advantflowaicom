@@ -1,3 +1,32 @@
+export const setupProducts = {
+  starter: {
+    name: "Starter Setup",
+    price_id: "price_1TBvmXC1I7VBCNgyWmHFnU09",
+    product_id: "prod_UAGJrIMjAcFReX",
+    price: "£199",
+  },
+  growth: {
+    name: "Growth Setup",
+    price_id: "price_1TBvmYC1I7VBCNgyHi3xuWI8",
+    product_id: "prod_UAGJ7uYv9DjHj1",
+    price: "£299",
+  },
+  premium: {
+    name: "Premium Setup",
+    price_id: "price_1TBvmZC1I7VBCNgyCmBu3IsD",
+    product_id: "prod_UAGJFglibseEYZ",
+    price: "£399",
+  },
+} as const;
+
+export const monthlySubscription = {
+  name: "AdvantFlowAI Monthly",
+  price_id: "price_1TBvmaC1I7VBCNgyc0oPWI16",
+  product_id: "prod_UAGJhyHd6sLLjF",
+  price: "£49",
+} as const;
+
+// Legacy products kept for existing customers
 export const subscriptionTiers = {
   starter: {
     name: "Starter",
@@ -41,10 +70,18 @@ export const webDesignProducts = {
 } as const;
 
 export type SubscriptionTier = keyof typeof subscriptionTiers;
+export type SetupTier = keyof typeof setupProducts;
 
 export function getTierByProductId(productId: string): SubscriptionTier | null {
   for (const [key, tier] of Object.entries(subscriptionTiers)) {
     if (tier.product_id === productId) return key as SubscriptionTier;
+  }
+  return null;
+}
+
+export function getSetupTierByProductId(productId: string): SetupTier | null {
+  for (const [key, tier] of Object.entries(setupProducts)) {
+    if (tier.product_id === productId) return key as SetupTier;
   }
   return null;
 }
