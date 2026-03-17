@@ -33,7 +33,7 @@ interface Profile {
   avatar_url: string | null;
 }
 
-type TabId = "projects" | "files" | "profile" | "admin" | "chat" | "blog";
+type TabId = "projects" | "files" | "profile" | "admin" | "chat" | "blog" | "leads" | "bookings" | "messages" | "automation";
 
 const Portal = () => {
   const { user, loading: authLoading, signOut } = useAuth();
