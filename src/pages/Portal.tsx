@@ -98,12 +98,16 @@ const Portal = () => {
   };
 
   const tabs: { id: TabId; label: string; icon: any; adminOnly?: boolean }[] = [
+    { id: "leads", label: "Leads", icon: Users },
+    { id: "bookings", label: "Bookings", icon: Calendar },
+    { id: "messages", label: "Messages", icon: MessageCircle },
+    { id: "automation", label: "Automation", icon: Zap },
     { id: "projects", label: "Projects", icon: FolderOpen },
     { id: "files", label: "Files", icon: Files },
     { id: "profile", label: "Profile", icon: User },
     { id: "admin", label: "Admin", icon: Shield, adminOnly: true },
     { id: "blog", label: "Blog", icon: FileText, adminOnly: true },
-    { id: "chat", label: "Chat", icon: MessageCircle, adminOnly: true },
+    { id: "chat", label: "Chat Inbox", icon: MessageCircle, adminOnly: true },
   ];
 
   const visibleTabs = tabs.filter((t) => !t.adminOnly || isAdmin);
