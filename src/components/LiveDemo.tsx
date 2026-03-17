@@ -94,13 +94,12 @@ const BookingDemo = () => {
         </motion.div>
       )}
       {step === 1 && (
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center space-y-4 py-4">
-          <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center mx-auto">
-            <Check className="w-8 h-8 text-green-500" />
-          </div>
-          <div>
-            <p className="font-semibold text-foreground">Booking Confirmed!</p>
-            <p className="text-sm text-muted-foreground mt-1">Today at 2:00 PM</p>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center space-y-4 py-4">
+        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
+          <Check className="w-8 h-8 text-primary" />
+        </div>
+        <p className="font-semibold text-foreground">Booking Confirmed!</p>
+        <p className="text-sm text-muted-foreground mt-1">Today at 2:00 PM</p>
             <p className="text-xs text-muted-foreground mt-2">✅ Confirmation sent automatically</p>
           </div>
           <Button variant="outline" size="sm" onClick={() => setStep(0)}>Try Again</Button>
