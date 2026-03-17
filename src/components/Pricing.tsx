@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { subscriptionTiers, webDesignProducts } from "@/lib/subscriptions";
+import { setupProducts, monthlySubscription, webDesignProducts } from "@/lib/subscriptions";
 
 const webPlans = [
   {
@@ -83,7 +83,7 @@ const aiPlans = [
     name: "Starter Setup",
     price: "£199",
     period: " one-time",
-    priceId: subscriptionTiers.starter.price_id,
+    priceId: setupProducts.starter.price_id,
     description: "We install your AI system — chatbot, lead capture & booking page",
     features: [
       "AI chatbot installed on your site",
@@ -99,7 +99,7 @@ const aiPlans = [
     name: "Growth Setup",
     price: "£299",
     period: " one-time",
-    priceId: subscriptionTiers.growth.price_id,
+    priceId: setupProducts.growth.price_id,
     description: "Full AI system with automations — the most popular choice",
     features: [
       "Everything in Starter",
@@ -116,7 +116,7 @@ const aiPlans = [
     name: "Premium Setup",
     price: "£399",
     period: " one-time",
-    priceId: subscriptionTiers.enterprise.price_id,
+    priceId: setupProducts.premium.price_id,
     description: "Complete done-for-you AI transformation for your business",
     features: [
       "Everything in Growth",

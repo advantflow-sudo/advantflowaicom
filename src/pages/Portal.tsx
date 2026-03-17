@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { LogOut, LayoutDashboard, FolderOpen, User, Loader2, MessageCircle, FileText, Files, Shield } from "lucide-react";
+import { LogOut, LayoutDashboard, FolderOpen, User, Loader2, MessageCircle, FileText, Files, Shield, Users, Calendar, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -33,7 +33,7 @@ interface Profile {
   avatar_url: string | null;
 }
 
-type TabId = "projects" | "files" | "profile" | "admin" | "chat" | "blog";
+type TabId = "projects" | "files" | "profile" | "admin" | "chat" | "blog" | "leads" | "bookings" | "messages" | "automation";
 
 const Portal = () => {
   const { user, loading: authLoading, signOut } = useAuth();
@@ -42,7 +42,7 @@ const Portal = () => {
   const [projects, setProjects] = useState<ClientProject[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loadingData, setLoadingData] = useState(true);
-  const [activeTab, setActiveTab] = useState<TabId>("projects");
+  const [activeTab, setActiveTab] = useState<TabId>("leads");
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
@@ -98,12 +98,16 @@ const Portal = () => {
   };
 
   const tabs: { id: TabId; label: string; icon: any; adminOnly?: boolean }[] = [
+    { id: "leads", label: "Leads", icon: Users },
+    { id: "bookings", label: "Bookings", icon: Calendar },
+    { id: "messages", label: "Messages", icon: MessageCircle },
+    { id: "automation", label: "Automation", icon: Zap },
     { id: "projects", label: "Projects", icon: FolderOpen },
     { id: "files", label: "Files", icon: Files },
     { id: "profile", label: "Profile", icon: User },
     { id: "admin", label: "Admin", icon: Shield, adminOnly: true },
     { id: "blog", label: "Blog", icon: FileText, adminOnly: true },
-    { id: "chat", label: "Chat", icon: MessageCircle, adminOnly: true },
+    { id: "chat", label: "Chat Inbox", icon: MessageCircle, adminOnly: true },
   ];
 
   const visibleTabs = tabs.filter((t) => !t.adminOnly || isAdmin);
@@ -178,6 +182,30 @@ const Portal = () => {
           {loadingData ? (
             <div className="flex items-center justify-center py-20">
               <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            </div>
+          ) : activeTab === "leads" ? (
+            <div className="card-enhanced rounded-2xl p-12 text-center">
+              <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="heading-md mb-2">Leads</h3>
+              <p className="text-muted-foreground">Your captured leads will appear here. AI scores and follow-ups managed automatically.</p>
+            </div>
+          ) : activeTab === "bookings" ? (
+            <div className="card-enhanced rounded-2xl p-12 text-center">
+              <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="heading-md mb-2">Bookings</h3>
+              <p className="text-muted-foreground">Your upcoming and past bookings will appear here.</p>
+            </div>
+          ) : activeTab === "messages" ? (
+            <div className="card-enhanced rounded-2xl p-12 text-center">
+              <MessageCircle className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="heading-md mb-2">Messages</h3>
+              <p className="text-muted-foreground">All customer conversations in one place.</p>
+            </div>
+          ) : activeTab === "automation" ? (
+            <div className="card-enhanced rounded-2xl p-12 text-center">
+              <Zap className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="heading-md mb-2">Automation</h3>
+              <p className="text-muted-foreground">Pre-built workflows: auto-replies, booking confirmations, and follow-up messages.</p>
             </div>
           ) : activeTab === "projects" ? (
             projects.length === 0 ? (
