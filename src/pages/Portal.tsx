@@ -183,6 +183,30 @@ const Portal = () => {
             <div className="flex items-center justify-center py-20">
               <Loader2 className="w-8 h-8 animate-spin text-primary" />
             </div>
+          ) : activeTab === "leads" ? (
+            <div className="card-enhanced rounded-2xl p-12 text-center">
+              <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="heading-md mb-2">Leads</h3>
+              <p className="text-muted-foreground">Your captured leads will appear here. AI scores and follow-ups managed automatically.</p>
+            </div>
+          ) : activeTab === "bookings" ? (
+            <div className="card-enhanced rounded-2xl p-12 text-center">
+              <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="heading-md mb-2">Bookings</h3>
+              <p className="text-muted-foreground">Your upcoming and past bookings will appear here.</p>
+            </div>
+          ) : activeTab === "messages" ? (
+            <div className="card-enhanced rounded-2xl p-12 text-center">
+              <MessageCircle className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="heading-md mb-2">Messages</h3>
+              <p className="text-muted-foreground">All customer conversations in one place.</p>
+            </div>
+          ) : activeTab === "automation" ? (
+            <div className="card-enhanced rounded-2xl p-12 text-center">
+              <Zap className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="heading-md mb-2">Automation</h3>
+              <p className="text-muted-foreground">Pre-built workflows: auto-replies, booking confirmations, and follow-up messages.</p>
+            </div>
           ) : activeTab === "projects" ? (
             projects.length === 0 ? (
               <div className="card-enhanced rounded-2xl p-12 text-center">
