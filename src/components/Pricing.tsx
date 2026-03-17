@@ -116,7 +116,7 @@ const aiPlans = [
     name: "Premium Setup",
     price: "£399",
     period: " one-time",
-    priceId: subscriptionTiers.enterprise.price_id,
+    priceId: setupProducts.premium.price_id,
     description: "Complete done-for-you AI transformation for your business",
     features: [
       "Everything in Growth",
