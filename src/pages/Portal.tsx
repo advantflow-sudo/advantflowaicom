@@ -12,6 +12,7 @@ import { ChatInbox } from "@/components/portal/ChatInbox";
 import { BlogManager } from "@/components/portal/BlogManager";
 import { FileManager } from "@/components/portal/FileManager";
 import { AdminDashboard } from "@/components/portal/AdminDashboard";
+import { LeadsCRM } from "@/components/portal/LeadsCRM";
 
 interface ClientProject {
   id: string;
