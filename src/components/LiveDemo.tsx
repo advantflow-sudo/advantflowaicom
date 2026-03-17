@@ -103,7 +103,6 @@ const BookingDemo = () => {
             <p className="text-xs text-muted-foreground mt-2">✅ Confirmation sent automatically</p>
           </div>
           <Button variant="outline" size="sm" onClick={() => setStep(0)}>Try Again</Button>
-        </motion.div>
       )}
     </div>
   );
