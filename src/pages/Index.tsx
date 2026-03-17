@@ -2,8 +2,11 @@ import { SEOHead } from "@/components/SEOHead";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { Marquee } from "@/components/Marquee";
+import { Trust } from "@/components/Trust";
 import { Problem } from "@/components/Problem";
 import { Solution } from "@/components/Solution";
+import { Offer } from "@/components/Offer";
+import { LiveDemo } from "@/components/LiveDemo";
 import { Services } from "@/components/Services";
 import { WhoItsFor } from "@/components/WhoItsFor";
 import { Dashboards } from "@/components/Dashboards";
@@ -30,8 +33,11 @@ const Index = () => {
       <Navbar />
       <Hero />
       <Marquee />
+      <Trust />
       <Problem />
       <Solution />
+      <Offer />
+      <LiveDemo />
       <Services />
       <WhoItsFor />
       <Dashboards />
