@@ -12,6 +12,7 @@ import { ChatInbox } from "@/components/portal/ChatInbox";
 import { BlogManager } from "@/components/portal/BlogManager";
 import { FileManager } from "@/components/portal/FileManager";
 import { AdminDashboard } from "@/components/portal/AdminDashboard";
+import { LeadsCRM } from "@/components/portal/LeadsCRM";
 
 interface ClientProject {
   id: string;
@@ -184,11 +185,7 @@ const Portal = () => {
               <Loader2 className="w-8 h-8 animate-spin text-primary" />
             </div>
           ) : activeTab === "leads" ? (
-            <div className="card-enhanced rounded-2xl p-12 text-center">
-              <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="heading-md mb-2">Leads</h3>
-              <p className="text-muted-foreground">Your captured leads will appear here. AI scores and follow-ups managed automatically.</p>
-            </div>
+            <LeadsCRM isAdmin={isAdmin} />
           ) : activeTab === "bookings" ? (
             <div className="card-enhanced rounded-2xl p-12 text-center">
               <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
