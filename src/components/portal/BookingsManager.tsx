@@ -102,6 +102,16 @@ export const BookingsManager = ({ isAdmin }: BookingsManagerProps) => {
       toast.error("Failed to cancel booking");
     } else {
       toast.success(`Booking for ${bookingToCancel.name} cancelled`);
+      // Send cancellation email notification
+      supabase.functions.invoke("send-booking-update", {
+        body: {
+          type: "cancelled",
+          name: bookingToCancel.name,
+          email: bookingToCancel.email,
+          original_date: bookingToCancel.booking_date,
+          original_time: bookingToCancel.booking_time,
+        },
+      }).catch(() => {});
       fetchBookings();
     }
     setCancelling(false);
