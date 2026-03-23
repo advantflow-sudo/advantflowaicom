@@ -25,19 +25,19 @@ export const MagicLinkEmail = ({
 }: MagicLinkEmailProps) => (
   <Html lang="en" dir="ltr">
     <Head />
-    <Preview>Your AdvantFlowAI login link</Preview>
+    <Preview>Your Advant Flow AI login link</Preview>
     <Body style={main}>
       <Container style={container}>
         <Img
           src="https://cdahbpcdepcqnhqqveom.supabase.co/storage/v1/object/public/email-assets/logo-icon.png"
           width="48"
           height="48"
-          alt="AdvantFlowAI"
+          alt="Advant Flow AI"
           style={{ marginBottom: '24px', borderRadius: '12px' }}
         />
         <Heading style={h1}>Your login link</Heading>
         <Text style={text}>
-          Click below to sign in to AdvantFlowAI. This link expires shortly.
+          Click below to sign in to Advant Flow AI. This link expires shortly.
         </Text>
         <Button style={button} href={confirmationUrl}>
           Sign In

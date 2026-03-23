@@ -116,7 +116,7 @@ const handler = async (req: Request): Promise<Response> => {
     let emailSuccess = false;
     try {
       await sendEmail({
-        from: "AdvantFlowAI <hello@advantflowai.com>",
+        from: "Advant Flow AI <hello@advantflowai.com>",
         to: [email],
         reply_to: "advantflow@gmail.com",
         subject: `${name}, ${serviceContent.subject_suffix}`,
@@ -175,9 +175,9 @@ const handler = async (req: Request): Promise<Response> => {
                   </p>
                 </div>
                 <div class="footer">
-                  <p>AdvantFlowAI Ltd · London, UK</p>
+                  <p>Advant Flow AI Ltd · London, UK</p>
                   <p><a href="https://advantflowai.com">advantflowai.com</a> · <a href="mailto:advantflow@gmail.com">advantflow@gmail.com</a></p>
-                  <p>© ${new Date().getFullYear()} AdvantFlowAI Ltd. All rights reserved.</p>
+                  <p>© ${new Date().getFullYear()} Advant Flow AI Ltd. All rights reserved.</p>
                 </div>
               </div>
             </body>
@@ -193,7 +193,7 @@ const handler = async (req: Request): Promise<Response> => {
     // 2. Send enriched notification to business
     try {
       await sendEmail({
-        from: "AdvantFlowAI Website <hello@advantflowai.com>",
+        from: "Advant Flow AI Website <hello@advantflowai.com>",
         to: ["advantflow@gmail.com"],
         subject: `🔥 New Lead: ${name} — ${service_interest || "General"} ${company ? `(${company})` : ""}`,
         html: `
@@ -217,7 +217,7 @@ const handler = async (req: Request): Promise<Response> => {
                     <p style="color: #e2e8f0;">${message}</p>
                   </div>
                   <div style="text-align: center; margin-top: 20px;">
-                    <a href="mailto:${email}?subject=Re: Your enquiry to AdvantFlowAI&body=Hi ${name}," style="display: inline-block; background: #00d4ff; color: #0a0e1a; font-weight: bold; padding: 10px 24px; border-radius: 6px; text-decoration: none;">Reply to ${name} →</a>
+                    <a href="mailto:${email}?subject=Re: Your enquiry to Advant Flow AI&body=Hi ${name}," style="display: inline-block; background: #00d4ff; color: #0a0e1a; font-weight: bold; padding: 10px 24px; border-radius: 6px; text-decoration: none;">Reply to ${name} →</a>
                   </div>
                 </div>
               </div>
