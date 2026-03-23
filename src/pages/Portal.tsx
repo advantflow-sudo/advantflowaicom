@@ -13,6 +13,7 @@ import { BlogManager } from "@/components/portal/BlogManager";
 import { FileManager } from "@/components/portal/FileManager";
 import { AdminDashboard } from "@/components/portal/AdminDashboard";
 import { LeadsCRM } from "@/components/portal/LeadsCRM";
+import { BookingsManager } from "@/components/portal/BookingsManager";
 
 interface ClientProject {
   id: string;
