@@ -1,9 +1,20 @@
 import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { format, parseISO, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isSameMonth, addMonths, subMonths, isToday, isBefore, startOfDay } from "date-fns";
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Clock, User, Mail, Phone, Loader2, Search } from "lucide-react";
+import { format, parseISO, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, addMonths, subMonths, isToday, isBefore, startOfDay } from "date-fns";
+import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Clock, User, Mail, Phone, Loader2, Search, XCircle, CalendarCheck, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
 
 interface Booking {
   id: string;
@@ -30,6 +41,12 @@ const statusColors: Record<string, string> = {
   completed: "bg-primary/10 text-primary border-primary/20",
 };
 
+const TIME_SLOTS = [
+  "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
+  "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
+  "15:00", "15:30", "16:00", "16:30", "17:00",
+];
+
 export const BookingsManager = ({ isAdmin }: BookingsManagerProps) => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,17 +54,30 @@ export const BookingsManager = ({ isAdmin }: BookingsManagerProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [search, setSearch] = useState("");
 
+  // Cancel dialog
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+  const [bookingToCancel, setBookingToCancel] = useState<Booking | null>(null);
+  const [cancelling, setCancelling] = useState(false);
+
+  // Reschedule dialog
+  const [rescheduleDialogOpen, setRescheduleDialogOpen] = useState(false);
+  const [bookingToReschedule, setBookingToReschedule] = useState<Booking | null>(null);
+  const [newDate, setNewDate] = useState<Date | undefined>();
+  const [newTime, setNewTime] = useState("");
+  const [rescheduling, setRescheduling] = useState(false);
+
+  const fetchBookings = async () => {
+    setLoading(true);
+    const { data } = await supabase
+      .from("bookings")
+      .select("*")
+      .order("booking_date", { ascending: true })
+      .order("booking_time", { ascending: true });
+    setBookings(data || []);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchBookings = async () => {
-      setLoading(true);
-      const { data } = await supabase
-        .from("bookings")
-        .select("*")
-        .order("booking_date", { ascending: true })
-        .order("booking_time", { ascending: true });
-      setBookings(data || []);
-      setLoading(false);
-    };
     fetchBookings();
 
     const channel = supabase
@@ -60,6 +90,62 @@ export const BookingsManager = ({ isAdmin }: BookingsManagerProps) => {
     return () => { supabase.removeChannel(channel); };
   }, []);
 
+  const handleCancel = async () => {
+    if (!bookingToCancel) return;
+    setCancelling(true);
+    const { error } = await supabase
+      .from("bookings")
+      .update({ status: "cancelled" })
+      .eq("id", bookingToCancel.id);
+
+    if (error) {
+      toast.error("Failed to cancel booking");
+    } else {
+      toast.success(`Booking for ${bookingToCancel.name} cancelled`);
+      fetchBookings();
+    }
+    setCancelling(false);
+    setCancelDialogOpen(false);
+    setBookingToCancel(null);
+  };
+
+  const handleReschedule = async () => {
+    if (!bookingToReschedule || !newDate || !newTime) return;
+    setRescheduling(true);
+    const { error } = await supabase
+      .from("bookings")
+      .update({
+        booking_date: format(newDate, "yyyy-MM-dd"),
+        booking_time: newTime,
+        status: "confirmed",
+      })
+      .eq("id", bookingToReschedule.id);
+
+    if (error) {
+      toast.error("Failed to reschedule booking");
+    } else {
+      toast.success(`Booking rescheduled to ${format(newDate, "dd MMM")} at ${newTime}`);
+      fetchBookings();
+    }
+    setRescheduling(false);
+    setRescheduleDialogOpen(false);
+    setBookingToReschedule(null);
+    setNewDate(undefined);
+    setNewTime("");
+  };
+
+  const openCancelDialog = (booking: Booking) => {
+    setBookingToCancel(booking);
+    setCancelDialogOpen(true);
+  };
+
+  const openRescheduleDialog = (booking: Booking) => {
+    setBookingToReschedule(booking);
+    setNewDate(parseISO(booking.booking_date));
+    setNewTime(booking.booking_time);
+    setRescheduleDialogOpen(true);
+  };
+
   const days = useMemo(() => {
     const start = startOfMonth(currentMonth);
     const end = endOfMonth(currentMonth);
@@ -68,7 +154,7 @@ export const BookingsManager = ({ isAdmin }: BookingsManagerProps) => {
 
   const firstDayOffset = useMemo(() => {
     const day = startOfMonth(currentMonth).getDay();
-    return day === 0 ? 6 : day - 1; // Monday start
+    return day === 0 ? 6 : day - 1;
   }, [currentMonth]);
 
   const bookingsByDate = useMemo(() => {
@@ -160,14 +246,12 @@ export const BookingsManager = ({ isAdmin }: BookingsManagerProps) => {
             </div>
           </div>
 
-          {/* Day headers */}
           <div className="grid grid-cols-7 gap-1 mb-2">
             {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => (
               <div key={d} className="text-center text-xs font-medium text-muted-foreground py-2">{d}</div>
             ))}
           </div>
 
-          {/* Days grid */}
           <div className="grid grid-cols-7 gap-1">
             {Array.from({ length: firstDayOffset }).map((_, i) => (
               <div key={`empty-${i}`} />
@@ -235,7 +319,7 @@ export const BookingsManager = ({ isAdmin }: BookingsManagerProps) => {
       {/* Selected date detail */}
       {selectedDate && (
         <div className="card-enhanced rounded-2xl p-6">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
             <h3 className="font-display font-semibold">
               {format(selectedDate, "EEEE, dd MMMM yyyy")}
               <span className="ml-2 text-sm font-normal text-muted-foreground">
@@ -289,12 +373,104 @@ export const BookingsManager = ({ isAdmin }: BookingsManagerProps) => {
                   {b.notes && (
                     <p className="text-xs text-muted-foreground italic">"{b.notes}"</p>
                   )}
+                  {/* Admin actions */}
+                  {b.status !== "cancelled" && (
+                    <div className="flex gap-2 pt-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-xs h-7 gap-1"
+                        onClick={() => openRescheduleDialog(b)}
+                      >
+                        <RefreshCw className="w-3 h-3" />
+                        Reschedule
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-xs h-7 gap-1 text-destructive hover:text-destructive border-destructive/30 hover:bg-destructive/10"
+                        onClick={() => openCancelDialog(b)}
+                      >
+                        <XCircle className="w-3 h-3" />
+                        Cancel
+                      </Button>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           )}
         </div>
       )}
+
+      {/* Cancel confirmation dialog */}
+      <Dialog open={cancelDialogOpen} onOpenChange={setCancelDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Cancel Booking</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to cancel the booking for <strong>{bookingToCancel?.name}</strong> on{" "}
+              {bookingToCancel && format(parseISO(bookingToCancel.booking_date), "dd MMM yyyy")} at {bookingToCancel?.booking_time}?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCancelDialogOpen(false)}>Keep Booking</Button>
+            <Button variant="destructive" onClick={handleCancel} disabled={cancelling}>
+              {cancelling ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <XCircle className="w-4 h-4 mr-2" />}
+              Cancel Booking
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Reschedule dialog */}
+      <Dialog open={rescheduleDialogOpen} onOpenChange={setRescheduleDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Reschedule Booking</DialogTitle>
+            <DialogDescription>
+              Choose a new date and time for <strong>{bookingToReschedule?.name}</strong>.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div>
+              <label className="text-sm font-medium mb-2 block">New Date</label>
+              <Calendar
+                mode="single"
+                selected={newDate}
+                onSelect={setNewDate}
+                disabled={(date) => isBefore(date, startOfDay(new Date())) || date.getDay() === 0 || date.getDay() === 6}
+                className={cn("p-3 pointer-events-auto rounded-xl border border-border")}
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium mb-2 block">New Time</label>
+              <div className="grid grid-cols-4 gap-2">
+                {TIME_SLOTS.map((slot) => (
+                  <button
+                    key={slot}
+                    onClick={() => setNewTime(slot)}
+                    className={`px-2 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                      newTime === slot
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-secondary hover:bg-secondary/80 text-foreground"
+                    }`}
+                  >
+                    {slot}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setRescheduleDialogOpen(false)}>Cancel</Button>
+            <Button onClick={handleReschedule} disabled={!newDate || !newTime || rescheduling}>
+              {rescheduling ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <CalendarCheck className="w-4 h-4 mr-2" />}
+              Confirm Reschedule
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
