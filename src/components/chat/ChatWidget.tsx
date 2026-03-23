@@ -14,6 +14,14 @@ interface Message {
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
 const SIGNUP_MARKER = "[SHOW_SIGNUP_BUTTON]";
 
+const SUGGESTION_CHIPS = [
+  "What are your prices?",
+  "How does it work?",
+  "Book a demo",
+];
+
+const cleanContent = (text: string) => text.replace(/\[SHOW_SIGNUP_BUTTON\]/g, "").trim();
+
 export const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -30,15 +38,11 @@ export const ChatWidget = () => {
   }, [messages]);
 
   useEffect(() => {
-    const hasMarker = messages.some(
-      (m) => m.role === "assistant" && m.content.includes(SIGNUP_MARKER)
-    );
-    if (hasMarker) setShowSignup(true);
+    if (messages.some((m) => m.role === "assistant" && m.content.includes(SIGNUP_MARKER))) {
+      setShowSignup(true);
+    }
   }, [messages]);
 
-  const cleanContent = (text: string) => text.replace(/\[SHOW_SIGNUP_BUTTON\]/g, "").trim();
-
-  // Create or get conversation ID
   const ensureConversation = useCallback(async () => {
     if (conversationIdRef.current) return conversationIdRef.current;
     const { data, error } = await supabase
@@ -54,25 +58,22 @@ export const ChatWidget = () => {
     return data.id;
   }, []);
 
-  // Save a message to the database
   const saveMessage = useCallback(async (conversationId: string, message: string, senderType: "visitor" | "ai") => {
-    const { error } = await supabase.from("chat_messages").insert({
+    await supabase.from("chat_messages").insert({
       conversation_id: conversationId,
       message,
       sender_type: senderType,
     });
-    if (error) console.error("Failed to save message:", error);
   }, []);
 
-  const sendMessage = async () => {
-    if (!input.trim() || isLoading) return;
-    const userMsg: Message = { role: "user", content: input.trim() };
-    const allMessages = [...messages, userMsg];
+  const sendText = async (text: string, currentMessages: Message[] = messages) => {
+    if (!text.trim() || isLoading) return;
+    const userMsg: Message = { role: "user", content: text.trim() };
+    const allMessages = [...currentMessages, userMsg];
     setMessages(allMessages);
     setInput("");
     setIsLoading(true);
 
-    // Save user message to DB
     const convId = await ensureConversation();
     if (convId) await saveMessage(convId, userMsg.content, "visitor");
 
@@ -130,14 +131,15 @@ export const ChatWidget = () => {
         }
       }
 
-      // Save final assistant message to DB
       if (convId && assistantSoFar) {
         await saveMessage(convId, cleanContent(assistantSoFar), "ai");
       }
     } catch (e) {
       console.error("Chat error:", e);
-      const errorMsg = "Sorry, I'm having trouble connecting right now. Please try again or contact us at advantflow@gmail.com.";
-      setMessages((prev) => [...prev, { role: "assistant", content: errorMsg }]);
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: "Sorry, I'm having trouble connecting right now. Please try again or contact us at advantflow@gmail.com." },
+      ]);
     } finally {
       setIsLoading(false);
     }
@@ -153,87 +155,9 @@ export const ChatWidget = () => {
     setIsOpen(!isOpen);
   };
 
-  const SUGGESTION_CHIPS = [
-    "What are your prices?",
-    "How does it work?",
-    "Book a demo",
-  ];
-
-  const handleChip = (text: string) => {
-    setInput(text);
-    setTimeout(() => {
-      const fakeMsg: Message = { role: "user", content: text };
-      const allMessages = [fakeMsg];
-      setMessages(allMessages);
-      setInput("");
-      setIsLoading(true);
-
-      (async () => {
-        const convId = await ensureConversation();
-        if (convId) await saveMessage(convId, text, "visitor");
-
-        let assistantSoFar = "";
-        try {
-          const resp = await fetch(CHAT_URL, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-            },
-            body: JSON.stringify({ messages: allMessages }),
-          });
-          if (!resp.ok || !resp.body) throw new Error("Failed to connect");
-
-          const reader = resp.body.getReader();
-          const decoder = new TextDecoder();
-          let textBuffer = "";
-
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            textBuffer += decoder.decode(value, { stream: true });
-            let newlineIndex: number;
-            while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
-              let line = textBuffer.slice(0, newlineIndex);
-              textBuffer = textBuffer.slice(newlineIndex + 1);
-              if (line.endsWith("\r")) line = line.slice(0, -1);
-              if (line.startsWith(":") || line.trim() === "") continue;
-              if (!line.startsWith("data: ")) continue;
-              const jsonStr = line.slice(6).trim();
-              if (jsonStr === "[DONE]") break;
-              try {
-                const parsed = JSON.parse(jsonStr);
-                const content = parsed.choices?.[0]?.delta?.content as string | undefined;
-                if (content) {
-                  assistantSoFar += content;
-                  setMessages((prev) => {
-                    const last = prev[prev.length - 1];
-                    if (last?.role === "assistant") {
-                      return prev.map((m, i) => (i === prev.length - 1 ? { ...m, content: assistantSoFar } : m));
-                    }
-                    return [...prev, { role: "assistant", content: assistantSoFar }];
-                  });
-                }
-              } catch {
-                textBuffer = line + "\n" + textBuffer;
-                break;
-              }
-            }
-          }
-          if (convId && assistantSoFar) await saveMessage(convId, cleanContent(assistantSoFar), "ai");
-        } catch (e) {
-          console.error("Chat error:", e);
-          setMessages((prev) => [...prev, { role: "assistant", content: "Sorry, I'm having trouble connecting. Please try again or email advantflow@gmail.com." }]);
-        } finally {
-          setIsLoading(false);
-        }
-      })();
-    }, 0);
-  };
-
   return (
     <>
-      {/* Pulse ring — only shown before first open */}
+      {/* Pulse ring — only before first open */}
       {!hasBeenOpened && !isOpen && (
         <span className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full pointer-events-none">
           <span className="absolute inset-0 rounded-full bg-primary/40 animate-ping" />
@@ -279,7 +203,7 @@ export const ChatWidget = () => {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[240px] max-h-[340px]">
+            <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[200px] max-h-[340px]">
               {messages.length === 0 && (
                 <div className="text-center py-6 space-y-4">
                   <Bot className="w-10 h-10 mx-auto text-muted-foreground/50" />
@@ -290,7 +214,7 @@ export const ChatWidget = () => {
                     {SUGGESTION_CHIPS.map((chip) => (
                       <button
                         key={chip}
-                        onClick={() => handleChip(chip)}
+                        onClick={() => sendText(chip, [])}
                         className="px-3 py-1.5 rounded-full text-xs font-medium border border-primary/30 bg-primary/5 text-primary hover:bg-primary/10 hover:border-primary/50 transition-colors"
                       >
                         {chip}
@@ -348,11 +272,11 @@ export const ChatWidget = () => {
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                onKeyDown={(e) => e.key === "Enter" && sendText(input)}
                 placeholder="Ask me anything..."
                 className="flex-1 px-3 py-2 rounded-lg bg-secondary border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
               />
-              <Button size="sm" onClick={sendMessage} disabled={!input.trim() || isLoading}>
+              <Button size="sm" onClick={() => sendText(input)} disabled={!input.trim() || isLoading}>
                 {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               </Button>
             </div>
