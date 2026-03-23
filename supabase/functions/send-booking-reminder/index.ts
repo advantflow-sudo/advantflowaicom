@@ -55,14 +55,14 @@ const handler = async (req: Request): Promise<Response> => {
       const startUtc = new Date(Date.UTC(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), hours, minutes));
       const endUtc = new Date(startUtc.getTime() + 30 * 60 * 1000);
       const fmt = (d: Date) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
-      const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("Discovery Call with AdvantFlowAI")}&dates=${fmt(startUtc)}/${fmt(endUtc)}&details=${encodeURIComponent(`Free 30-minute discovery call with AdvantFlowAI.`)}&location=${encodeURIComponent("Video Call (link to follow)")}`;
+      const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("Discovery Call with Advant Flow AI")}&dates=${fmt(startUtc)}/${fmt(endUtc)}&details=${encodeURIComponent(`Free 30-minute discovery call with Advant Flow AI.`)}&location=${encodeURIComponent("Video Call (link to follow)")}`;
 
       try {
         const res = await fetch("https://api.resend.com/emails", {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
           body: JSON.stringify({
-            from: "AdvantFlowAI <hello@advantflowai.com>",
+            from: "Advant Flow AI <hello@advantflowai.com>",
             to: [booking.email],
             reply_to: "advantflow@gmail.com",
             subject: `Reminder: Your discovery call is tomorrow at ${booking.booking_time}`,
@@ -117,9 +117,9 @@ body{font-family:'Space Grotesk','Segoe UI',sans-serif;margin:0;padding:0;backgr
     </div>
   </div>
   <div class="footer">
-    <p>AdvantFlowAI Ltd · London, UK</p>
+    <p>Advant Flow AI Ltd · London, UK</p>
     <p><a href="https://advantflowai.com">advantflowai.com</a> · <a href="mailto:advantflow@gmail.com">advantflow@gmail.com</a></p>
-    <p>© ${new Date().getFullYear()} AdvantFlowAI Ltd. All rights reserved.</p>
+    <p>© ${new Date().getFullYear()} Advant Flow AI Ltd. All rights reserved.</p>
   </div>
 </div>
 </body>

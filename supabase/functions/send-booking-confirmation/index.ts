@@ -34,7 +34,7 @@ const handler = async (req: Request): Promise<Response> => {
     const startUtc = new Date(Date.UTC(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), hours, minutes));
     const endUtc = new Date(startUtc.getTime() + 30 * 60 * 1000); // 30 min call
     const fmt = (d: Date) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
-    const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("Discovery Call with AdvantFlowAI")}&dates=${fmt(startUtc)}/${fmt(endUtc)}&details=${encodeURIComponent(`Free 30-minute discovery call with AdvantFlowAI.\n\nService interest: ${service_interest || "General"}\n\nWe'll reach out with meeting details shortly.`)}&location=${encodeURIComponent("Video Call (link to follow)")}`;
+    const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("Discovery Call with Advant Flow AI")}&dates=${fmt(startUtc)}/${fmt(endUtc)}&details=${encodeURIComponent(`Free 30-minute discovery call with Advant Flow AI.\n\nService interest: ${service_interest || "General"}\n\nWe'll reach out with meeting details shortly.`)}&location=${encodeURIComponent("Video Call (link to follow)")}`;
 
     // 1. Send confirmation to the booker
     try {
@@ -42,7 +42,7 @@ const handler = async (req: Request): Promise<Response> => {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
         body: JSON.stringify({
-          from: "AdvantFlowAI <hello@advantflowai.com>",
+          from: "Advant Flow AI <hello@advantflowai.com>",
           to: [email],
           reply_to: "advantflow@gmail.com",
           subject: `Your discovery call is confirmed — ${formattedDate} at ${booking_time}`,
@@ -96,9 +96,9 @@ body{font-family:'Space Grotesk','Segoe UI',sans-serif;margin:0;padding:0;backgr
     <a href="https://advantflowai.com/#projects" class="cta">See Our Recent Work →</a>
   </div>
   <div class="footer">
-    <p>AdvantFlowAI Ltd · London, UK</p>
+    <p>Advant Flow AI Ltd · London, UK</p>
     <p><a href="https://advantflowai.com">advantflowai.com</a> · <a href="mailto:advantflow@gmail.com">advantflow@gmail.com</a></p>
-    <p>© ${new Date().getFullYear()} AdvantFlowAI Ltd. All rights reserved.</p>
+    <p>© ${new Date().getFullYear()} Advant Flow AI Ltd. All rights reserved.</p>
   </div>
 </div>
 </body>
@@ -117,7 +117,7 @@ body{font-family:'Space Grotesk','Segoe UI',sans-serif;margin:0;padding:0;backgr
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
         body: JSON.stringify({
-          from: "AdvantFlowAI Website <hello@advantflowai.com>",
+          from: "Advant Flow AI Website <hello@advantflowai.com>",
           to: ["advantflow@gmail.com"],
           subject: `📅 New Booking: ${name} — ${formattedDate} at ${booking_time}`,
           html: `
@@ -135,7 +135,7 @@ body{font-family:'Space Grotesk','Segoe UI',sans-serif;margin:0;padding:0;backgr
     <p style="color:#e2e8f0;font-size:18px;font-weight:bold">${formattedDate} at ${booking_time}</p>
     ${service_interest ? `<p style="color:#00d4ff;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:bold">Interest</p><p style="color:#e2e8f0">${service_interest}</p>` : ""}
     <div style="text-align:center;margin-top:20px">
-      <a href="mailto:${email}?subject=Your upcoming discovery call with AdvantFlowAI&body=Hi ${name}," style="display:inline-block;background:#00d4ff;color:#0a0e1a;font-weight:bold;padding:10px 24px;border-radius:6px;text-decoration:none">Reply to ${name} →</a>
+      <a href="mailto:${email}?subject=Your upcoming discovery call with Advant Flow AI&body=Hi ${name}," style="display:inline-block;background:#00d4ff;color:#0a0e1a;font-weight:bold;padding:10px 24px;border-radius:6px;text-decoration:none">Reply to ${name} →</a>
     </div>
   </div>
 </div>

@@ -152,7 +152,7 @@ export const Footer = () => {
           transition={{ duration: 0.7, delay: 0.3 }}
         >
           <div className="text-sm text-muted-foreground text-center md:text-left">
-            <p>© 2026 AdvantFlowAI Ltd. All rights reserved.</p>
+            <p>© 2026 Advant Flow AI Ltd. All rights reserved.</p>
             <p className="mt-1 opacity-70">Registered in England & Wales. Company No: 12345678 | VAT No: GB123456789</p>
           </div>
 
