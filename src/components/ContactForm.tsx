@@ -177,8 +177,8 @@ export const ContactForm = () => {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Call us at</p>
-                  <a href="tel:+442071234567" className="font-medium text-foreground hover:text-primary transition-colors">
-                    +44 20 7123 4567
+                  <a href="tel:+4407751523675" className="font-medium text-foreground hover:text-primary transition-colors">
+                    +4407751523675
                   </a>
                 </div>
               </div>
