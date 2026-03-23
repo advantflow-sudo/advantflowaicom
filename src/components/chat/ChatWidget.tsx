@@ -281,11 +281,22 @@ export const ChatWidget = () => {
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[240px] max-h-[340px]">
               {messages.length === 0 && (
-                <div className="text-center py-8 space-y-3">
+                <div className="text-center py-6 space-y-4">
                   <Bot className="w-10 h-10 mx-auto text-muted-foreground/50" />
                   <p className="text-xs text-muted-foreground">
                     Hey! 👋 I'm here to help you get more customers. Ask me anything about AdvantFlowAI.
                   </p>
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {SUGGESTION_CHIPS.map((chip) => (
+                      <button
+                        key={chip}
+                        onClick={() => handleChip(chip)}
+                        className="px-3 py-1.5 rounded-full text-xs font-medium border border-primary/30 bg-primary/5 text-primary hover:bg-primary/10 hover:border-primary/50 transition-colors"
+                      >
+                        {chip}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
               {messages.map((msg, i) => (
