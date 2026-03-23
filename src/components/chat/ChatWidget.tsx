@@ -1,8 +1,9 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send, Loader2, Bot, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import ReactMarkdown from "react-markdown";
 
 interface Message {
@@ -19,6 +20,8 @@ export const ChatWidget = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
+  const [hasBeenOpened, setHasBeenOpened] = useState(false);
+  const conversationIdRef = useRef<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -26,7 +29,6 @@ export const ChatWidget = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Check if any message contains the signup marker
   useEffect(() => {
     const hasMarker = messages.some(
       (m) => m.role === "assistant" && m.content.includes(SIGNUP_MARKER)
@@ -36,6 +38,32 @@ export const ChatWidget = () => {
 
   const cleanContent = (text: string) => text.replace(/\[SHOW_SIGNUP_BUTTON\]/g, "").trim();
 
+  // Create or get conversation ID
+  const ensureConversation = useCallback(async () => {
+    if (conversationIdRef.current) return conversationIdRef.current;
+    const { data, error } = await supabase
+      .from("chat_conversations")
+      .insert({ status: "open" })
+      .select("id")
+      .single();
+    if (error) {
+      console.error("Failed to create conversation:", error);
+      return null;
+    }
+    conversationIdRef.current = data.id;
+    return data.id;
+  }, []);
+
+  // Save a message to the database
+  const saveMessage = useCallback(async (conversationId: string, message: string, senderType: "visitor" | "ai") => {
+    const { error } = await supabase.from("chat_messages").insert({
+      conversation_id: conversationId,
+      message,
+      sender_type: senderType,
+    });
+    if (error) console.error("Failed to save message:", error);
+  }, []);
+
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
     const userMsg: Message = { role: "user", content: input.trim() };
@@ -43,6 +71,10 @@ export const ChatWidget = () => {
     setMessages(allMessages);
     setInput("");
     setIsLoading(true);
+
+    // Save user message to DB
+    const convId = await ensureConversation();
+    if (convId) await saveMessage(convId, userMsg.content, "visitor");
 
     let assistantSoFar = "";
 
@@ -97,12 +129,15 @@ export const ChatWidget = () => {
           }
         }
       }
+
+      // Save final assistant message to DB
+      if (convId && assistantSoFar) {
+        await saveMessage(convId, cleanContent(assistantSoFar), "ai");
+      }
     } catch (e) {
       console.error("Chat error:", e);
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: "Sorry, I'm having trouble connecting right now. Please try again or contact us at advantflow@gmail.com." },
-      ]);
+      const errorMsg = "Sorry, I'm having trouble connecting right now. Please try again or contact us at advantflow@gmail.com.";
+      setMessages((prev) => [...prev, { role: "assistant", content: errorMsg }]);
     } finally {
       setIsLoading(false);
     }
@@ -113,10 +148,23 @@ export const ChatWidget = () => {
     navigate("/auth");
   };
 
+  const handleToggle = () => {
+    if (!isOpen) setHasBeenOpened(true);
+    setIsOpen(!isOpen);
+  };
+
   return (
     <>
+      {/* Pulse ring — only shown before first open */}
+      {!hasBeenOpened && !isOpen && (
+        <span className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full pointer-events-none">
+          <span className="absolute inset-0 rounded-full bg-primary/40 animate-ping" />
+          <span className="absolute -inset-1 rounded-full bg-primary/20 animate-pulse" />
+        </span>
+      )}
+
       <motion.button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggle}
         className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/30 hover:scale-110 transition-transform"
         whileTap={{ scale: 0.95 }}
       >
