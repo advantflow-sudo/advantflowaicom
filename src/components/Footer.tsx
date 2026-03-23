@@ -47,10 +47,10 @@ export const Footer = () => {
             {/* Logo */}
             <div className="flex items-center gap-2.5 mb-8">
               <div className="w-11 h-11 rounded-xl overflow-hidden shadow-lg shadow-primary/20">
-                <img src={logoIcon} alt="AdvantFlowAI" className="w-full h-full object-cover" />
+                <img src={logoIcon} alt="Advant Flow AI" className="w-full h-full object-cover" />
               </div>
               <span className="font-display font-bold text-2xl text-foreground">
-                Advant<span className="text-primary">FlowAI</span>
+                Advant <span className="text-primary">Flow AI</span>
               </span>
             </div>
 
