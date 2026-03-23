@@ -30,21 +30,21 @@ export const SignupEmail = ({
 }: SignupEmailProps) => (
   <Html lang="en" dir="ltr">
     <Head />
-    <Preview>Welcome to AdvantFlowAI — confirm your email</Preview>
+    <Preview>Welcome to Advant Flow AI — confirm your email</Preview>
     <Body style={main}>
       <Container style={container}>
         <Img
           src="https://cdahbpcdepcqnhqqveom.supabase.co/storage/v1/object/public/email-assets/logo-icon.png"
           width="48"
           height="48"
-          alt="AdvantFlowAI"
+          alt="Advant Flow AI"
           style={{ marginBottom: '24px', borderRadius: '12px' }}
         />
         <Heading style={h1}>Welcome aboard 👋</Heading>
         <Text style={text}>
           Thanks for signing up for{' '}
           <Link href={siteUrl} style={link}>
-            <strong>AdvantFlowAI</strong>
+            <strong>Advant Flow AI</strong>
           </Link>
           ! We're excited to have you.
         </Text>

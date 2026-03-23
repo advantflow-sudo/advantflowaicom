@@ -47,10 +47,10 @@ export const Footer = () => {
             {/* Logo */}
             <div className="flex items-center gap-2.5 mb-8">
               <div className="w-11 h-11 rounded-xl overflow-hidden shadow-lg shadow-primary/20">
-                <img src={logoIcon} alt="AdvantFlowAI" className="w-full h-full object-cover" />
+                <img src={logoIcon} alt="Advant Flow AI" className="w-full h-full object-cover" />
               </div>
               <span className="font-display font-bold text-2xl text-foreground">
-                Advant<span className="text-primary">FlowAI</span>
+                Advant <span className="text-primary">Flow AI</span>
               </span>
             </div>
 
@@ -82,7 +82,7 @@ export const Footer = () => {
                 <span>+4407751523675</span>
               </motion.a>
               <motion.a
-                href="https://wa.me/4407751523675?text=Hi%2C%20I%27m%20interested%20in%20AdvantFlowAI!"
+                href="https://wa.me/4407751523675?text=Hi%2C%20I%27m%20interested%20in%20Advant%20Flow%20AI!"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-4 text-muted-foreground hover:text-foreground transition-colors duration-300 group"
@@ -152,7 +152,7 @@ export const Footer = () => {
           transition={{ duration: 0.7, delay: 0.3 }}
         >
           <div className="text-sm text-muted-foreground text-center md:text-left">
-            <p>© 2026 AdvantFlowAI Ltd. All rights reserved.</p>
+            <p>© 2026 Advant Flow AI Ltd. All rights reserved.</p>
             <p className="mt-1 opacity-70">Registered in England & Wales. Company No: 12345678 | VAT No: GB123456789</p>
           </div>
 

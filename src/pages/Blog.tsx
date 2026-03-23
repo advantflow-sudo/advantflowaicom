@@ -36,8 +36,8 @@ const Blog = () => {
   return (
     <main className="relative">
       <SEOHead
-        title="Blog | AdvantFlowAI — AI Automation & Web Design Insights"
-        description="Expert insights on AI automation, web design, and business growth. Tips, guides, and case studies from AdvantFlowAI."
+        title="Blog | Advant Flow AI — AI Automation & Web Design Insights"
+        description="Expert insights on AI automation, web design, and business growth. Tips, guides, and case studies from Advant Flow AI."
         canonical="https://advantflowai.com/blog"
       />
       <Navbar />

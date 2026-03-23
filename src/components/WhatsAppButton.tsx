@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 
 const WHATSAPP_NUMBER = "4407751523675";
-const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=Hi%2C%20I%27m%20interested%20in%20AdvantFlowAI!`;
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=Hi%2C%20I%27m%20interested%20in%20Advant%20Flow%20AI!`;
 
 export const WhatsAppButton = () => {
   return (

@@ -35,7 +35,7 @@ serve(async (req) => {
         messages: [
           {
             role: "system",
-            content: `You are a lead scoring assistant for AdvantFlowAI, a web design and AI automation agency based in London, UK.
+            content: `You are a lead scoring assistant for Advant Flow AI, a web design and AI automation agency based in London, UK.
 
 Score leads from 1-100 based on:
 - Service interest alignment (Web Design, AI Automation, Full Package = higher)

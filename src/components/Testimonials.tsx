@@ -8,7 +8,7 @@ const testimonials = [
     name: "D. Patel",
     role: "Owner, Patel & Co Accountants",
     image: "",
-    content: "AdvantFlowAI built us a professional website in under a week. We went from zero online presence to getting enquiries through our site within days. Brilliant service and very easy to work with.",
+    content: "Advant Flow AI built us a professional website in under a week. We went from zero online presence to getting enquiries through our site within days. Brilliant service and very easy to work with.",
     rating: 5,
   },
   {
@@ -100,7 +100,7 @@ export const Testimonials = () => {
             <span className="text-gradient">Say About Us</span>
           </h2>
           <p className="body-lg max-w-2xl mx-auto">
-            Don't just take our word for it. Here's what our partners have to say about working with AdvantFlowAI.
+            Don't just take our word for it. Here's what our partners have to say about working with Advant Flow AI.
           </p>
         </motion.div>
 

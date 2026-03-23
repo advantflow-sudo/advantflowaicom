@@ -27,19 +27,19 @@ export const InviteEmail = ({
 }: InviteEmailProps) => (
   <Html lang="en" dir="ltr">
     <Head />
-    <Preview>You've been invited to join AdvantFlowAI</Preview>
+    <Preview>You've been invited to join Advant Flow AI</Preview>
     <Body style={main}>
       <Container style={container}>
         <Img
           src="https://cdahbpcdepcqnhqqveom.supabase.co/storage/v1/object/public/email-assets/logo-icon.png"
           width="48"
           height="48"
-          alt="AdvantFlowAI"
+          alt="Advant Flow AI"
           style={{ marginBottom: '24px', borderRadius: '12px' }}
         />
         <Heading style={h1}>You've been invited 🎉</Heading>
         <Text style={text}>
-          You've been invited to join <strong>AdvantFlowAI</strong>. Click
+          You've been invited to join <strong>Advant Flow AI</strong>. Click
           below to accept and create your account.
         </Text>
         <Button style={button} href={confirmationUrl}>

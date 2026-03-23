@@ -50,10 +50,10 @@ export const Navbar = () => {
         {/* Logo */}
         <a href="#" className="flex items-center gap-3 group">
           <div className="w-9 h-9 rounded-lg overflow-hidden">
-            <img src={logoIcon} alt="AdvantFlowAI" className="w-full h-full object-cover" />
+            <img src={logoIcon} alt="Advant Flow AI" className="w-full h-full object-cover" />
           </div>
           <span className="font-display font-bold text-lg text-foreground tracking-tight">
-            Advant<span className="text-primary">Flow</span>
+            Advant <span className="text-primary">Flow AI</span>
           </span>
         </a>
 

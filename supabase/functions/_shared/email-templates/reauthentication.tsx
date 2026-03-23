@@ -20,14 +20,14 @@ interface ReauthenticationEmailProps {
 export const ReauthenticationEmail = ({ token }: ReauthenticationEmailProps) => (
   <Html lang="en" dir="ltr">
     <Head />
-    <Preview>Your AdvantFlowAI verification code</Preview>
+    <Preview>Your Advant Flow AI verification code</Preview>
     <Body style={main}>
       <Container style={container}>
         <Img
           src="https://cdahbpcdepcqnhqqveom.supabase.co/storage/v1/object/public/email-assets/logo-icon.png"
           width="48"
           height="48"
-          alt="AdvantFlowAI"
+          alt="Advant Flow AI"
           style={{ marginBottom: '24px', borderRadius: '12px' }}
         />
         <Heading style={h1}>Verification code</Heading>

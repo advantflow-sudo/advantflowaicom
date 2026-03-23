@@ -27,8 +27,8 @@ const Index = () => {
   return (
     <main className="relative">
       <SEOHead
-        title="AdvantFlowAI | Get More Bookings Automatically With AI"
-        description="AdvantFlowAI replies to customers instantly, captures leads, and books jobs for you 24/7. Built for service businesses. Start your free trial today."
+        title="Advant Flow AI | Get More Bookings Automatically With AI"
+        description="Advant Flow AI replies to customers instantly, captures leads, and books jobs for you 24/7. Built for service businesses. Start your free trial today."
         canonical="https://advantflowai.com/"
       />
       <Navbar />

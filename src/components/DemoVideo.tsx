@@ -37,7 +37,7 @@ const PhoneFrame = ({ children, label }: { children: React.ReactNode; label: str
           <Bot className="w-4 h-4 text-primary" />
         </div>
         <div>
-          <p className="text-xs font-semibold text-foreground leading-tight">AdvantFlowAI</p>
+          <p className="text-xs font-semibold text-foreground leading-tight">Advant Flow AI</p>
           <p className="text-[10px] text-primary leading-tight flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
             Online
@@ -385,7 +385,7 @@ export const DemoVideo = () => {
             See It In 2 Minutes
           </span>
           <h2 className="heading-lg mb-6">
-            Watch How <span className="text-gradient">AdvantFlowAI</span> Works
+            Watch How <span className="text-gradient">Advant Flow AI</span> Works
           </h2>
           <p className="body-lg max-w-2xl mx-auto">
             See the full system in action — from customer message to confirmed booking, all handled by AI.

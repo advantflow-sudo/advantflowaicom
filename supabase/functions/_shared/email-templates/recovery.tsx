@@ -25,19 +25,19 @@ export const RecoveryEmail = ({
 }: RecoveryEmailProps) => (
   <Html lang="en" dir="ltr">
     <Head />
-    <Preview>Reset your AdvantFlowAI password</Preview>
+    <Preview>Reset your Advant Flow AI password</Preview>
     <Body style={main}>
       <Container style={container}>
         <Img
           src="https://cdahbpcdepcqnhqqveom.supabase.co/storage/v1/object/public/email-assets/logo-icon.png"
           width="48"
           height="48"
-          alt="AdvantFlowAI"
+          alt="Advant Flow AI"
           style={{ marginBottom: '24px', borderRadius: '12px' }}
         />
         <Heading style={h1}>Reset your password</Heading>
         <Text style={text}>
-          We received a request to reset your AdvantFlowAI password. Click
+          We received a request to reset your Advant Flow AI password. Click
           below to choose a new one.
         </Text>
         <Button style={button} href={confirmationUrl}>

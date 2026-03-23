@@ -32,7 +32,7 @@ export const FinalCTA = () => {
               Start Automating Your<br />Business Today
             </h2>
             <p className="text-lg md:text-xl text-primary-foreground/70 max-w-xl mx-auto mb-10">
-              Join hundreds of service businesses already using AdvantFlowAI to get more bookings on autopilot.
+              Join hundreds of service businesses already using Advant Flow AI to get more bookings on autopilot.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

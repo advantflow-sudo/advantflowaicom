@@ -202,7 +202,7 @@ export const LiveDemo = () => {
             Watch AI <span className="text-gradient">Work For You</span>
           </h2>
           <p className="body-lg max-w-2xl mx-auto">
-            See exactly how AdvantFlowAI handles customers, captures leads, and books appointments — automatically.
+            See exactly how Advant Flow AI handles customers, captures leads, and books appointments — automatically.
           </p>
         </motion.div>
 
