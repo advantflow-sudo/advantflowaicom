@@ -14,6 +14,14 @@ interface Message {
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
 const SIGNUP_MARKER = "[SHOW_SIGNUP_BUTTON]";
 
+const SUGGESTION_CHIPS = [
+  "What are your prices?",
+  "How does it work?",
+  "Book a demo",
+];
+
+const cleanContent = (text: string) => text.replace(/\[SHOW_SIGNUP_BUTTON\]/g, "").trim();
+
 export const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -30,15 +38,11 @@ export const ChatWidget = () => {
   }, [messages]);
 
   useEffect(() => {
-    const hasMarker = messages.some(
-      (m) => m.role === "assistant" && m.content.includes(SIGNUP_MARKER)
-    );
-    if (hasMarker) setShowSignup(true);
+    if (messages.some((m) => m.role === "assistant" && m.content.includes(SIGNUP_MARKER))) {
+      setShowSignup(true);
+    }
   }, [messages]);
 
-  const cleanContent = (text: string) => text.replace(/\[SHOW_SIGNUP_BUTTON\]/g, "").trim();
-
-  // Create or get conversation ID
   const ensureConversation = useCallback(async () => {
     if (conversationIdRef.current) return conversationIdRef.current;
     const { data, error } = await supabase
@@ -54,25 +58,22 @@ export const ChatWidget = () => {
     return data.id;
   }, []);
 
-  // Save a message to the database
   const saveMessage = useCallback(async (conversationId: string, message: string, senderType: "visitor" | "ai") => {
-    const { error } = await supabase.from("chat_messages").insert({
+    await supabase.from("chat_messages").insert({
       conversation_id: conversationId,
       message,
       sender_type: senderType,
     });
-    if (error) console.error("Failed to save message:", error);
   }, []);
 
-  const sendMessage = async () => {
-    if (!input.trim() || isLoading) return;
-    const userMsg: Message = { role: "user", content: input.trim() };
-    const allMessages = [...messages, userMsg];
+  const sendText = async (text: string, currentMessages: Message[] = messages) => {
+    if (!text.trim() || isLoading) return;
+    const userMsg: Message = { role: "user", content: text.trim() };
+    const allMessages = [...currentMessages, userMsg];
     setMessages(allMessages);
     setInput("");
     setIsLoading(true);
 
-    // Save user message to DB
     const convId = await ensureConversation();
     if (convId) await saveMessage(convId, userMsg.content, "visitor");
 
@@ -130,14 +131,15 @@ export const ChatWidget = () => {
         }
       }
 
-      // Save final assistant message to DB
       if (convId && assistantSoFar) {
         await saveMessage(convId, cleanContent(assistantSoFar), "ai");
       }
     } catch (e) {
       console.error("Chat error:", e);
-      const errorMsg = "Sorry, I'm having trouble connecting right now. Please try again or contact us at advantflow@gmail.com.";
-      setMessages((prev) => [...prev, { role: "assistant", content: errorMsg }]);
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: "Sorry, I'm having trouble connecting right now. Please try again or contact us at advantflow@gmail.com." },
+      ]);
     } finally {
       setIsLoading(false);
     }
@@ -155,7 +157,7 @@ export const ChatWidget = () => {
 
   return (
     <>
-      {/* Pulse ring — only shown before first open */}
+      {/* Pulse ring — only before first open */}
       {!hasBeenOpened && !isOpen && (
         <span className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full pointer-events-none">
           <span className="absolute inset-0 rounded-full bg-primary/40 animate-ping" />
@@ -187,7 +189,7 @@ export const ChatWidget = () => {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-24 right-6 z-50 w-[380px] max-h-[520px] rounded-2xl border border-border bg-card shadow-2xl flex flex-col overflow-hidden"
+            className="fixed bottom-24 right-4 left-4 sm:left-auto sm:right-6 z-50 sm:w-[380px] max-h-[80vh] sm:max-h-[520px] rounded-2xl border border-border bg-card shadow-2xl flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="p-4 bg-gradient-to-r from-primary to-accent flex items-center gap-3">
@@ -201,13 +203,24 @@ export const ChatWidget = () => {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[240px] max-h-[340px]">
+            <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[200px] max-h-[340px]">
               {messages.length === 0 && (
-                <div className="text-center py-8 space-y-3">
+                <div className="text-center py-6 space-y-4">
                   <Bot className="w-10 h-10 mx-auto text-muted-foreground/50" />
                   <p className="text-xs text-muted-foreground">
                     Hey! 👋 I'm here to help you get more customers. Ask me anything about AdvantFlowAI.
                   </p>
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {SUGGESTION_CHIPS.map((chip) => (
+                      <button
+                        key={chip}
+                        onClick={() => sendText(chip, [])}
+                        className="px-3 py-1.5 rounded-full text-xs font-medium border border-primary/30 bg-primary/5 text-primary hover:bg-primary/10 hover:border-primary/50 transition-colors"
+                      >
+                        {chip}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
               {messages.map((msg, i) => (
@@ -259,11 +272,11 @@ export const ChatWidget = () => {
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                onKeyDown={(e) => e.key === "Enter" && sendText(input)}
                 placeholder="Ask me anything..."
                 className="flex-1 px-3 py-2 rounded-lg bg-secondary border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
               />
-              <Button size="sm" onClick={sendMessage} disabled={!input.trim() || isLoading}>
+              <Button size="sm" onClick={() => sendText(input)} disabled={!input.trim() || isLoading}>
                 {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               </Button>
             </div>
