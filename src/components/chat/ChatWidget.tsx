@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, Loader2, Bot } from "lucide-react";
+import { MessageCircle, X, Send, Loader2, Bot, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 
 interface Message {
@@ -10,17 +11,30 @@ interface Message {
 }
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
+const SIGNUP_MARKER = "[SHOW_SIGNUP_BUTTON]";
 
 export const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Check if any message contains the signup marker
+  useEffect(() => {
+    const hasMarker = messages.some(
+      (m) => m.role === "assistant" && m.content.includes(SIGNUP_MARKER)
+    );
+    if (hasMarker) setShowSignup(true);
+  }, [messages]);
+
+  const cleanContent = (text: string) => text.replace(/\[SHOW_SIGNUP_BUTTON\]/g, "").trim();
 
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
@@ -42,9 +56,7 @@ export const ChatWidget = () => {
         body: JSON.stringify({ messages: allMessages }),
       });
 
-      if (!resp.ok || !resp.body) {
-        throw new Error("Failed to connect");
-      }
+      if (!resp.ok || !resp.body) throw new Error("Failed to connect");
 
       const reader = resp.body.getReader();
       const decoder = new TextDecoder();
@@ -96,6 +108,11 @@ export const ChatWidget = () => {
     }
   };
 
+  const handleSignup = () => {
+    setIsOpen(false);
+    navigate("/auth");
+  };
+
   return (
     <>
       <motion.button
@@ -124,22 +141,24 @@ export const ChatWidget = () => {
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             className="fixed bottom-24 right-6 z-50 w-[380px] max-h-[520px] rounded-2xl border border-border bg-card shadow-2xl flex flex-col overflow-hidden"
           >
+            {/* Header */}
             <div className="p-4 bg-gradient-to-r from-primary to-accent flex items-center gap-3">
               <div className="w-9 h-9 rounded-full bg-primary-foreground/20 flex items-center justify-center">
                 <Bot className="w-5 h-5 text-primary-foreground" />
               </div>
               <div>
-                <h3 className="font-display font-semibold text-primary-foreground text-sm">AdvantFlow AI Assistant</h3>
-                <p className="text-primary-foreground/70 text-xs">Ask me anything about our services</p>
+                <h3 className="font-display font-semibold text-primary-foreground text-sm">AdvantFlow AI</h3>
+                <p className="text-primary-foreground/70 text-xs">Ask me anything — I'm here to help</p>
               </div>
             </div>
 
+            {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[240px] max-h-[340px]">
               {messages.length === 0 && (
                 <div className="text-center py-8 space-y-3">
                   <Bot className="w-10 h-10 mx-auto text-muted-foreground/50" />
                   <p className="text-xs text-muted-foreground">
-                    Hi! 👋 I'm the AdvantFlowAI assistant. Ask me about our services, pricing, or how we can help your business.
+                    Hey! 👋 I'm here to help you get more customers. Ask me anything about AdvantFlowAI.
                   </p>
                 </div>
               )}
@@ -154,7 +173,7 @@ export const ChatWidget = () => {
                   >
                     {msg.role === "assistant" ? (
                       <div className="prose prose-sm dark:prose-invert max-w-none [&>p]:m-0 [&>ul]:m-0 [&>ol]:m-0">
-                        <ReactMarkdown>{msg.content}</ReactMarkdown>
+                        <ReactMarkdown>{cleanContent(msg.content)}</ReactMarkdown>
                       </div>
                     ) : (
                       msg.content
@@ -172,12 +191,28 @@ export const ChatWidget = () => {
               <div ref={messagesEndRef} />
             </div>
 
+            {/* Signup CTA */}
+            {showSignup && (
+              <div className="px-3 pb-2">
+                <Button
+                  onClick={handleSignup}
+                  variant="hero"
+                  size="sm"
+                  className="w-full gap-2"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  Start Your Free Trial
+                </Button>
+              </div>
+            )}
+
+            {/* Input */}
             <div className="p-3 border-t border-border flex gap-2">
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                placeholder="Ask about our services..."
+                placeholder="Ask me anything..."
                 className="flex-1 px-3 py-2 rounded-lg bg-secondary border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
               />
               <Button size="sm" onClick={sendMessage} disabled={!input.trim() || isLoading}>
