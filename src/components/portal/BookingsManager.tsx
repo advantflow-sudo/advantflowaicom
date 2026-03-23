@@ -135,6 +135,18 @@ export const BookingsManager = ({ isAdmin }: BookingsManagerProps) => {
       toast.error("Failed to reschedule booking");
     } else {
       toast.success(`Booking rescheduled to ${format(newDate, "dd MMM")} at ${newTime}`);
+      // Send reschedule email notification
+      supabase.functions.invoke("send-booking-update", {
+        body: {
+          type: "rescheduled",
+          name: bookingToReschedule.name,
+          email: bookingToReschedule.email,
+          original_date: bookingToReschedule.booking_date,
+          original_time: bookingToReschedule.booking_time,
+          new_date: format(newDate, "yyyy-MM-dd"),
+          new_time: newTime,
+        },
+      }).catch(() => {});
       fetchBookings();
     }
     setRescheduling(false);
