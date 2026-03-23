@@ -29,9 +29,35 @@ export const ChatWidget = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [hasBeenOpened, setHasBeenOpened] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const conversationIdRef = useRef<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  // Listen for admin replies via realtime when chat is closed
+  useEffect(() => {
+    const convId = conversationIdRef.current;
+    if (!convId) return;
+
+    const channel = supabase
+      .channel(`visitor-notif-${convId}`)
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "chat_messages", filter: `conversation_id=eq.${convId}` },
+        (payload) => {
+          const msg = payload.new as { sender_type: string; message: string };
+          if (msg.sender_type === "agent") {
+            // Add to messages
+            setMessages((prev) => [...prev, { role: "assistant", content: msg.message }]);
+            // Increment unread if chat is closed
+            if (!isOpen) setUnreadCount((c) => c + 1);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, [conversationIdRef.current, isOpen]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -151,7 +177,10 @@ export const ChatWidget = () => {
   };
 
   const handleToggle = () => {
-    if (!isOpen) setHasBeenOpened(true);
+    if (!isOpen) {
+      setHasBeenOpened(true);
+      setUnreadCount(0);
+    }
     setIsOpen(!isOpen);
   };
 
@@ -170,6 +199,12 @@ export const ChatWidget = () => {
         className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/30 hover:scale-110 transition-transform"
         whileTap={{ scale: 0.95 }}
       >
+        {/* Unread badge */}
+        {unreadCount > 0 && !isOpen && (
+          <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-destructive text-destructive-foreground text-[10px] font-bold flex items-center justify-center animate-scale-in shadow-md">
+            {unreadCount > 9 ? "9+" : unreadCount}
+          </span>
+        )}
         <AnimatePresence mode="wait">
           {isOpen ? (
             <motion.span key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }}>
