@@ -14,6 +14,7 @@ import { FileManager } from "@/components/portal/FileManager";
 import { AdminDashboard } from "@/components/portal/AdminDashboard";
 import { LeadsCRM } from "@/components/portal/LeadsCRM";
 import { BookingsManager } from "@/components/portal/BookingsManager";
+import { MessagesTab } from "@/components/portal/MessagesTab";
 
 interface ClientProject {
   id: string;
@@ -190,11 +191,7 @@ const Portal = () => {
           ) : activeTab === "bookings" ? (
             <BookingsManager isAdmin={isAdmin} />
           ) : activeTab === "messages" ? (
-            <div className="card-enhanced rounded-2xl p-12 text-center">
-              <MessageCircle className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="heading-md mb-2">Messages</h3>
-              <p className="text-muted-foreground">All customer conversations in one place.</p>
-            </div>
+            <MessagesTab />
           ) : activeTab === "automation" ? (
             <div className="card-enhanced rounded-2xl p-12 text-center">
               <Zap className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
