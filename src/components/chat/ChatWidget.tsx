@@ -29,9 +29,35 @@ export const ChatWidget = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [hasBeenOpened, setHasBeenOpened] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const conversationIdRef = useRef<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  // Listen for admin replies via realtime when chat is closed
+  useEffect(() => {
+    const convId = conversationIdRef.current;
+    if (!convId) return;
+
+    const channel = supabase
+      .channel(`visitor-notif-${convId}`)
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "chat_messages", filter: `conversation_id=eq.${convId}` },
+        (payload) => {
+          const msg = payload.new as { sender_type: string; message: string };
+          if (msg.sender_type === "agent") {
+            // Add to messages
+            setMessages((prev) => [...prev, { role: "assistant", content: msg.message }]);
+            // Increment unread if chat is closed
+            if (!isOpen) setUnreadCount((c) => c + 1);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, [conversationIdRef.current, isOpen]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
