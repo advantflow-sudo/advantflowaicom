@@ -41,7 +41,7 @@ export const Solution = () => {
             The Solution
           </span>
           <h2 className="heading-lg mb-6">
-            AdvantFlowAI Fixes This <span className="text-gradient">Automatically</span>
+            Advant Flow AI Fixes This <span className="text-gradient">Automatically</span>
           </h2>
           <p className="body-lg max-w-2xl mx-auto">
             A simple 3-step system that turns every enquiry into a booked customer — without you lifting a finger.

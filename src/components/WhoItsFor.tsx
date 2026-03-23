@@ -33,7 +33,7 @@ export const WhoItsFor = () => {
             Built for <span className="text-gradient">Service Businesses</span>
           </h2>
           <p className="body-lg max-w-2xl mx-auto">
-            If you run a local business and rely on bookings, AdvantFlowAI was built for you.
+            If you run a local business and rely on bookings, Advant Flow AI was built for you.
           </p>
         </motion.div>
 

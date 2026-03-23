@@ -243,7 +243,7 @@ export const ChatWidget = () => {
                 <div className="text-center py-6 space-y-4">
                   <Bot className="w-10 h-10 mx-auto text-muted-foreground/50" />
                   <p className="text-xs text-muted-foreground">
-                    Hey! 👋 I'm here to help you get more customers. Ask me anything about AdvantFlowAI.
+                    Hey! 👋 I'm here to help you get more customers. Ask me anything about Advant Flow AI.
                   </p>
                   <div className="flex flex-wrap justify-center gap-2">
                     {SUGGESTION_CHIPS.map((chip) => (

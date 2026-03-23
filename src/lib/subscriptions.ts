@@ -20,7 +20,7 @@ export const setupProducts = {
 } as const;
 
 export const monthlySubscription = {
-  name: "AdvantFlowAI Monthly",
+  name: "Advant Flow AI Monthly",
   price_id: "price_1TBvmaC1I7VBCNgyc0oPWI16",
   product_id: "prod_UAGJhyHd6sLLjF",
   price: "£49",

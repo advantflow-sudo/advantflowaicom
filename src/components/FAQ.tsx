@@ -39,7 +39,7 @@ const faqs = [
       "Yes! While we're based in London, we work with clients worldwide. Our process is fully remote — we communicate via video calls, email, and our client portal.",
   },
   {
-    question: "How is AdvantFlowAI different from other agencies?",
+    question: "How is Advant Flow AI different from other agencies?",
     answer:
       "We combine web design with AI automation under one roof. Most agencies only do one or the other. With us, you get a beautiful site AND smart systems that save you hours every week — all at prices that won't break the bank.",
   },
