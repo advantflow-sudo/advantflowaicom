@@ -15,6 +15,7 @@ import { AdminDashboard } from "@/components/portal/AdminDashboard";
 import { LeadsCRM } from "@/components/portal/LeadsCRM";
 import { BookingsManager } from "@/components/portal/BookingsManager";
 import { MessagesTab } from "@/components/portal/MessagesTab";
+import { AutomationTab } from "@/components/portal/AutomationTab";
 
 interface ClientProject {
   id: string;
