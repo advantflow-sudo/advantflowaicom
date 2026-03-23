@@ -15,6 +15,7 @@ import { AdminDashboard } from "@/components/portal/AdminDashboard";
 import { LeadsCRM } from "@/components/portal/LeadsCRM";
 import { BookingsManager } from "@/components/portal/BookingsManager";
 import { MessagesTab } from "@/components/portal/MessagesTab";
+import { AutomationTab } from "@/components/portal/AutomationTab";
 
 interface ClientProject {
   id: string;
@@ -193,11 +194,7 @@ const Portal = () => {
           ) : activeTab === "messages" ? (
             <MessagesTab />
           ) : activeTab === "automation" ? (
-            <div className="card-enhanced rounded-2xl p-12 text-center">
-              <Zap className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="heading-md mb-2">Automation</h3>
-              <p className="text-muted-foreground">Pre-built workflows: auto-replies, booking confirmations, and follow-up messages.</p>
-            </div>
+            <AutomationTab />
           ) : activeTab === "projects" ? (
             projects.length === 0 ? (
               <div className="card-enhanced rounded-2xl p-12 text-center">
