@@ -177,7 +177,10 @@ export const ChatWidget = () => {
   };
 
   const handleToggle = () => {
-    if (!isOpen) setHasBeenOpened(true);
+    if (!isOpen) {
+      setHasBeenOpened(true);
+      setUnreadCount(0);
+    }
     setIsOpen(!isOpen);
   };
 
@@ -196,6 +199,12 @@ export const ChatWidget = () => {
         className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/30 hover:scale-110 transition-transform"
         whileTap={{ scale: 0.95 }}
       >
+        {/* Unread badge */}
+        {unreadCount > 0 && !isOpen && (
+          <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-destructive text-destructive-foreground text-[10px] font-bold flex items-center justify-center animate-scale-in shadow-md">
+            {unreadCount > 9 ? "9+" : unreadCount}
+          </span>
+        )}
         <AnimatePresence mode="wait">
           {isOpen ? (
             <motion.span key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }}>
