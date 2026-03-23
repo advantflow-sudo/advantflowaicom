@@ -13,6 +13,7 @@ import { BlogManager } from "@/components/portal/BlogManager";
 import { FileManager } from "@/components/portal/FileManager";
 import { AdminDashboard } from "@/components/portal/AdminDashboard";
 import { LeadsCRM } from "@/components/portal/LeadsCRM";
+import { BookingsManager } from "@/components/portal/BookingsManager";
 
 interface ClientProject {
   id: string;
@@ -187,11 +188,7 @@ const Portal = () => {
           ) : activeTab === "leads" ? (
             <LeadsCRM isAdmin={isAdmin} />
           ) : activeTab === "bookings" ? (
-            <div className="card-enhanced rounded-2xl p-12 text-center">
-              <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="heading-md mb-2">Bookings</h3>
-              <p className="text-muted-foreground">Your upcoming and past bookings will appear here.</p>
-            </div>
+            <BookingsManager isAdmin={isAdmin} />
           ) : activeTab === "messages" ? (
             <div className="card-enhanced rounded-2xl p-12 text-center">
               <MessageCircle className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
