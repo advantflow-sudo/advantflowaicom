@@ -82,7 +82,7 @@ export const Footer = () => {
                 <span>+4407751523675</span>
               </motion.a>
               <motion.a
-                href="https://wa.me/4407751523675?text=Hi%2C%20I%27m%20interested%20in%20AdvantFlowAI!"
+                href="https://wa.me/4407751523675?text=Hi%2C%20I%27m%20interested%20in%20Advant%20Flow%20AI!"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-4 text-muted-foreground hover:text-foreground transition-colors duration-300 group"
