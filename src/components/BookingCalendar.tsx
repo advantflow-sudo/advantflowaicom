@@ -52,14 +52,10 @@ export const BookingCalendar = () => {
     setSelectedDate(date);
     setSelectedTime("");
     if (date) {
-      // Fetch booked slots for this date
+      // Fetch booked slots for this date via SECURITY DEFINER RPC (no PII exposed)
       const dateStr = format(date, "yyyy-MM-dd");
-      const { data } = await supabase
-        .from("bookings")
-        .select("booking_time")
-        .eq("booking_date", dateStr)
-        .eq("status", "confirmed");
-      setBookedSlots(data?.map((b: any) => b.booking_time) || []);
+      const { data } = await supabase.rpc("get_booked_slots", { _date: dateStr });
+      setBookedSlots((data as any[])?.map((b: any) => b.booking_time) || []);
     }
   };
 
