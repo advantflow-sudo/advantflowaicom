@@ -353,6 +353,21 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_booked_slots: {
+        Args: { _date: string }
+        Returns: {
+          booking_time: string
+        }[]
+      }
+      get_visitor_chat_messages: {
+        Args: { _conversation_id: string }
+        Returns: {
+          created_at: string
+          id: string
+          message: string
+          sender_type: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
