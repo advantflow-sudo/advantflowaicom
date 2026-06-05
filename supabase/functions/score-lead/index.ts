@@ -12,13 +12,43 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Internal-only: require shared secret matching the service role key.
+  // This function is invoked server-to-server by send-lead-confirmation.
+  const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+  const provided = req.headers.get("x-internal-secret") ?? "";
+  if (!serviceRoleKey || provided !== serviceRoleKey) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+    serviceRoleKey
   );
 
   try {
     const { lead_id, name, email, company, phone, service_interest, message } = await req.json();
+
+    // Validate lead exists and email matches to prevent arbitrary lead corruption
+    if (!lead_id || !email) {
+      return new Response(JSON.stringify({ error: "Missing lead_id or email" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const { data: leadRow } = await supabase
+      .from("leads")
+      .select("id, email")
+      .eq("id", lead_id)
+      .maybeSingle();
+    if (!leadRow || leadRow.email !== email) {
+      return new Response(JSON.stringify({ error: "Lead not found or mismatched" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");

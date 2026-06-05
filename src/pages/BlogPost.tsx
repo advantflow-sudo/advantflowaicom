@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, Calendar } from "lucide-react";
 import { format } from "date-fns";
+import DOMPurify from "dompurify";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -79,7 +80,7 @@ const BlogPost = () => {
                   prose-headings:font-display prose-headings:text-foreground
                   prose-p:text-muted-foreground prose-p:leading-relaxed
                   prose-a:text-primary prose-strong:text-foreground"
-                dangerouslySetInnerHTML={{ __html: post.content }}
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content, { USE_PROFILES: { html: true } }) }}
               />
             </motion.article>
           )}
