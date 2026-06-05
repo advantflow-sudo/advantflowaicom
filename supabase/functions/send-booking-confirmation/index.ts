@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -23,6 +24,27 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     const { name, email, booking_date, booking_time, service_interest }: BookingEmailRequest = await req.json();
+
+    // Validate: must reference a real booking to prevent email-abuse spam
+    if (!email || !booking_date || !booking_time) {
+      return new Response(JSON.stringify({ error: "Missing required fields" }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const supabaseAdmin = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+    );
+    const { data: bookingRow } = await supabaseAdmin
+      .from("bookings").select("id, email")
+      .eq("email", email).eq("booking_date", booking_date).eq("booking_time", booking_time)
+      .maybeSingle();
+    if (!bookingRow) {
+      return new Response(JSON.stringify({ error: "Booking not found" }), {
+        status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     console.log("Sending booking confirmation:", { name, email, booking_date, booking_time });
 
     // Format date nicely
