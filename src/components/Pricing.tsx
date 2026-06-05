@@ -106,7 +106,6 @@ const aiPlans = [
       "Custom AI training for your business",
       "Automated follow-up sequences",
       "CRM dashboard access",
-      "WhatsApp integration",
       "Priority support",
       "Then just £49/mo",
     ],
