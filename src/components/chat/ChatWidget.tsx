@@ -34,29 +34,38 @@ export const ChatWidget = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  // Listen for admin replies via realtime when chat is closed
+  // Poll for admin replies (visitor is anonymous; no public realtime access)
   useEffect(() => {
     const convId = conversationIdRef.current;
     if (!convId) return;
+    const seenIds = new Set<string>();
+    let cancelled = false;
 
-    const channel = supabase
-      .channel(`visitor-notif-${convId}`)
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "chat_messages", filter: `conversation_id=eq.${convId}` },
-        (payload) => {
-          const msg = payload.new as { sender_type: string; message: string };
-          if (msg.sender_type === "agent") {
-            // Add to messages
-            setMessages((prev) => [...prev, { role: "assistant", content: msg.message }]);
-            // Increment unread if chat is closed
-            if (!isOpen) setUnreadCount((c) => c + 1);
-          }
-        }
-      )
-      .subscribe();
+    const poll = async () => {
+      const { data } = await supabase.rpc("get_visitor_chat_messages", { _conversation_id: convId });
+      if (cancelled || !data) return;
+      const newAgent = (data as any[]).filter(
+        (m) => m.sender_type === "agent" && !seenIds.has(m.id)
+      );
+      newAgent.forEach((m) => seenIds.add(m.id));
+      if (newAgent.length > 0) {
+        setMessages((prev) => [
+          ...prev,
+          ...newAgent.map((m) => ({ role: "assistant" as const, content: m.message })),
+        ]);
+        if (!isOpen) setUnreadCount((c) => c + newAgent.length);
+      }
+      // Mark all existing as seen on first run
+      (data as any[]).forEach((m) => seenIds.add(m.id));
+    };
 
-    return () => { supabase.removeChannel(channel); };
+    // Seed seen IDs without surfacing
+    supabase.rpc("get_visitor_chat_messages", { _conversation_id: convId }).then(({ data }) => {
+      (data as any[] | null)?.forEach((m: any) => seenIds.add(m.id));
+    });
+
+    const interval = setInterval(poll, 5000);
+    return () => { cancelled = true; clearInterval(interval); };
   }, [conversationIdRef.current, isOpen]);
 
   useEffect(() => {
