@@ -14,7 +14,7 @@ import PaymentSuccess from "./pages/PaymentSuccess";
 import PricingPage from "./pages/PricingPage";
 import ResetPassword from "./pages/ResetPassword";
 import { ChatWidget } from "@/components/chat/ChatWidget";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
+
 
 const queryClient = new QueryClient();
 
@@ -37,7 +37,7 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
-          <WhatsAppButton />
+          
           <ChatWidget />
         </BrowserRouter>
       </TooltipProvider>
