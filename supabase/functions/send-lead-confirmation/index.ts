@@ -108,6 +108,24 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     const { name, email, company, phone, service_interest, message, lead_id }: LeadEmailRequest = await req.json();
 
+    // Validate: must reference a real lead with matching email to prevent email-abuse spam
+    if (!lead_id || !email || !name) {
+      return new Response(JSON.stringify({ error: "Missing required fields" }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const supabaseAdmin = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+    );
+    const { data: leadRow } = await supabaseAdmin
+      .from("leads").select("id, email").eq("id", lead_id).maybeSingle();
+    if (!leadRow || leadRow.email.toLowerCase() !== String(email).toLowerCase()) {
+      return new Response(JSON.stringify({ error: "Lead not found or email mismatch" }), {
+        status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     console.log("Processing lead:", { name, email, service_interest, lead_id });
 
     const serviceContent = getServiceSpecificContent(service_interest);
