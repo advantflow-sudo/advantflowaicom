@@ -233,14 +233,15 @@ const handler = async (req: Request): Promise<Response> => {
     // 3. Trigger AI lead scoring (always runs regardless of email status)
     if (lead_id) {
       const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
-      const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
-      
+      const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+
       try {
         await fetch(`${supabaseUrl}/functions/v1/score-lead`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${supabaseAnonKey}`,
+            Authorization: `Bearer ${serviceRoleKey}`,
+            "x-internal-secret": serviceRoleKey,
           },
           body: JSON.stringify({ lead_id, name, email, company, phone, service_interest, message }),
         });
