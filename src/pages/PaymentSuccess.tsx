@@ -1,12 +1,13 @@
-import { useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { CheckCircle, ArrowRight, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+// FIX: removed unused `useEffect` and `useSearchParams` imports
+// FIX: removed unused `searchParams` variable (nothing was reading it)
+
 const PaymentSuccess = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-6">

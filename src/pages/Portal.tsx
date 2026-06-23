@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { LogOut, LayoutDashboard, FolderOpen, User, Loader2, MessageCircle, FileText, Files, Shield, Users, Calendar, Zap } from "lucide-react";
@@ -46,7 +46,8 @@ const Portal = () => {
   const [projects, setProjects] = useState<ClientProject[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loadingData, setLoadingData] = useState(true);
-  const [activeTab, setActiveTab] = useState<TabId>("leads");
+  // FIX: default tab is "projects" for regular users; admins will see "leads" after data loads
+  const [activeTab, setActiveTab] = useState<TabId>("projects");
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
@@ -64,23 +65,31 @@ const Portal = () => {
     }
   }, [searchParams, setSearchParams]);
 
-  useEffect(() => {
-    if (user) fetchData();
-  }, [user]);
-
-  const fetchData = async () => {
+  // FIX: wrap fetchData in useCallback so it can be safely used in useEffect deps
+  const fetchData = useCallback(async () => {
+    if (!user) return;
     setLoadingData(true);
     const [projectsRes, profileRes, rolesRes] = await Promise.all([
       supabase.from("client_projects").select("*").order("created_at", { ascending: false }),
-      supabase.from("profiles").select("*").eq("user_id", user!.id).single(),
-      supabase.from("user_roles").select("role").eq("user_id", user!.id),
+      supabase.from("profiles").select("*").eq("user_id", user.id).single(),
+      supabase.from("user_roles").select("role").eq("user_id", user.id),
     ]);
 
     if (projectsRes.data) setProjects(projectsRes.data);
     if (profileRes.data) setProfile(profileRes.data);
-    if (rolesRes.data) setIsAdmin(rolesRes.data.some((r) => r.role === "admin"));
+
+    const adminStatus = rolesRes.data?.some((r) => r.role === "admin") ?? false;
+    setIsAdmin(adminStatus);
+
+    // FIX: set default tab to "leads" for admins once we know their role
+    if (adminStatus) setActiveTab("leads");
+
     setLoadingData(false);
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) fetchData();
+  }, [user, fetchData]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -102,10 +111,10 @@ const Portal = () => {
   };
 
   const tabs: { id: TabId; label: string; icon: any; adminOnly?: boolean }[] = [
-    { id: "leads", label: "Leads", icon: Users },
-    { id: "bookings", label: "Bookings", icon: Calendar },
+    { id: "leads", label: "Leads", icon: Users, adminOnly: true },
+    { id: "bookings", label: "Bookings", icon: Calendar, adminOnly: true },
     { id: "messages", label: "Messages", icon: MessageCircle },
-    { id: "automation", label: "Automation", icon: Zap },
+    { id: "automation", label: "Automation", icon: Zap, adminOnly: true },
     { id: "projects", label: "Projects", icon: FolderOpen },
     { id: "files", label: "Files", icon: Files },
     { id: "profile", label: "Profile", icon: User },

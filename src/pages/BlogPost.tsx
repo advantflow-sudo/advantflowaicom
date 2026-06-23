@@ -21,17 +21,26 @@ const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
+  // FIX: track fetch errors separately so we can show a distinct error message
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (!slug) return;
+    setError(false);
     supabase
       .from("blog_posts")
       .select("*")
       .eq("slug", slug)
       .eq("published", true)
       .single()
-      .then(({ data }) => {
-        setPost(data);
+      .then(({ data, error: fetchError }) => {
+        // FIX: handle actual network/query errors vs simply not finding a post
+        if (fetchError && fetchError.code !== "PGRST116") {
+          // PGRST116 = "no rows returned" which just means post not found — not an error
+          setError(true);
+        } else {
+          setPost(data);
+        }
         setLoading(false);
       });
   }, [slug]);
@@ -52,10 +61,22 @@ const BlogPost = () => {
             <div className="flex justify-center py-20">
               <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
             </div>
+          ) : error ? (
+            // FIX: distinct error state for when the fetch itself fails
+            <div className="text-center py-20">
+              <h1 className="heading-md mb-4">Something went wrong</h1>
+              <p className="text-muted-foreground mb-6">We couldn't load this article. Please try again.</p>
+              <Link to="/blog" className="text-primary hover:underline font-medium">
+                Back to all articles
+              </Link>
+            </div>
           ) : !post ? (
             <div className="text-center py-20">
               <h1 className="heading-md mb-4">Post not found</h1>
-              <p className="text-muted-foreground">This article may have been removed.</p>
+              <p className="text-muted-foreground mb-6">This article may have been removed or moved.</p>
+              <Link to="/blog" className="text-primary hover:underline font-medium">
+                Back to all articles
+              </Link>
             </div>
           ) : (
             <motion.article

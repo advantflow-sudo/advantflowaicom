@@ -13,22 +13,37 @@ const ResetPassword = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [isRecovery, setIsRecovery] = useState(false);
+  // FIX: track whether we've finished checking the recovery token so we don't
+  // flash "Invalid Reset Link" for a moment while the auth state loads
+  const [checkingToken, setCheckingToken] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Check URL hash immediately (synchronous)
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
     if (hashParams.get("type") === "recovery") {
       setIsRecovery(true);
+      setCheckingToken(false);
+      return;
     }
 
+    // Also listen for Supabase auth state (async)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === "PASSWORD_RECOVERY") {
         setIsRecovery(true);
       }
+      // Once auth fires any event, we know the check is done
+      setCheckingToken(false);
     });
 
-    return () => subscription.unsubscribe();
+    // Fallback: if auth state hasn't fired within 1.5s, stop showing the spinner
+    const timeout = setTimeout(() => setCheckingToken(false), 1500);
+
+    return () => {
+      subscription.unsubscribe();
+      clearTimeout(timeout);
+    };
   }, []);
 
   const handleResetPassword = async (e: React.FormEvent) => {
@@ -65,6 +80,15 @@ const ResetPassword = () => {
       setLoading(false);
     }
   };
+
+  // FIX: show spinner while checking token instead of flashing the invalid screen
+  if (checkingToken) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   if (!isRecovery) {
     return (
