@@ -166,8 +166,8 @@ export const ContactForm = () => {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Email us at</p>
-                   <a href="mailto:advantflow@gmail.com" className="font-medium text-foreground hover:text-primary transition-colors">
-                    advantflow@gmail.com
+                   <a href="mailto:info@advantflowai.com" className="font-medium text-foreground hover:text-primary transition-colors">
+                    info@advantflowai.com
                   </a>
                 </div>
               </div>

@@ -64,7 +64,7 @@ const handler = async (req: Request): Promise<Response> => {
           body: JSON.stringify({
             from: "Advant Flow AI <hello@advantflowai.com>",
             to: [booking.email],
-            reply_to: "advantflow@gmail.com",
+            reply_to: "info@advantflowai.com",
             subject: `Reminder: Your discovery call is tomorrow at ${booking.booking_time}`,
             html: `
 <!DOCTYPE html>
@@ -112,13 +112,13 @@ body{font-family:'Space Grotesk','Segoe UI',sans-serif;margin:0;padding:0;backgr
       <a href="${gcalUrl}" style="display:inline-block;background:linear-gradient(135deg,#00d4ff,#0ea5e9);color:#0a0e1a;font-weight:bold;padding:14px 32px;border-radius:8px;text-decoration:none;font-size:15px">📅 Add to Google Calendar</a>
     </div>
     <div style="text-align:center;margin:16px 0 24px;display:flex;justify-content:center;gap:12px">
-      <a href="mailto:advantflow@gmail.com?subject=Reschedule: ${encodeURIComponent(booking.name)} — ${encodeURIComponent(formattedDate)} at ${booking.booking_time}&body=Hi, I'd like to reschedule my discovery call.%0A%0AOriginal: ${encodeURIComponent(formattedDate)} at ${booking.booking_time}%0A%0APreferred new time: " style="display:inline-block;background:#1e293b;border:1px solid #00d4ff;color:#00d4ff;font-weight:600;padding:12px 24px;border-radius:8px;text-decoration:none;font-size:14px">🔄 Reschedule</a>
-      <a href="mailto:advantflow@gmail.com?subject=Cancel: ${encodeURIComponent(booking.name)} — ${encodeURIComponent(formattedDate)} at ${booking.booking_time}&body=Hi, I'd like to cancel my discovery call scheduled for ${encodeURIComponent(formattedDate)} at ${booking.booking_time}.%0A%0AReason (optional): " style="display:inline-block;background:#1e293b;border:1px solid #475569;color:#94a3b8;font-weight:600;padding:12px 24px;border-radius:8px;text-decoration:none;font-size:14px">✕ Cancel</a>
+      <a href="mailto:info@advantflowai.com?subject=Reschedule: ${encodeURIComponent(booking.name)} — ${encodeURIComponent(formattedDate)} at ${booking.booking_time}&body=Hi, I'd like to reschedule my discovery call.%0A%0AOriginal: ${encodeURIComponent(formattedDate)} at ${booking.booking_time}%0A%0APreferred new time: " style="display:inline-block;background:#1e293b;border:1px solid #00d4ff;color:#00d4ff;font-weight:600;padding:12px 24px;border-radius:8px;text-decoration:none;font-size:14px">🔄 Reschedule</a>
+      <a href="mailto:info@advantflowai.com?subject=Cancel: ${encodeURIComponent(booking.name)} — ${encodeURIComponent(formattedDate)} at ${booking.booking_time}&body=Hi, I'd like to cancel my discovery call scheduled for ${encodeURIComponent(formattedDate)} at ${booking.booking_time}.%0A%0AReason (optional): " style="display:inline-block;background:#1e293b;border:1px solid #475569;color:#94a3b8;font-weight:600;padding:12px 24px;border-radius:8px;text-decoration:none;font-size:14px">✕ Cancel</a>
     </div>
   </div>
   <div class="footer">
     <p>Advant Flow AI Ltd · London, UK</p>
-    <p><a href="https://advantflowai.com">advantflowai.com</a> · <a href="mailto:advantflow@gmail.com">advantflow@gmail.com</a></p>
+    <p><a href="https://advantflowai.com">advantflowai.com</a> · <a href="mailto:info@advantflowai.com">info@advantflowai.com</a></p>
     <p>© ${new Date().getFullYear()} Advant Flow AI Ltd. All rights reserved.</p>
   </div>
 </div>

@@ -173,7 +173,7 @@ export const ChatWidget = () => {
       console.error("Chat error:", e);
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: "Sorry, I'm having trouble connecting right now. Please try again or contact us at advantflow@gmail.com." },
+        { role: "assistant", content: "Sorry, I'm having trouble connecting right now. Please try again or contact us at info@advantflowai.com." },
       ]);
     } finally {
       setIsLoading(false);
