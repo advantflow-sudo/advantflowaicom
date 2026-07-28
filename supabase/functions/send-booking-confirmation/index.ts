@@ -66,7 +66,7 @@ const handler = async (req: Request): Promise<Response> => {
         body: JSON.stringify({
           from: "Advant Flow AI <hello@advantflowai.com>",
           to: [email],
-          reply_to: "advantflow@gmail.com",
+          reply_to: "info@advantflowai.com",
           subject: `Your discovery call is confirmed — ${formattedDate} at ${booking_time}`,
           html: `
 <!DOCTYPE html>
@@ -119,7 +119,7 @@ body{font-family:'Space Grotesk','Segoe UI',sans-serif;margin:0;padding:0;backgr
   </div>
   <div class="footer">
     <p>Advant Flow AI Ltd · London, UK</p>
-    <p><a href="https://advantflowai.com">advantflowai.com</a> · <a href="mailto:advantflow@gmail.com">advantflow@gmail.com</a></p>
+    <p><a href="https://advantflowai.com">advantflowai.com</a> · <a href="mailto:info@advantflowai.com">info@advantflowai.com</a></p>
     <p>© ${new Date().getFullYear()} Advant Flow AI Ltd. All rights reserved.</p>
   </div>
 </div>
@@ -140,7 +140,7 @@ body{font-family:'Space Grotesk','Segoe UI',sans-serif;margin:0;padding:0;backgr
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
         body: JSON.stringify({
           from: "Advant Flow AI Website <hello@advantflowai.com>",
-          to: ["advantflow@gmail.com"],
+          to: ["info@advantflowai.com"],
           subject: `📅 New Booking: ${name} — ${formattedDate} at ${booking_time}`,
           html: `
 <body style="font-family:'Space Grotesk',sans-serif;background:#0a0e1a;color:#e2e8f0;margin:0;padding:0">

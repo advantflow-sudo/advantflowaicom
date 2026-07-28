@@ -43,7 +43,7 @@ Then just £49/month for everything.
 
 ## Contact
 Phone: +4407751523675
-Email: advantflow@gmail.com
+Email: info@advantflowai.com
 Location: London, UK (work with clients worldwide)
 Website: advantflowai.co.uk
 

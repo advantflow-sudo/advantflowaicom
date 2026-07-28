@@ -136,7 +136,7 @@ const handler = async (req: Request): Promise<Response> => {
       await sendEmail({
         from: "Advant Flow AI <hello@advantflowai.com>",
         to: [email],
-        reply_to: "advantflow@gmail.com",
+        reply_to: "info@advantflowai.com",
         subject: `${name}, ${serviceContent.subject_suffix}`,
         html: `
           <!DOCTYPE html>
@@ -194,7 +194,7 @@ const handler = async (req: Request): Promise<Response> => {
                 </div>
                 <div class="footer">
                   <p>Advant Flow AI Ltd · London, UK</p>
-                  <p><a href="https://advantflowai.com">advantflowai.com</a> · <a href="mailto:advantflow@gmail.com">advantflow@gmail.com</a></p>
+                  <p><a href="https://advantflowai.com">advantflowai.com</a> · <a href="mailto:info@advantflowai.com">info@advantflowai.com</a></p>
                   <p>© ${new Date().getFullYear()} Advant Flow AI Ltd. All rights reserved.</p>
                 </div>
               </div>
@@ -212,7 +212,7 @@ const handler = async (req: Request): Promise<Response> => {
     try {
       await sendEmail({
         from: "Advant Flow AI Website <hello@advantflowai.com>",
-        to: ["advantflow@gmail.com"],
+        to: ["info@advantflowai.com"],
         subject: `🔥 New Lead: ${name} — ${service_interest || "General"} ${company ? `(${company})` : ""}`,
         html: `
           <!DOCTYPE html>
