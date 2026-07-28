@@ -6,42 +6,43 @@
 
 @layer base {
   :root {
-    --background: 234 50% 6%;
+    /* Brand board: #0A0F1C midnight, #2563FF electric blue, #00D4FF cyan, #7C3AED purple */
+    --background: 225 47% 8%;
     --foreground: 0 0% 98%;
 
-    --card: 234 42% 10%;
+    --card: 225 35% 11%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 234 42% 10%;
+    --popover: 225 35% 11%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 195 100% 50%;
-    --primary-foreground: 234 50% 6%;
+    --primary: 225 100% 57%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 234 35% 14%;
+    --secondary: 225 30% 15%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 234 25% 20%;
-    --muted-foreground: 220 15% 70%;
+    --muted: 225 22% 20%;
+    --muted-foreground: 220 15% 72%;
 
-    --accent: 220 100% 60%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 190 100% 50%;
+    --accent-foreground: 225 47% 8%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 234 25% 18%;
-    --input: 234 25% 18%;
-    --ring: 195 100% 50%;
+    --border: 225 22% 18%;
+    --input: 225 22% 18%;
+    --ring: 225 100% 57%;
 
-    --radius: 0.875rem;
+    --radius: 1rem;
 
     /* Custom brand colors */
-    --glow: 195 100% 50%;
-    --glow-blue: 220 100% 60%;
-    --gradient-start: 195 100% 50%;
-    --gradient-end: 220 100% 60%;
-    
+    --glow: 225 100% 57%;
+    --glow-blue: 190 100% 50%;
+    --gradient-start: 225 100% 57%;
+    --gradient-end: 190 100% 50%;
+
     /* Typography */
     --font-display: 'Space Grotesk', sans-serif;
     --font-body: 'Inter', sans-serif;
