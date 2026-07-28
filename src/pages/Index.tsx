@@ -2,22 +2,14 @@ import { SEOHead } from "@/components/SEOHead";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { Marquee } from "@/components/Marquee";
-import { Trust } from "@/components/Trust";
-import { Problem } from "@/components/Problem";
-import { Solution } from "@/components/Solution";
-import { Offer } from "@/components/Offer";
-import { LiveDemo } from "@/components/LiveDemo";
-import { DemoVideo } from "@/components/DemoVideo";
 import { Services } from "@/components/Services";
-import { WhoItsFor } from "@/components/WhoItsFor";
+import { Process } from "@/components/Process";
+import { WhyChoose } from "@/components/WhyChoose";
 import { Dashboards } from "@/components/Dashboards";
 import { Projects } from "@/components/Projects";
-import { About } from "@/components/About";
-import { Process } from "@/components/Process";
 import { Pricing } from "@/components/Pricing";
-import { IndividualServices } from "@/components/IndividualServices";
-import { FAQ } from "@/components/FAQ";
 import { Testimonials } from "@/components/Testimonials";
+import { FAQ } from "@/components/FAQ";
 import { FinalCTA } from "@/components/FinalCTA";
 import { BookingCalendar } from "@/components/BookingCalendar";
 import { ContactForm } from "@/components/ContactForm";
@@ -27,29 +19,21 @@ const Index = () => {
   return (
     <main className="relative">
       <SEOHead
-        title="Advant Flow AI | Get More Bookings Automatically With AI"
-        description="Advant Flow AI replies to customers instantly, captures leads, and books jobs for you 24/7. Built for service businesses. Start your free trial today."
+        title="Advant Flow AI | Technology Made Simple for UK Businesses"
+        description="We build websites, business software, AI assistants and automation for UK service businesses. Save time, win more customers and grow — technology made simple."
         canonical="https://advantflowai.com/"
       />
       <Navbar />
       <Hero />
       <Marquee />
-      <Trust />
-      <Problem />
-      <Solution />
-      <Offer />
-      <LiveDemo />
-      <DemoVideo />
       <Services />
-      <WhoItsFor />
+      <Process />
+      <WhyChoose />
       <Dashboards />
       <Projects />
-      <About />
-      <Process />
       <Pricing />
-      <IndividualServices />
-      <FAQ />
       <Testimonials />
+      <FAQ />
       <FinalCTA />
       <BookingCalendar />
       <ContactForm />
