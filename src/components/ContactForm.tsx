@@ -116,6 +116,7 @@ export const ContactForm = () => {
       routeLead({
         name: result.data.name,
         email: result.data.email,
+        phone: result.data.phone,
         interest: result.data.service_interest,
         message: result.data.message,
         source: "contact form",
