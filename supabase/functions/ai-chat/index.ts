@@ -61,11 +61,87 @@ Website: advantflowai.co.uk
 - When someone says they want to try it, sign up, get started, or start a trial → include [SHOW_SIGNUP_BUTTON]
 - After 3-4 messages, naturally suggest trying the free trial.`;
 
+/**
+ * Turn a plain text reply into the SSE stream shape the chat widget already reads,
+ * so swapping the AI brain never requires front-end changes.
+ */
+function textAsSseStream(text: string): ReadableStream<Uint8Array> {
+  const encoder = new TextEncoder();
+  return new ReadableStream({
+    start(controller) {
+      const chunk = { choices: [{ delta: { content: text } }] };
+      controller.enqueue(encoder.encode(`data: ${JSON.stringify(chunk)}\n\n`));
+      controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+      controller.close();
+    },
+  });
+}
+
+/**
+ * Route the conversation through n8n (which calls Claude via its Anthropic node).
+ * Returns null when n8n is not configured or fails, so we fall back to the built-in AI.
+ *
+ * PLUG-IN POINT: set the project secret CHAT_WEBHOOK_URL to the *production* URL of the
+ * n8n Webhook node that fronts your Claude chat workflow, e.g.
+ *   https://n8n-8afo.srv1982053.hstgr.cloud/webhook/advantflow-chat
+ * The Anthropic API key lives inside n8n's Anthropic credential — never in this app.
+ */
+async function replyViaN8n(messages: unknown[]): Promise<string | null> {
+  const CHAT_WEBHOOK_URL = Deno.env.get("CHAT_WEBHOOK_URL");
+  if (!CHAT_WEBHOOK_URL) return null;
+
+  try {
+    const res = await fetch(CHAT_WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        event: "chat.message",
+        source: "advantflowai.com website chat",
+        timestamp: new Date().toISOString(),
+        systemPrompt: SYSTEM_PROMPT,
+        messages,
+      }),
+      signal: AbortSignal.timeout(25000),
+    });
+
+    if (!res.ok) {
+      console.error("n8n chat webhook error:", res.status, await res.text());
+      return null;
+    }
+
+    const raw = await res.text();
+    if (!raw.trim()) return null;
+
+    // Accept { reply }, { output }, { text }, [ { ... } ] or plain text from n8n.
+    try {
+      const parsed = JSON.parse(raw);
+      const node = Array.isArray(parsed) ? parsed[0] : parsed;
+      const reply = node?.reply ?? node?.output ?? node?.text ?? node?.message;
+      return typeof reply === "string" && reply.trim() ? reply : null;
+    } catch {
+      return raw;
+    }
+  } catch (e) {
+    console.error("n8n chat webhook failed:", e);
+    return null;
+  }
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
     const { messages } = await req.json();
+
+    // 1) Prefer Claude-via-n8n when configured; never break the chat if it is down.
+    const n8nReply = await replyViaN8n(messages);
+    if (n8nReply) {
+      return new Response(textAsSseStream(n8nReply), {
+        headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
+      });
+    }
+
+    // 2) Fallback: built-in AI included with the plan.
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
