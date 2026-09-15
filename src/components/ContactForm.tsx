@@ -98,6 +98,7 @@ export const ContactForm = () => {
       const { error: emailError } = await supabase.functions.invoke("send-lead-confirmation", {
         body: {
           lead_id: leadId,
+          source: "advantflowai.com contact form",
           name: result.data.name,
           email: result.data.email,
           company: result.data.company,

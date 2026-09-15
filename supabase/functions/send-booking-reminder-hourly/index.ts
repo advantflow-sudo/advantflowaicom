@@ -8,7 +8,10 @@ import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 //
 // >>> EMAIL PROVIDER KEY: RESEND_API_KEY (already configured) <<<
 // ---------------------------------------------------------------------------
-const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+// >>> PLUG IN YOUR EMAIL PROVIDER KEY HERE: secret EMAIL_API_KEY (Resend) <<<
+const RESEND_API_KEY = Deno.env.get("EMAIL_API_KEY") ?? Deno.env.get("RESEND_API_KEY");
+// >>> PLUG IN YOUR MEETING LINK HERE: secret CALL_LINK (Zoom / Meet / Teams room) <<<
+const CALL_LINK = Deno.env.get("CALL_LINK") ?? "https://advantflowai.com/#booking";
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
@@ -56,7 +59,7 @@ serve(async (req) => {
             from: "Advant Flow AI <hello@advantflowai.com>",
             to: [booking.email],
             reply_to: "info@advantflowai.com",
-            subject: `Starting soon: your call at ${booking.booking_time}`,
+            subject: `Reminder: your call with Advant Flow AI is in 1 hour`,
             html: `
 <!DOCTYPE html><html><body style="font-family:'Space Grotesk','Segoe UI',sans-serif;background:#0a0e1a;color:#e2e8f0;margin:0;padding:0;">
   <div style="max-width:600px;margin:0 auto;">
@@ -64,9 +67,10 @@ serve(async (req) => {
       <div style="font-size:26px;font-weight:bold;"><span style="color:#fff;">Advant</span><span style="color:#00d4ff;">Flow</span>AI</div>
     </div>
     <div style="background:#111827;padding:36px 30px;">
-      <h2 style="color:#fff;margin-top:0;">See you in an hour, ${booking.name} 👋</h2>
-      <p style="color:#94a3b8;">Your free discovery call starts at <strong style="color:#00d4ff;">${booking.booking_time}</strong> today (${booking.timezone ?? "Europe/London"}).</p>
-      <p style="color:#94a3b8;">Have a think about your biggest bottleneck right now — that is where we will start.</p>
+      <h2 style="color:#fff;margin-top:0;">Hi ${String(booking.name || "there").split(" ")[0]},</h2>
+      <p style="color:#94a3b8;">Quick reminder — we're speaking at <strong style="color:#00d4ff;">${booking.booking_time}</strong> today about ${booking.service_interest || "your project"}.</p>
+      <p style="color:#94a3b8;">Join here: <a href="${CALL_LINK}" style="color:#00d4ff;">${CALL_LINK}</a></p>
+      <p style="color:#94a3b8;">See you shortly,<br/>The Advant Flow AI Team</p>
     </div>
     <div style="background:#0a0e1a;text-align:center;padding:24px;color:#475569;font-size:13px;border-top:1px solid #1e293b;">
       <p>Advant Flow AI Ltd · <a href="mailto:info@advantflowai.com" style="color:#00d4ff;text-decoration:none;">info@advantflowai.com</a></p>

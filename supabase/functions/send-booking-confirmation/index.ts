@@ -1,7 +1,9 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 
-const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+// >>> PLUG IN YOUR EMAIL PROVIDER KEY HERE <<<
+// Add a project secret named EMAIL_API_KEY (Resend). RESEND_API_KEY stays as a fallback.
+const RESEND_API_KEY = Deno.env.get("EMAIL_API_KEY") ?? Deno.env.get("RESEND_API_KEY");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -36,7 +38,7 @@ const handler = async (req: Request): Promise<Response> => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
     const { data: bookingRow } = await supabaseAdmin
-      .from("bookings").select("id, email")
+      .from("bookings").select("id, email, timezone")
       .eq("email", email).eq("booking_date", booking_date).eq("booking_time", booking_time)
       .maybeSingle();
     if (!bookingRow) {
@@ -44,6 +46,9 @@ const handler = async (req: Request): Promise<Response> => {
         status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+
+    const firstName = String(name || "there").trim().split(" ")[0] || "there";
+    const timezone = (bookingRow as { timezone?: string }).timezone || "Europe/London";
 
     console.log("Sending booking confirmation:", { name, email, booking_date, booking_time });
 
@@ -67,7 +72,7 @@ const handler = async (req: Request): Promise<Response> => {
           from: "Advant Flow AI <hello@advantflowai.com>",
           to: [email],
           reply_to: "info@advantflowai.com",
-          subject: `Your discovery call is confirmed — ${formattedDate} at ${booking_time}`,
+          subject: `You're booked — ${formattedDate} at ${booking_time}`,
           html: `
 <!DOCTYPE html>
 <html>
@@ -94,24 +99,18 @@ body{font-family:'Space Grotesk','Segoe UI',sans-serif;margin:0;padding:0;backgr
     <p style="color:#94a3b8;margin:8px 0 0;font-size:13px">AI Automation & Web Design Agency</p>
   </div>
   <div class="content">
-    <h2>You're booked in, ${name}! 🎉</h2>
-    <p>Your free 30-minute discovery call has been confirmed. Here are the details:</p>
-    <div class="card">
-      <p class="label">Date</p>
-      <p style="font-size:18px;font-weight:600">${formattedDate}</p>
-      <p class="label">Time</p>
-      <p style="font-size:18px;font-weight:600">${booking_time} (London time)</p>
-      ${service_interest ? `<p class="label">Topic</p><p>${service_interest}</p>` : ""}
-    </div>
+    <h2>Hi ${firstName},</h2>
+    <p>You're confirmed for a call with Advant Flow AI on <span class="highlight">${formattedDate}</span> at <span class="highlight">${booking_time}</span> (${timezone}).</p>
+    <p>We'll be chatting about <span class="highlight">${service_interest || "your project"}</span>. To make the most of the time, it's worth jotting down:</p>
     <div style="background:#1e293b;border-radius:12px;padding:24px;margin:24px 0;border-left:3px solid #00d4ff">
-      <p style="color:#00d4ff;font-weight:600;margin:0 0 12px">📋 How to prepare:</p>
       <ul style="color:#94a3b8;margin:0;padding-left:20px">
-        <li style="margin-bottom:8px">Have a rough idea of your budget and timeline</li>
-        <li style="margin-bottom:8px">List your top 3 pain points or goals</li>
-        <li style="margin-bottom:8px">Gather 2-3 examples of websites or tools you admire</li>
+        <li style="margin-bottom:8px">What's prompting the change right now</li>
+        <li style="margin-bottom:8px">Any must-haves or deadlines</li>
+        <li style="margin-bottom:8px">Rough budget range, if you have one in mind</li>
       </ul>
     </div>
-    <p>If you need to reschedule, just reply to this email.</p>
+    <p>We'll send a reminder an hour before. See you then.</p>
+    <p style="color:#94a3b8">The Advant Flow AI Team<br/><a href="https://advantflowai.com" style="color:#00d4ff;text-decoration:none">advantflowai.com</a></p>
     <div style="text-align:center;margin:24px 0">
       <a href="${gcalUrl}" style="display:inline-block;background:linear-gradient(135deg,#00d4ff,#0ea5e9);color:#0a0e1a;font-weight:bold;padding:14px 32px;border-radius:8px;text-decoration:none;font-size:15px">📅 Add to Google Calendar</a>
     </div>

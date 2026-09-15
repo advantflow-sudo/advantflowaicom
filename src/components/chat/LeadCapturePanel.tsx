@@ -41,6 +41,7 @@ export const LeadCapturePanel = ({ onDone }: { onDone?: () => void }) => {
         .invoke("send-lead-confirmation", {
           body: {
             lead_id: leadId,
+            source: "advantflowai.com chat widget",
             name: name.trim(),
             email: email.trim(),
             service_interest: interest || undefined,

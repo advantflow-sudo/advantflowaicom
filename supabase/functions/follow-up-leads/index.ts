@@ -9,7 +9,10 @@ import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 //
 // >>> EMAIL PROVIDER KEY: RESEND_API_KEY (already configured) <<<
 // ---------------------------------------------------------------------------
-const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+// >>> PLUG IN YOUR EMAIL PROVIDER KEY HERE: secret EMAIL_API_KEY (Resend) <<<
+const RESEND_API_KEY = Deno.env.get("EMAIL_API_KEY") ?? Deno.env.get("RESEND_API_KEY");
+// >>> PLUG IN YOUR CALENDAR / BOOKING LINK HERE: secret BOOKING_LINK <<<
+const BOOKING_LINK = Deno.env.get("BOOKING_LINK") ?? "https://advantflowai.com/#booking";
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
@@ -66,7 +69,7 @@ serve(async (req) => {
             from: "Advant Flow AI <hello@advantflowai.com>",
             to: [lead.email],
             reply_to: "info@advantflowai.com",
-            subject: `Just checking in, ${firstName}`,
+            subject: `Still thinking about ${interest}?`,
             html: `
 <!DOCTYPE html><html><body style="font-family:'Space Grotesk','Segoe UI',sans-serif;background:#0a0e1a;color:#e2e8f0;margin:0;padding:0;">
   <div style="max-width:600px;margin:0 auto;">
@@ -74,10 +77,12 @@ serve(async (req) => {
       <div style="font-size:26px;font-weight:bold;"><span style="color:#fff;">Advant</span><span style="color:#00d4ff;">Flow</span>AI</div>
     </div>
     <div style="background:#111827;padding:36px 30px;">
-      <h2 style="color:#fff;margin-top:0;">Hi ${firstName} 👋</h2>
-      <p style="color:#94a3b8;">Just checking in — still interested in <span style="color:#00d4ff;font-weight:600;">${interest}</span>?</p>
-      <p style="color:#94a3b8;">If it is still on your list, the quickest next step is a free 30-minute call. No pressure, no jargon — just a straight answer on what it would take.</p>
-      <a href="https://advantflowai.com/#booking" style="display:inline-block;background:linear-gradient(135deg,#00d4ff,#0ea5e9);color:#0a0e1a;font-weight:bold;padding:14px 32px;border-radius:8px;text-decoration:none;margin-top:16px;">Book your free call →</a>
+      <h2 style="color:#fff;margin-top:0;">Hi ${firstName},</h2>
+      <p style="color:#94a3b8;">Just checking in — you got in touch about <span style="color:#00d4ff;font-weight:600;">${interest}</span> a couple of days ago, and we didn't want it to slip through the cracks.</p>
+      <p style="color:#94a3b8;">No pressure at all, but if it's still on your mind, the fastest way forward is a quick 15-minute call:</p>
+      <a href="${BOOKING_LINK}" style="display:inline-block;background:linear-gradient(135deg,#00d4ff,#0ea5e9);color:#0a0e1a;font-weight:bold;padding:14px 32px;border-radius:8px;text-decoration:none;margin:8px 0 16px;">Book a call →</a>
+      <p style="color:#94a3b8;">Or just reply to this email — happy to answer questions first.</p>
+      <p style="color:#94a3b8;">The Advant Flow AI Team<br/><a href="https://advantflowai.com" style="color:#00d4ff;text-decoration:none;">advantflowai.com</a></p>
     </div>
     <div style="background:#0a0e1a;text-align:center;padding:24px;color:#475569;font-size:13px;border-top:1px solid #1e293b;">
       <p>Advant Flow AI Ltd · <a href="mailto:info@advantflowai.com" style="color:#00d4ff;text-decoration:none;">info@advantflowai.com</a></p>
