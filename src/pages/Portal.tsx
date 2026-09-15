@@ -48,7 +48,7 @@ const Portal = () => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loadingData, setLoadingData] = useState(true);
   // FIX: default tab is "projects" for regular users; admins will see "leads" after data loads
-  const [activeTab, setActiveTab] = useState<TabId>("projects");
+  const [activeTab, setActiveTab] = useState<TabId>("my-bookings");
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
@@ -112,6 +112,7 @@ const Portal = () => {
   };
 
   const tabs: { id: TabId; label: string; icon: any; adminOnly?: boolean }[] = [
+    { id: "my-bookings", label: "My Bookings", icon: Calendar },
     { id: "leads", label: "Leads", icon: Users, adminOnly: true },
     { id: "bookings", label: "Bookings", icon: Calendar, adminOnly: true },
     { id: "messages", label: "Messages", icon: MessageCircle },
@@ -197,6 +198,8 @@ const Portal = () => {
             <div className="flex items-center justify-center py-20">
               <Loader2 className="w-8 h-8 animate-spin text-primary" />
             </div>
+          ) : activeTab === "my-bookings" ? (
+            <ClientBookings />
           ) : activeTab === "leads" ? (
             <LeadsCRM isAdmin={isAdmin} />
           ) : activeTab === "bookings" ? (
