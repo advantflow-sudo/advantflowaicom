@@ -5,6 +5,7 @@ import { Home, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { SEOHead } from "@/components/SEOHead";
 
 // FIX: replaced the bare unstyled 404 page with a fully branded one
 // that includes Navbar, Footer, and a proper CTA so users don't feel lost
@@ -18,6 +19,11 @@ const NotFound = () => {
 
   return (
     <main className="relative min-h-screen flex flex-col">
+      <SEOHead
+        title="Page Not Found (404) | Advant Flow AI"
+        description="This page doesn't exist. Head back to the Advant Flow AI homepage for websites, AI assistants and automation for UK businesses."
+        noindex
+      />
       <Navbar />
       <div className="flex-1 flex items-center justify-center px-6 py-32">
         <motion.div
