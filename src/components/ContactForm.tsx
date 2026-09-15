@@ -111,10 +111,20 @@ export const ContactForm = () => {
         console.error("Email error:", emailError);
       }
 
+      // Unified lead routing (CRM / Zapier / Make / n8n) — non-blocking
+      routeLead({
+        name: result.data.name,
+        email: result.data.email,
+        interest: result.data.service_interest,
+        message: result.data.message,
+        source: "contact form",
+      });
+
       toast({
         title: "Message sent successfully!",
-        description: "We'll get back to you within 24 hours.",
+        description: "Thanks — we'll be in touch within one business day.",
       });
+      setIsSubmitted(true);
 
       // Reset form
       setFormData({
