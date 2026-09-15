@@ -154,7 +154,7 @@ body{font-family:'Space Grotesk','Segoe UI',sans-serif;margin:0;padding:0;backgr
         },
         body: JSON.stringify({
           templateName: "booking-notification",
-          recipientEmail: "info@advantflowai.com",
+          recipientEmail: "lerone.smith1@outlook.com",
           templateData: {
             name,
             email,

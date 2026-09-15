@@ -4,7 +4,7 @@ import type { TemplateEntry } from './registry.ts'
 import { Shell, Row } from './theme.tsx'
 
 // >>> YOUR INBOX <<< every new booking is delivered here instantly.
-const OWNER_INBOX = 'info@advantflowai.com'
+const OWNER_INBOX = 'lerone.smith1@outlook.com'
 
 interface Props {
   name?: string

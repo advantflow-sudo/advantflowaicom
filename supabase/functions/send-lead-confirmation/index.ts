@@ -98,7 +98,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // 2. Instant notification to the owner inbox (recipient fixed in the template)
     try {
-      await sendTemplate("lead-notification", "info@advantflowai.com", {
+      await sendTemplate("lead-notification", "lerone.smith1@outlook.com", {
         name,
         email,
         company,
