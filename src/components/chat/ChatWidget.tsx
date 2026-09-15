@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import ReactMarkdown from "react-markdown";
+import { LeadCapturePanel } from "@/components/chat/LeadCapturePanel";
 
 interface Message {
   role: "user" | "assistant";
@@ -30,6 +31,7 @@ export const ChatWidget = () => {
   const [showSignup, setShowSignup] = useState(false);
   const [hasBeenOpened, setHasBeenOpened] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [showLeadForm, setShowLeadForm] = useState(false);
   const conversationIdRef = useRef<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
