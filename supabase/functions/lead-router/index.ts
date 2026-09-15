@@ -45,6 +45,7 @@ const clamp = (value: unknown, max: number) =>
   typeof value === "string" ? value.trim().slice(0, max) : "";
 
 serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req);
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
