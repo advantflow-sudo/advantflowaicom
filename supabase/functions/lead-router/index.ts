@@ -43,6 +43,7 @@ serve(async (req) => {
       event: clamp(body.event, 40) || "lead.captured",
       name: clamp(body.name, 100),
       email: clamp(body.email, 255),
+      phone: clamp(body.phone, 30),
       interest: clamp(body.interest, 100),
       message: clamp(body.message, 2000),
       source: clamp(body.source, 100) || "advantflowai.com",
