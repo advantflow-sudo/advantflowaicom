@@ -9,7 +9,10 @@ import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 //
 // >>> EMAIL PROVIDER KEY: RESEND_API_KEY (already configured) <<<
 // ---------------------------------------------------------------------------
-const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+// >>> PLUG IN YOUR EMAIL PROVIDER KEY HERE: secret EMAIL_API_KEY (Resend) <<<
+const RESEND_API_KEY = Deno.env.get("EMAIL_API_KEY") ?? Deno.env.get("RESEND_API_KEY");
+// >>> PLUG IN YOUR CALENDAR / BOOKING LINK HERE: secret BOOKING_LINK <<<
+const BOOKING_LINK = Deno.env.get("BOOKING_LINK") ?? "https://advantflowai.com/#booking";
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
