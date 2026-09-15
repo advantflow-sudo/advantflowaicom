@@ -91,9 +91,9 @@ export const PricingComparison = () => {
               <TableHeader>
                 <TableRow className="bg-secondary/50">
                   <TableHead className="font-display font-semibold text-foreground w-[200px]">Feature</TableHead>
-                  <TableHead className="text-center font-display font-semibold text-foreground">Starter<br /><span className="text-primary text-xs font-normal">£497</span></TableHead>
-                  <TableHead className="text-center font-display font-semibold text-primary">Growth<br /><span className="text-xs font-normal">£997</span></TableHead>
-                  <TableHead className="text-center font-display font-semibold text-foreground">Premium<br /><span className="text-primary text-xs font-normal">£2,497</span></TableHead>
+                  <TableHead className="text-center font-display font-semibold text-foreground">Starter<br /><span className="text-primary text-xs font-normal">£797</span></TableHead>
+                  <TableHead className="text-center font-display font-semibold text-primary">Growth<br /><span className="text-xs font-normal">£1,497</span></TableHead>
+                  <TableHead className="text-center font-display font-semibold text-foreground">Premium<br /><span className="text-primary text-xs font-normal">£2,997</span></TableHead>
                   <TableHead className="text-center font-display font-semibold text-foreground">Custom<br /><span className="text-primary text-xs font-normal">Quote</span></TableHead>
                 </TableRow>
               </TableHeader>
