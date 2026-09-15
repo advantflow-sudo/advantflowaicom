@@ -1,7 +1,9 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 
-const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+// >>> PLUG IN YOUR EMAIL PROVIDER KEY HERE <<<
+// Add a project secret named EMAIL_API_KEY (Resend). RESEND_API_KEY stays as a fallback.
+const RESEND_API_KEY = Deno.env.get("EMAIL_API_KEY") ?? Deno.env.get("RESEND_API_KEY");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
