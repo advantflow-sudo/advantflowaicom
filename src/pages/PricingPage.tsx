@@ -10,7 +10,7 @@ const PricingPage = () => {
     <main className="relative">
       <SEOHead
         title="Pricing | Advant Flow AI — Web Design & AI Automation Plans"
-        description="Transparent pricing for web design (from £497), AI automation (from £97/mo), and custom dashboards (from £997). No hidden fees. 100% money-back guarantee."
+        description="Transparent pricing for web design (from £797), AI automation (from £97/mo), and custom dashboards (from £997). No hidden fees. 100% money-back guarantee."
         canonical="https://advantflowai.com/pricing"
       />
       <Navbar />
