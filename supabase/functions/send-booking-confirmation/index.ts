@@ -47,6 +47,9 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
+    const firstName = String(name || "there").trim().split(" ")[0] || "there";
+    const timezone = (bookingRow as { timezone?: string }).timezone || "Europe/London";
+
     console.log("Sending booking confirmation:", { name, email, booking_date, booking_time });
 
     // Format date nicely
