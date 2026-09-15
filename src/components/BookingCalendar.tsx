@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { routeLead } from "@/lib/lead-routing";
 import { CalendarCheck, Clock, User, Mail, Loader2, CheckCircle2 } from "lucide-react";
 import { format, addDays, isBefore, isWeekend, startOfDay } from "date-fns";
 
@@ -78,6 +79,15 @@ export const BookingCalendar = () => {
       });
 
       if (error) throw error;
+
+      // Unified lead routing (CRM / Zapier / Make / n8n) — non-blocking
+      routeLead({
+        name: formData.name,
+        email: formData.email,
+        interest: formData.service_interest,
+        message: `Booked a call for ${format(selectedDate, "yyyy-MM-dd")} at ${selectedTime}. ${formData.notes || ""}`.trim(),
+        source: "booking",
+      });
 
       // Trigger confirmation email (non-blocking)
       try {
