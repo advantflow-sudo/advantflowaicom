@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import ReactMarkdown from "react-markdown";
+import { LeadCapturePanel } from "@/components/chat/LeadCapturePanel";
 
 interface Message {
   role: "user" | "assistant";
@@ -30,6 +31,7 @@ export const ChatWidget = () => {
   const [showSignup, setShowSignup] = useState(false);
   const [hasBeenOpened, setHasBeenOpened] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [showLeadForm, setShowLeadForm] = useState(false);
   const conversationIdRef = useRef<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -246,8 +248,17 @@ export const ChatWidget = () => {
               </div>
             </div>
 
+            {/* Lead capture form */}
+            {showLeadForm && (
+              <div className="flex-1 overflow-y-auto min-h-[200px] max-h-[380px]">
+                <LeadCapturePanel />
+              </div>
+            )}
+
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[200px] max-h-[340px]">
+            <div
+              className={`flex-1 overflow-y-auto p-4 space-y-3 min-h-[200px] max-h-[340px] ${showLeadForm ? "hidden" : ""}`}
+            >
               {messages.length === 0 && (
                 <div className="text-center py-6 space-y-4">
                   <Bot className="w-10 h-10 mx-auto text-muted-foreground/50" />
@@ -311,8 +322,19 @@ export const ChatWidget = () => {
               </div>
             )}
 
+            {/* Switch between AI chat and the lead-capture form */}
+            <div className="px-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setShowLeadForm((v) => !v)}
+                className="w-full text-xs font-medium text-primary hover:underline py-1"
+              >
+                {showLeadForm ? "← Back to chat" : "Prefer a human? Leave your details →"}
+              </button>
+            </div>
+
             {/* Input */}
-            <div className="p-3 border-t border-border flex gap-2">
+            <div className={`p-3 border-t border-border flex gap-2 ${showLeadForm ? "hidden" : ""}`}>
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}

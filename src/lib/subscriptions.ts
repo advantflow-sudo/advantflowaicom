@@ -51,21 +51,21 @@ export const subscriptionTiers = {
 export const webDesignProducts = {
   starter: {
     name: "Starter",
-    price_id: "price_1T4FKPC1I7VBCNgyjkPbY1or",
+    price_id: "price_1UFrKmC1I7VBCNgyIeXz9k91",
     product_id: "prod_U2JyxjhRCMUU9A",
-    price: "£497",
+    price: "£797",
   },
   growth: {
     name: "Growth",
-    price_id: "price_1T4FKkC1I7VBCNgyGg2w0zVV",
+    price_id: "price_1UFrRuC1I7VBCNgyDeKwE3hi",
     product_id: "prod_U2Jyms2Qf8fZq9",
-    price: "£997",
+    price: "£1,497",
   },
   premium: {
     name: "Premium",
-    price_id: "price_1T4FL4C1I7VBCNgyUZG63Xn1",
+    price_id: "price_1UFrS6C1I7VBCNgyNQMs0Ijp",
     product_id: "prod_U2JzXngjkDd7xS",
-    price: "£2,497",
+    price: "£2,997",
   },
 } as const;
 
