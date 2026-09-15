@@ -248,8 +248,17 @@ export const ChatWidget = () => {
               </div>
             </div>
 
+            {/* Lead capture form */}
+            {showLeadForm && (
+              <div className="flex-1 overflow-y-auto min-h-[200px] max-h-[380px]">
+                <LeadCapturePanel />
+              </div>
+            )}
+
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[200px] max-h-[340px]">
+            <div
+              className={`flex-1 overflow-y-auto p-4 space-y-3 min-h-[200px] max-h-[340px] ${showLeadForm ? "hidden" : ""}`}
+            >
               {messages.length === 0 && (
                 <div className="text-center py-6 space-y-4">
                   <Bot className="w-10 h-10 mx-auto text-muted-foreground/50" />
