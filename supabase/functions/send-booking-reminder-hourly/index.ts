@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
+import { notifyWebhook } from "../_shared/notify-webhook.ts";
 
 // ---------------------------------------------------------------------------
 // 1-HOUR-BEFORE CALL REMINDER
@@ -79,7 +80,19 @@ serve(async (req) => {
 </body></html>`,
           }),
         });
-        if (res.ok) sent++;
+        if (res.ok) {
+          sent++;
+          await notifyWebhook({
+            event: "booking.reminder",
+            name: booking.name,
+            email: booking.email,
+            interest: booking.service_interest || "",
+            source: "advantflowai.com booking reminder",
+            booking_date: booking.booking_date,
+            booking_time: booking.booking_time,
+            timezone: booking.timezone || "Europe/London",
+          });
+        }
         else console.error("[reminder-1h] Resend error:", await res.text());
       } catch (err) {
         console.error("[reminder-1h] Send failed (non-fatal):", err);

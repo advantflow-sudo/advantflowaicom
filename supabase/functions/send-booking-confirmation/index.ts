@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
+import { notifyWebhook } from "../_shared/notify-webhook.ts";
 
 // >>> PLUG IN YOUR EMAIL PROVIDER KEY HERE <<<
 // Add a project secret named EMAIL_API_KEY (Resend). RESEND_API_KEY stays as a fallback.
@@ -132,7 +133,16 @@ body{font-family:'Space Grotesk','Segoe UI',sans-serif;margin:0;padding:0;backgr
       console.error("Email send error (non-fatal):", e);
     }
 
-    // 2. Notify admin
+    // 2. Forward the booking to your automation platform (n8n / Zapier / CRM)
+    await notifyWebhook({
+      event: "booking.created",
+      name, email,
+      interest: service_interest || "",
+      source: "advantflowai.com booking",
+      booking_date, booking_time, timezone,
+    });
+
+    // 3. Notify admin
     try {
       await fetch("https://api.resend.com/emails", {
         method: "POST",

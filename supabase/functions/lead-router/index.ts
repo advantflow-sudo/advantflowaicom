@@ -18,6 +18,7 @@ const corsHeaders = {
 };
 
 interface LeadPayload {
+  event?: string;
   name?: string;
   email?: string;
   interest?: string;
@@ -38,6 +39,7 @@ serve(async (req) => {
     const body = (await req.json()) as LeadPayload;
 
     const payload = {
+      event: clamp(body.event, 40) || "lead.captured",
       name: clamp(body.name, 100),
       email: clamp(body.email, 255),
       interest: clamp(body.interest, 100),

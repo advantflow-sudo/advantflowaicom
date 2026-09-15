@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
+import { notifyWebhook } from "../_shared/notify-webhook.ts";
 
 // ---------------------------------------------------------------------------
 // 48-HOUR FOLLOW-UP
@@ -102,6 +103,14 @@ serve(async (req) => {
           .update({ follow_up_sent: true, follow_up_sent_at: new Date().toISOString() })
           .eq("id", lead.id);
         sent++;
+
+        await notifyWebhook({
+          event: "lead.followup",
+          name: lead.name,
+          email: lead.email,
+          interest: lead.service_interest || "",
+          source: "advantflowai.com 48h follow-up",
+        });
       } catch (err) {
         console.error("[follow-up] Send failed (non-fatal):", err);
       }
