@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { Send, Loader2, Mail, User, Building2, Phone, MessageSquare } from "lucide-react";
+import { Send, Loader2, Mail, User, Building2, Phone, MessageSquare, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -225,6 +225,16 @@ export const ContactForm = () => {
               onSubmit={handleSubmit}
               className="relative bg-card border border-border rounded-3xl p-8 md:p-10 space-y-6"
             >
+              {/* On-page confirmation */}
+              {isSubmitted && (
+                <div className="flex items-start gap-3 rounded-2xl border border-primary/30 bg-primary/10 p-4">
+                  <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                  <p className="text-sm text-foreground">
+                    Thanks — we'll be in touch within one business day.
+                  </p>
+                </div>
+              )}
+
               {/* Name & Email Row */}
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
