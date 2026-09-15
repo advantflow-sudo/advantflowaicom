@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 export interface LeadPayload {
   name: string;
   email: string;
+  phone?: string;
   interest?: string;
   message?: string;
   source: "chat widget" | "contact form" | "booking";
@@ -22,6 +23,7 @@ export async function routeLead(payload: LeadPayload): Promise<void> {
   const body = {
     name: payload.name,
     email: payload.email,
+    phone: payload.phone ?? "",
     interest: payload.interest ?? "",
     message: payload.message ?? "",
     source: `advantflowai.com ${payload.source}`,
