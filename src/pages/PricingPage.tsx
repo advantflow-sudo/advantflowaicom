@@ -14,7 +14,14 @@ const PricingPage = () => {
         canonical="https://advantflowai.com/pricing"
       />
       <Navbar />
-      <div className="pt-24" />
+      <header className="pt-36 md:pt-44 pb-4 text-center container-wide">
+        <h1 className="heading-lg mb-4">
+          Advant Flow AI <span className="text-gradient">Plans & Pricing</span>
+        </h1>
+        <p className="body-lg max-w-2xl mx-auto">
+          Transparent pricing for websites, AI automation and custom dashboards — no hidden fees.
+        </p>
+      </header>
       <Pricing />
       <IndividualServices />
       <PricingComparison />

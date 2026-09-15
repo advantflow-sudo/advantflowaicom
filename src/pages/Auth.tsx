@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { useAuth } from "@/hooks/useAuth";
+import { SEOHead } from "@/components/SEOHead";
 
 // FIX: removed duplicate `useEffect` import that was listed twice
 
@@ -125,6 +126,12 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-6 relative">
+      <SEOHead
+        title="Sign In or Create an Account | Advant Flow AI"
+        description="Sign in to your Advant Flow AI client portal to track projects, manage bookings and view your automation dashboards."
+        canonical="https://advantflowai.com/auth"
+        noindex
+      />
       <div className="absolute inset-0 bg-gradient-radial opacity-30" />
 
       <motion.div

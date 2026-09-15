@@ -1,0 +1,11 @@
+# Advant Flow AI
+
+> UK agency building high-converting websites, business software, AI assistants and automation for service businesses.
+
+Advant Flow AI is based in London and works with businesses across the UK and worldwide. Websites start from £497, AI automation from £97/month, and custom white-label dashboards from £997. Every project follows the FLOW Method: Find, Launch, Optimise, Win.
+
+## Pages
+
+- [Home](/): Services overview, the FLOW Method, pricing, FAQs and booking.
+- [Pricing](/pricing): Plans for web design, AI automation and dashboards, plus individual services.
+- [Blog](/blog): Guides on AI automation, web design and growing a service business.

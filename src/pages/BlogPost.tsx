@@ -7,6 +7,7 @@ import DOMPurify from "dompurify";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { SEOHead } from "@/components/SEOHead";
 
 interface Post {
   id: string;
@@ -16,6 +17,8 @@ interface Post {
   cover_image_url: string | null;
   created_at: string;
 }
+
+const SITE = "https://advantflowai.com";
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -45,8 +48,41 @@ const BlogPost = () => {
       });
   }, [slug]);
 
+  const canonical = `${SITE}/blog/${slug}`;
+  const metaTitle = post ? `${post.title} | Advant Flow AI Blog` : "Article | Advant Flow AI Blog";
+  const metaDescription = post
+    ? (post.excerpt ?? `${post.title} — insights on AI automation and web design from Advant Flow AI.`).slice(0, 158)
+    : "Read the latest insights on AI automation, web design and business growth from Advant Flow AI.";
+
   return (
     <main className="relative">
+      <SEOHead
+        title={metaTitle}
+        description={metaDescription}
+        canonical={canonical}
+        ogType="article"
+        ogImage={post?.cover_image_url ?? undefined}
+        noindex={!loading && !post}
+        jsonLd={
+          post
+            ? {
+                "@context": "https://schema.org",
+                "@type": "Article",
+                headline: post.title,
+                description: metaDescription,
+                image: post.cover_image_url ? [post.cover_image_url] : undefined,
+                datePublished: post.created_at,
+                mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
+                author: { "@type": "Organization", name: "Advant Flow AI" },
+                publisher: {
+                  "@type": "Organization",
+                  name: "Advant Flow AI",
+                  logo: { "@type": "ImageObject", url: `${SITE}/favicon.ico` },
+                },
+              }
+            : undefined
+        }
+      />
       <Navbar />
       <section className="section-padding pt-36 md:pt-44 min-h-screen">
         <div className="container-wide max-w-3xl">

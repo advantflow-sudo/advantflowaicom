@@ -59,6 +59,7 @@ const ServiceItem = ({ service, index }: { service: typeof individualServices[nu
           size="sm"
           onClick={handleBuy}
           disabled={loading}
+          aria-label={`Buy ${service.name} for ${service.price}`}
           className="group/btn"
         >
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : (
