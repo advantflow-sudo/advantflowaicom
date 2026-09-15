@@ -14,6 +14,7 @@ import PaymentSuccess from "./pages/PaymentSuccess";
 import PricingPage from "./pages/PricingPage";
 import ResetPassword from "./pages/ResetPassword";
 import Download from "./pages/Download";
+import Unsubscribe from "./pages/Unsubscribe";
 import { ChatWidget } from "@/components/chat/ChatWidget";
 
 
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/payment-success" element={<PaymentSuccess />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/download" element={<Download />} />
+            <Route path="/unsubscribe" element={<Unsubscribe />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -142,40 +142,33 @@ body{font-family:'Space Grotesk','Segoe UI',sans-serif;margin:0;padding:0;backgr
       booking_date, booking_time, timezone,
     });
 
-    // 3. Notify admin
+    // 3. Notify the owner inbox instantly, through the project's own verified
+    //    sending domain (notify.advantflowai.com). Template + recipient live in
+    //    _shared/transactional-email-templates/booking-notification.tsx
     try {
-      await fetch("https://api.resend.com/emails", {
+      const res = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/send-transactional-email`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+        },
         body: JSON.stringify({
-          from: "Advant Flow AI Website <hello@advantflowai.com>",
-          to: ["info@advantflowai.com"],
-          subject: `📅 New Booking: ${name} — ${formattedDate} at ${booking_time}`,
-          html: `
-<body style="font-family:'Space Grotesk',sans-serif;background:#0a0e1a;color:#e2e8f0;margin:0;padding:0">
-<div style="max-width:600px;margin:0 auto">
-  <div style="background:linear-gradient(135deg,#1a1f4d,#0a0e2a);padding:30px 20px;text-align:center;border-bottom:2px solid #00d4ff">
-    <h2 style="color:#fff;margin:0">📅 New Discovery Call Booked</h2>
-  </div>
-  <div style="background:#111827;padding:30px">
-    <p style="color:#00d4ff;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:bold">Name</p>
-    <p style="color:#e2e8f0">${name}</p>
-    <p style="color:#00d4ff;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:bold">Email</p>
-    <p><a href="mailto:${email}" style="color:#00d4ff">${email}</a></p>
-    <p style="color:#00d4ff;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:bold">Date & Time</p>
-    <p style="color:#e2e8f0;font-size:18px;font-weight:bold">${formattedDate} at ${booking_time}</p>
-    ${service_interest ? `<p style="color:#00d4ff;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:bold">Interest</p><p style="color:#e2e8f0">${service_interest}</p>` : ""}
-    <div style="text-align:center;margin-top:20px">
-      <a href="mailto:${email}?subject=Your upcoming discovery call with Advant Flow AI&body=Hi ${name}," style="display:inline-block;background:#00d4ff;color:#0a0e1a;font-weight:bold;padding:10px 24px;border-radius:6px;text-decoration:none">Reply to ${name} →</a>
-    </div>
-  </div>
-</div>
-</body>`,
+          templateName: "booking-notification",
+          recipientEmail: "info@advantflowai.com",
+          templateData: {
+            name,
+            email,
+            interest: service_interest || "Not specified",
+            date: formattedDate,
+            time: booking_time,
+            timezone,
+          },
         }),
       });
-      console.log("Admin booking notification sent");
+      if (!res.ok) console.error("Owner booking notification failed:", await res.text());
+      else console.log("Owner booking notification queued");
     } catch (e) {
-      console.error("Admin notification error (non-fatal):", e);
+      console.error("Owner notification error (non-fatal):", e);
     }
 
     return new Response(JSON.stringify({ success: true }), {
