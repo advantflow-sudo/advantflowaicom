@@ -7,6 +7,7 @@ import DOMPurify from "dompurify";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { SEOHead } from "@/components/SEOHead";
 
 interface Post {
   id: string;
@@ -16,6 +17,8 @@ interface Post {
   cover_image_url: string | null;
   created_at: string;
 }
+
+const SITE = "https://advantflowai.com";
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
