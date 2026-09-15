@@ -11,12 +11,24 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 // ---------------------------------------------------------------------------
 const LEAD_WEBHOOK_URL = Deno.env.get("LEAD_WEBHOOK_URL");
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "https://advantflowai.com",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+const allowedOrigins = [
+  "https://advantflowai.com",
+  "https://www.advantflowai.com",
+  "https://advantflowaicom.lovable.app",
+  "https://id-preview--3285e5ca-ad8d-49ce-ac1d-7df0ba939353.lovable.app",
+  "http://localhost:8080",
+];
+
+function getCorsHeaders(req: Request) {
+  const origin = req.headers.get("origin") ?? "";
+  const allowOrigin = allowedOrigins.includes(origin) ? origin : "https://advantflowai.com";
+  return {
+    "Access-Control-Allow-Origin": allowOrigin,
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+  };
+}
 
 interface LeadPayload {
   event?: string;
