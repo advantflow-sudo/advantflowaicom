@@ -322,8 +322,19 @@ export const ChatWidget = () => {
               </div>
             )}
 
+            {/* Switch between AI chat and the lead-capture form */}
+            <div className="px-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setShowLeadForm((v) => !v)}
+                className="w-full text-xs font-medium text-primary hover:underline py-1"
+              >
+                {showLeadForm ? "← Back to chat" : "Prefer a human? Leave your details →"}
+              </button>
+            </div>
+
             {/* Input */}
-            <div className="p-3 border-t border-border flex gap-2">
+            <div className={`p-3 border-t border-border flex gap-2 ${showLeadForm ? "hidden" : ""}`}>
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
