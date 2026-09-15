@@ -16,6 +16,7 @@ import { LeadsCRM } from "@/components/portal/LeadsCRM";
 import { BookingsManager } from "@/components/portal/BookingsManager";
 import { MessagesTab } from "@/components/portal/MessagesTab";
 import { AutomationTab } from "@/components/portal/AutomationTab";
+import { ClientBookings } from "@/components/portal/ClientBookings";
 
 interface ClientProject {
   id: string;
@@ -37,7 +38,7 @@ interface Profile {
   avatar_url: string | null;
 }
 
-type TabId = "projects" | "files" | "profile" | "admin" | "chat" | "blog" | "leads" | "bookings" | "messages" | "automation";
+type TabId = "projects" | "files" | "profile" | "admin" | "chat" | "blog" | "leads" | "bookings" | "messages" | "automation" | "my-bookings";
 
 const Portal = () => {
   const { user, loading: authLoading, signOut } = useAuth();
