@@ -317,7 +317,7 @@ export const ChatWidget = () => {
                   className="w-full gap-2"
                 >
                   <Sparkles className="w-4 h-4" />
-                  Start Your Free Trial
+                  Book a Free Call
                 </Button>
               </div>
             )}

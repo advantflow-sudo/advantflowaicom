@@ -5,21 +5,21 @@ import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 const footerLinks = {
   services: [
     { name: "Web Design", href: "#services" },
-    { name: "AI Automation", href: "#ai-automation" },
+    { name: "AI Automation", href: "#pricing" },
     { name: "White-Label Dashboards", href: "#dashboards" },
-    { name: "À La Carte Services", href: "#individual-services" },
+    { name: "À La Carte Services", href: "/pricing" },
   ],
   company: [
     { name: "About Us", href: "#about" },
     { name: "Our Work", href: "#work" },
     { name: "Process", href: "#process" },
-    { name: "Careers", href: "#" },
+    { name: "Contact", href: "#contact" },
   ],
   resources: [
     { name: "Blog", href: "/blog" },
-    { name: "Case Studies", href: "#" },
-    { name: "Free Tools", href: "#" },
-    { name: "Newsletter", href: "#" },
+    { name: "Pricing", href: "/pricing" },
+    { name: "Book a Call", href: "#booking" },
+    { name: "Get a Quote", href: "#contact" },
   ],
 };
 

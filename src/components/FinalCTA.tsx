@@ -24,7 +24,7 @@ export const FinalCTA = () => {
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-foreground/10 backdrop-blur-sm mb-8">
               <Sparkles className="w-3.5 h-3.5 text-primary-foreground" />
               <span className="text-xs font-medium text-primary-foreground/80 tracking-wide uppercase">
-                7-Day Free Trial • Cancel Anytime
+                Free Discovery Call • No Obligation
               </span>
             </div>
 
@@ -36,22 +36,22 @@ export const FinalCTA = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a href="#pricing">
+              <a href="#booking">
                 <Button
                   size="xl"
                   className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 hover:scale-[1.02] active:scale-[0.98] font-bold group"
                 >
-                  Start Free Trial
+                  Book a Free Call
                   <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                 </Button>
               </a>
-              <a href="#booking">
+              <a href="#pricing">
                 <Button
                   variant="glass"
                   size="xl"
                   className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10"
                 >
-                  Book Demo
+                  See Pricing
                 </Button>
               </a>
             </div>

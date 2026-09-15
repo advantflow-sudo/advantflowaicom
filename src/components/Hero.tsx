@@ -45,15 +45,15 @@ export const Hero = () => {
               </p>
 
               <div className="flex flex-wrap gap-4">
-                <a href="#pricing">
+                <a href="#booking">
                   <Button variant="hero" size="xl" className="group">
-                    Start Free Trial
+                    Book a Free Call
                     <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                   </Button>
                 </a>
-                <a href="#booking">
+                <a href="#pricing">
                   <Button variant="glass" size="xl">
-                    Book Free Demo
+                    See Pricing
                   </Button>
                 </a>
               </div>

@@ -11,7 +11,7 @@ const navLinks = [
     href: "#services",
     children: [
       { name: "Web Design", href: "#services" },
-      { name: "AI Automation", href: "#ai-automation" },
+      { name: "AI Automation", href: "#pricing" },
       { name: "White-Label Dashboards", href: "#dashboards" },
       { name: "View All Pricing", href: "/pricing" },
     ],
