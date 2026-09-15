@@ -99,7 +99,8 @@ const Blog = () => {
                           <p className="text-sm text-muted-foreground line-clamp-2">{post.excerpt}</p>
                         )}
                         <div className="flex items-center gap-1 text-primary text-sm font-medium mt-4 group-hover:gap-2 transition-all">
-                          Read more <ArrowRight className="w-4 h-4" />
+                          Read the full article<span className="sr-only">: {post.title}</span>{" "}
+                          <ArrowRight className="w-4 h-4" />
                         </div>
                       </div>
                     </div>
