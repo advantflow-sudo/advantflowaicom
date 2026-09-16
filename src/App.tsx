@@ -13,7 +13,7 @@ import Index from "./pages/Index";
 // Retry once, then force one hard reload to pick up the fresh build.
 const RELOAD_FLAG = "afa-chunk-reload";
 
-function lazyWithRetry<T extends { default: React.ComponentType<never> }>(
+function lazyWithRetry<T extends { default: React.ComponentType<any> }>(
   factory: () => Promise<T>,
 ) {
   return lazy(async () => {
