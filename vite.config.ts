@@ -26,21 +26,17 @@ export default defineConfig(({ mode }) => ({
         globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest,woff2}"],
         // The logo asset is >2 MiB; raise the precache limit so the build succeeds.
         maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
-        navigateFallback: "/index.html",
-        navigateFallbackDenylist: [/^\/~oauth/, /^\/api\//],
+        // No navigateFallback: a cached HTML page can point at asset files from
+        // an older deploy, which renders a blank screen for returning visitors.
         cleanupOutdatedCaches: true,
         clientsClaim: true,
         skipWaiting: true,
         runtimeCaching: [
           {
-            // HTML navigations: always try the network first so updates land fast.
+            // HTML navigations always come from the network so the page markup
+            // and the asset hashes it references can never fall out of sync.
             urlPattern: ({ request }) => request.mode === "navigate",
-            handler: "NetworkFirst",
-            options: {
-              cacheName: "html-pages",
-              networkTimeoutSeconds: 4,
-              expiration: { maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 },
-            },
+            handler: "NetworkOnly",
           },
           {
             urlPattern: ({ request }) =>
