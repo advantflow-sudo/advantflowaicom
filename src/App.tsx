@@ -8,17 +8,52 @@ import { AuthProvider } from "@/hooks/useAuth";
 import Index from "./pages/Index";
 
 // Secondary pages load on demand so the homepage ships less JavaScript.
-const Auth = lazy(() => import("./pages/Auth"));
-const Portal = lazy(() => import("./pages/Portal"));
-const Blog = lazy(() => import("./pages/Blog"));
-const BlogPost = lazy(() => import("./pages/BlogPost"));
-const NotFound = lazy(() => import("./pages/NotFound"));
-const PaymentSuccess = lazy(() => import("./pages/PaymentSuccess"));
-const PricingPage = lazy(() => import("./pages/PricingPage"));
-const ResetPassword = lazy(() => import("./pages/ResetPassword"));
-const Download = lazy(() => import("./pages/Download"));
-const Unsubscribe = lazy(() => import("./pages/Unsubscribe"));
-const ChatWidget = lazy(() =>
+// After a new deploy the old chunk filenames disappear, which makes a stale
+// tab/service-worker fail the dynamic import and show a blank screen.
+// Retry once, then force one hard reload to pick up the fresh build.
+const RELOAD_FLAG = "afa-chunk-reload";
+
+function lazyWithRetry<T extends { default: React.ComponentType<never> }>(
+  factory: () => Promise<T>,
+) {
+  return lazy(async () => {
+    try {
+      const mod = await factory();
+      sessionStorage.removeItem(RELOAD_FLAG);
+      return mod;
+    } catch (err) {
+      if (!sessionStorage.getItem(RELOAD_FLAG)) {
+        sessionStorage.setItem(RELOAD_FLAG, "1");
+        if ("caches" in window) {
+          try {
+            const keys = await caches.keys();
+            await Promise.all(keys.map((k) => caches.delete(k)));
+          } catch {
+            /* ignore */
+          }
+        }
+        window.location.reload();
+        // Never resolves — the page is reloading.
+        return new Promise<T>(() => {});
+      }
+      throw err;
+    }
+  });
+}
+
+const Auth = lazyWithRetry(() => import("./pages/Auth"));
+const Portal = lazyWithRetry(() => import("./pages/Portal"));
+const Blog = lazyWithRetry(() => import("./pages/Blog"));
+const BlogPost = lazyWithRetry(() => import("./pages/BlogPost"));
+const NotFound = lazyWithRetry(() => import("./pages/NotFound"));
+const PaymentSuccess = lazyWithRetry(() => import("./pages/PaymentSuccess"));
+const PricingPage = lazyWithRetry(() => import("./pages/PricingPage"));
+const ResetPassword = lazyWithRetry(() => import("./pages/ResetPassword"));
+const Download = lazyWithRetry(() => import("./pages/Download"));
+const Unsubscribe = lazyWithRetry(() =>
+  import("./pages/Unsubscribe"),
+);
+const ChatWidget = lazyWithRetry(() =>
   import("@/components/chat/ChatWidget").then((m) => ({ default: m.ChatWidget })),
 );
 
