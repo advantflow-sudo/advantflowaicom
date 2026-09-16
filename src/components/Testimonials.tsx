@@ -1,7 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Star, Quote } from "lucide-react";
-import testimonialsBg from "@/assets/testimonials-bg.png";
+import testimonialsBg from "@/assets/testimonials-bg.webp";
 
 const testimonials = [
   {

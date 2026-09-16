@@ -48,7 +48,7 @@ export const Navbar = () => {
     >
       <div className="container-wide px-6 md:px-12 lg:px-20 flex items-center justify-between">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-3 group">
+        <a href="/" aria-label="Advant Flow AI home" className="flex items-center gap-3 group">
           <div className="w-9 h-9 rounded-lg overflow-hidden">
             <img src={logoIcon} alt="Advant Flow AI" className="w-full h-full object-cover" />
           </div>
