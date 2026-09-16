@@ -32,22 +32,24 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/portal" element={<Portal />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/pricing" element={<PricingPage />} />
-            <Route path="/payment-success" element={<PaymentSuccess />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/download" element={<Download />} />
-            <Route path="/unsubscribe" element={<Unsubscribe />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          
-          <ChatWidget />
+          <Suspense fallback={null}>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/portal" element={<Portal />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/pricing" element={<PricingPage />} />
+              <Route path="/payment-success" element={<PaymentSuccess />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/download" element={<Download />} />
+              <Route path="/unsubscribe" element={<Unsubscribe />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+
+            <ChatWidget />
+          </Suspense>
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>
