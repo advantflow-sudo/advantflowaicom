@@ -1,7 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Award, Users, TrendingUp, Clock } from "lucide-react";
-import aboutBg from "@/assets/about-bg.png";
+import aboutBg from "@/assets/about-bg.webp";
 
 const values = [
   {
