@@ -30,6 +30,7 @@ export const LeadCapturePanel = ({ onDone }: { onDone?: () => void }) => {
     setError("");
     const leadId = crypto.randomUUID();
     const details = message.trim() || `Chat widget enquiry about ${interest || "our services"}.`;
+    let saved = false;
 
     try {
       const { error: dbError } = await supabase.from("leads").insert({
@@ -41,6 +42,7 @@ export const LeadCapturePanel = ({ onDone }: { onDone?: () => void }) => {
         message: details,
       });
       if (dbError) throw dbError;
+      saved = true;
 
       // Confirmation email to the visitor + notification to info@advantflowai.com
       supabase.functions
@@ -66,7 +68,7 @@ export const LeadCapturePanel = ({ onDone }: { onDone?: () => void }) => {
       setSending(false);
     }
     // Only show confirmation when the lead was saved.
-    if (!error) { setSent(true); onDone?.(); }
+    if (saved) { setSent(true); onDone?.(); }
   };
 
   if (sent) {
