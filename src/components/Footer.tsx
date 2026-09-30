@@ -72,14 +72,14 @@ export const Footer = () => {
                 <span>info@advantflowai.com</span>
               </motion.a>
               <motion.a
-                href="tel:+4407751523675"
+                href="tel:+447950472612"
                 className="flex items-center gap-4 text-muted-foreground hover:text-foreground transition-colors duration-300 group"
                 whileHover={{ x: 4 }}
               >
                 <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center group-hover:bg-primary/10 transition-colors">
                   <Phone className="w-5 h-5 group-hover:text-primary transition-colors" />
                 </div>
-                <span>+4407751523675</span>
+                <span>07950 472612</span>
               </motion.a>
               <div className="flex items-center gap-4 text-muted-foreground">
                 <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center">
