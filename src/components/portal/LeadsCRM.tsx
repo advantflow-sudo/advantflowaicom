@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Users, Search, ArrowUpDown, StickyNote, RefreshCw } from "lucide-react";
+import { Loader2, Users, Search, ArrowUpDown, StickyNote, RefreshCw, CheckCircle2, Clock3 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -41,6 +41,8 @@ interface Lead {
   lead_score: number | null;
   score_reason: string | null;
   admin_notes: string | null;
+  follow_up_sent: boolean | null;
+  follow_up_sent_at: string | null;
   message: string;
   created_at: string;
 }
@@ -74,6 +76,7 @@ export const LeadsCRM = ({ isAdmin }: { isAdmin: boolean }) => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [followUpFilter, setFollowUpFilter] = useState<string>("all");
   const [sortField, setSortField] = useState<"created_at" | "lead_score">("created_at");
   const [sortAsc, setSortAsc] = useState(false);
   const [noteLead, setNoteLead] = useState<Lead | null>(null);
@@ -152,6 +155,7 @@ export const LeadsCRM = ({ isAdmin }: { isAdmin: boolean }) => {
 
   const filtered = leads
     .filter((l) => statusFilter === "all" || (l.lead_status ?? "new") === statusFilter)
+    .filter((l) => followUpFilter === "all" || (followUpFilter === "sent" ? !!l.follow_up_sent_at : !l.follow_up_sent_at))
     .filter((l) => {
       const q = search.toLowerCase();
       return (
@@ -218,6 +222,16 @@ export const LeadsCRM = ({ isAdmin }: { isAdmin: boolean }) => {
               ))}
             </SelectContent>
           </Select>
+          <Select value={followUpFilter} onValueChange={setFollowUpFilter}>
+            <SelectTrigger className="w-full sm:w-44" aria-label="Filter follow-ups">
+              <SelectValue placeholder="All follow-ups" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All follow-ups</SelectItem>
+              <SelectItem value="sent">Email sent</SelectItem>
+              <SelectItem value="pending">Not sent</SelectItem>
+            </SelectContent>
+          </Select>
           <Button variant="outline" size="icon" onClick={fetchLeads} aria-label="Refresh leads">
             <RefreshCw className="w-4 h-4" />
           </Button>
@@ -225,12 +239,13 @@ export const LeadsCRM = ({ isAdmin }: { isAdmin: boolean }) => {
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
         {[
           { label: "Total Leads", value: leads.length },
           { label: "New", value: leads.filter((l) => (l.lead_status ?? "new") === "new").length },
           { label: "Hot Leads 🔥", value: leads.filter((l) => (l.lead_score ?? 0) >= 70).length },
           { label: "Converted", value: leads.filter((l) => l.lead_status === "converted").length },
+          { label: "Follow-up emails sent", value: leads.filter((l) => !!l.follow_up_sent_at).length },
           {
             label: "New Today",
             value: leads.filter(
@@ -246,12 +261,13 @@ export const LeadsCRM = ({ isAdmin }: { isAdmin: boolean }) => {
       </div>
 
       {/* Table */}
+      <p className="text-xs text-muted-foreground">Follow-up dates reflect emails recorded by the website's 48-hour follow-up, not activity inside n8n.</p>
       {filtered.length === 0 ? (
         <div className="card-enhanced rounded-2xl p-12 text-center">
           <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="heading-md mb-2">{search || statusFilter !== "all" ? "No matches" : "No leads yet"}</h3>
+            <h3 className="heading-md mb-2">{search || statusFilter !== "all" || followUpFilter !== "all" ? "No matches" : "No leads yet"}</h3>
           <p className="text-muted-foreground">
-            {search || statusFilter !== "all"
+              {search || statusFilter !== "all" || followUpFilter !== "all"
               ? "Try a different search or filter."
               : "Leads will appear here when customers contact you."}
           </p>
@@ -266,6 +282,7 @@ export const LeadsCRM = ({ isAdmin }: { isAdmin: boolean }) => {
                   <TableHead>Contact</TableHead>
                   <TableHead>Service</TableHead>
                   <TableHead>Status</TableHead>
+                  <TableHead>Follow-up email</TableHead>
                   <TableHead className="cursor-pointer select-none" onClick={() => toggleSort("lead_score")}>
                     <div className="flex items-center gap-1">
                       AI Score
@@ -328,6 +345,18 @@ export const LeadsCRM = ({ isAdmin }: { isAdmin: boolean }) => {
                             ))}
                           </SelectContent>
                         </Select>
+                      </TableCell>
+                      <TableCell>
+                        {lead.follow_up_sent_at ? (
+                          <span className="inline-flex items-center gap-1 text-sm text-primary whitespace-nowrap" title={new Date(lead.follow_up_sent_at).toLocaleString("en-GB")}>
+                            <CheckCircle2 className="w-4 h-4" />
+                            {new Date(lead.follow_up_sent_at).toLocaleString("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 text-sm text-muted-foreground whitespace-nowrap">
+                            <Clock3 className="w-4 h-4" />{lead.follow_up_sent ? "Skipped" : "Not sent"}
+                          </span>
+                        )}
                       </TableCell>
                       <TableCell>
                         <div className="text-center">

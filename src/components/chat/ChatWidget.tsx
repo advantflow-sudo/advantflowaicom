@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, Loader2, Bot, Sparkles } from "lucide-react";
+import { MessageCircle, X, Send, Loader2, Bot, Sparkles, Phone, MessageSquareText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -235,7 +235,7 @@ export const ChatWidget = () => {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-24 right-4 left-4 sm:left-auto sm:right-6 z-50 sm:w-[380px] max-h-[80vh] sm:max-h-[520px] rounded-2xl border border-border bg-card shadow-2xl flex flex-col overflow-hidden"
+            className="fixed bottom-24 right-4 left-4 sm:left-auto sm:right-6 z-50 sm:w-[380px] max-h-[calc(100dvh-7rem)] sm:max-h-[680px] rounded-2xl border border-border bg-card shadow-2xl flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="p-4 bg-gradient-to-r from-primary to-accent flex items-center gap-3">
@@ -250,7 +250,7 @@ export const ChatWidget = () => {
 
             {/* Lead capture form */}
             {showLeadForm && (
-              <div className="flex-1 overflow-y-auto min-h-[200px] max-h-[380px]">
+              <div className="flex-1 overflow-y-auto min-h-0">
                 <LeadCapturePanel />
               </div>
             )}
@@ -331,6 +331,14 @@ export const ChatWidget = () => {
               >
                 {showLeadForm ? "← Back to chat" : "Prefer a human? Leave your details →"}
               </button>
+              <div className="flex items-center justify-center gap-4 py-2 text-sm text-primary">
+                <a href="tel:+447950472612" className="inline-flex items-center gap-1 hover:underline" aria-label="Call Advant Flow AI on 07950 472612">
+                  <Phone className="w-4 h-4" /> Call 07950 472612
+                </a>
+                <a href="sms:+447950472612" className="inline-flex items-center gap-1 hover:underline" aria-label="Text Advant Flow AI on 07950 472612">
+                  <MessageSquareText className="w-4 h-4" /> Text us
+                </a>
+              </div>
             </div>
 
             {/* Input */}

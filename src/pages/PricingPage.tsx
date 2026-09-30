@@ -5,6 +5,7 @@ import { Pricing } from "@/components/Pricing";
 import { IndividualServices } from "@/components/IndividualServices";
 import { PricingComparison } from "@/components/PricingComparison";
 import { BookingCalendar } from "@/components/BookingCalendar";
+import { ContactForm } from "@/components/ContactForm";
 
 const PricingPage = () => {
   return (
@@ -27,6 +28,7 @@ const PricingPage = () => {
       <IndividualServices />
       <PricingComparison />
       <BookingCalendar />
+      <ContactForm />
       <Footer />
     </main>
   );
