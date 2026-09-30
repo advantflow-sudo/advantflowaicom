@@ -12,12 +12,13 @@
 - [x] EMAIL_API_KEY / BOOKING_LINK / CALL_LINK env vars supported (fall back to current settings)
 
 ## Waiting on you
-- [ ] Add LEAD_WEBHOOK_URL (n8n / Zapier / Make / CRM) so leads forward automatically
-- [ ] Optional: add EMAIL_API_KEY, BOOKING_LINK, CALL_LINK if you want to swap providers/links
+- [ ] Resume the paused Lovable Cloud hosted database so live forms, chat and the dashboard can save or read leads
+- [ ] Repair the failed Sales Follow-up execution in n8n (production webhook returned HTTP 500 "Error in workflow" on a labeled live test); then rerun the end-to-end lead test
+- [ ] Optional: add BOOKING_LINK and CALL_LINK if you want to swap booking links
 - [ ] Google Search Console connection (needs your authorisation)
 
 ## Current request
-- [ ] Verify a chat lead through the live Sales Follow-up workflow and its response (blocked if the hosted database is paused or n8n errors)
-- [ ] Show follow-up email state and sent time in the leads dashboard
-- [ ] Provide direct call/text actions and capture callback numbers in chat
-- [ ] Ensure the existing website contact form is accessible independently of chat
+- [x] Test the published Sales Follow-up webhook; it returned HTTP 500 (end-to-end confirmation waits on the two blockers above)
+- [x] Show follow-up email state and sent time in the leads dashboard (website's 48-hour email only; n8n events are not recorded in the app)
+- [x] Provide direct call/text actions and capture optional callback numbers in chat (phone carrier integration not provisioned)
+- [x] Ensure the existing website contact form is accessible independently of chat, including pricing
