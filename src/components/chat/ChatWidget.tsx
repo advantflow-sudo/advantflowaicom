@@ -250,7 +250,7 @@ export const ChatWidget = () => {
 
             {/* Lead capture form */}
             {showLeadForm && (
-              <div className="flex-1 overflow-y-auto min-h-[200px] max-h-[380px]">
+              <div className="flex-1 overflow-y-auto min-h-0">
                 <LeadCapturePanel />
               </div>
             )}
