@@ -191,8 +191,8 @@ export const ContactForm = () => {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Call us at</p>
-                  <a href="tel:+4407751523675" className="font-medium text-foreground hover:text-primary transition-colors">
-                    +4407751523675
+                  <a href="tel:+447950472612" className="font-medium text-foreground hover:text-primary transition-colors">
+                    07950 472612
                   </a>
                 </div>
               </div>
