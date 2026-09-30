@@ -15,3 +15,9 @@
 - [ ] Add LEAD_WEBHOOK_URL (n8n / Zapier / Make / CRM) so leads forward automatically
 - [ ] Optional: add EMAIL_API_KEY, BOOKING_LINK, CALL_LINK if you want to swap providers/links
 - [ ] Google Search Console connection (needs your authorisation)
+
+## Current request
+- [ ] Verify a chat lead through the live Sales Follow-up workflow and its response (blocked if the hosted database is paused or n8n errors)
+- [ ] Show follow-up email state and sent time in the leads dashboard
+- [ ] Provide direct call/text actions and capture callback numbers in chat
+- [ ] Ensure the existing website contact form is accessible independently of chat
