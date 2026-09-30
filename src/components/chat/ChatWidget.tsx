@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, Loader2, Bot, Sparkles, Phone } from "lucide-react";
+import { MessageCircle, X, Send, Loader2, Bot, Sparkles, Phone, MessageSquareText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -331,9 +331,14 @@ export const ChatWidget = () => {
               >
                 {showLeadForm ? "← Back to chat" : "Prefer a human? Leave your details →"}
               </button>
-              <a href="tel:+447950472612" className="flex items-center justify-center gap-2 py-2 text-sm text-primary hover:underline" aria-label="Call Advant Flow AI on 07950 472612">
-                <Phone className="w-4 h-4" /> Call 07950 472612
-              </a>
+              <div className="flex items-center justify-center gap-4 py-2 text-sm text-primary">
+                <a href="tel:+447950472612" className="inline-flex items-center gap-1 hover:underline" aria-label="Call Advant Flow AI on 07950 472612">
+                  <Phone className="w-4 h-4" /> Call 07950 472612
+                </a>
+                <a href="sms:+447950472612" className="inline-flex items-center gap-1 hover:underline" aria-label="Text Advant Flow AI on 07950 472612">
+                  <MessageSquareText className="w-4 h-4" /> Text us
+                </a>
+              </div>
             </div>
 
             {/* Input */}
