@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { routeLead } from "@/lib/lead-routing";
 
@@ -15,26 +16,31 @@ export const LeadCapturePanel = ({ onDone }: { onDone?: () => void }) => {
   const [interest, setInterest] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !email.trim()) return;
 
     setSending(true);
+    setError("");
     const leadId = crypto.randomUUID();
     const details = message.trim() || `Chat widget enquiry about ${interest || "our services"}.`;
 
     try {
-      await supabase.from("leads").insert({
+      const { error: dbError } = await supabase.from("leads").insert({
         id: leadId,
         name: name.trim(),
         email: email.trim(),
+        phone: phone.trim() || null,
         service_interest: interest || null,
         message: details,
       });
+      if (dbError) throw dbError;
 
       // Confirmation email to the visitor + notification to info@advantflowai.com
       supabase.functions
@@ -44,6 +50,7 @@ export const LeadCapturePanel = ({ onDone }: { onDone?: () => void }) => {
             source: "advantflowai.com chat widget",
             name: name.trim(),
             email: email.trim(),
+            phone: phone.trim(),
             service_interest: interest || undefined,
             message: details,
           },
@@ -51,14 +58,15 @@ export const LeadCapturePanel = ({ onDone }: { onDone?: () => void }) => {
         .catch((err) => console.error("Confirmation email failed (non-blocking):", err));
 
       // Unified lead routing (CRM / Zapier / Make / n8n)
-      routeLead({ name: name.trim(), email: email.trim(), interest, message: details, source: "chat widget" });
+      routeLead({ name: name.trim(), email: email.trim(), phone: phone.trim(), interest, message: details, source: "chat widget" });
     } catch (err) {
-      console.error("Lead capture failed (non-blocking):", err);
+      console.error("Lead capture failed:", err);
+      setError("We couldn't send your enquiry. Please try again or call us on 07950 472612.");
     } finally {
       setSending(false);
-      setSent(true);
-      onDone?.();
     }
+    // Only show confirmation when the lead was saved.
+    if (!error) { setSent(true); onDone?.(); }
   };
 
   if (sent) {
@@ -111,6 +119,7 @@ export const LeadCapturePanel = ({ onDone }: { onDone?: () => void }) => {
         required
         className="w-full px-3 py-2 rounded-lg bg-secondary border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
       />
+      <Input type="tel" autoComplete="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Your phone (optional)" maxLength={30} className="bg-secondary" />
       <textarea
         value={message}
         onChange={(e) => setMessage(e.target.value)}
@@ -123,6 +132,7 @@ export const LeadCapturePanel = ({ onDone }: { onDone?: () => void }) => {
         {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
         Send message
       </Button>
+      {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
     </form>
   );
 };
